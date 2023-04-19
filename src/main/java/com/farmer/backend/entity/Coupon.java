@@ -18,7 +18,7 @@ public class Coupon extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Coupon_id")
+    @Column(name = "coupon_id")
     private Long id;
 
     @ManyToOne

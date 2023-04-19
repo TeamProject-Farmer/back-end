@@ -16,7 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 public class Wishlist extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Wishlist_id")
+    @Column(name = "wishlist_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
