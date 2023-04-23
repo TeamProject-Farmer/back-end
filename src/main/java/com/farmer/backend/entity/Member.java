@@ -1,16 +1,17 @@
 package com.farmer.backend.entity;
 
+import com.farmer.backend.dto.admin.member.RequestMemberDto;
+import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 public class Member extends BaseTimeEntity{
 
     @Id
@@ -55,6 +56,39 @@ public class Member extends BaseTimeEntity{
 
     @NotNull
     private Long cumulativeAmount;
+
+    public ResponseMemberDto memberList() {
+        return Member.builder()
+                .id(id)
+                .userId(userId)
+                .password(password)
+                .username(username)
+                .email(email)
+                .address(address)
+                .ph(ph)
+                .point(point)
+                .grade(grade)
+                .role(role)
+                .accountStatus(accountStatus)
+                .cumulativeAmount(cumulativeAmount)
+                .build().memberList();
+    }
+
+    public Member modifiedMember(RequestMemberDto memberDto) {
+        return Member.builder()
+                .userId(memberDto.getUserId())
+                .password(memberDto.getPassword())
+                .username(memberDto.getUsername())
+                .email(memberDto.getEmail())
+                .address(memberDto.getAddress())
+                .ph(memberDto.getPh())
+                .point(memberDto.getPoint())
+                .grade(memberDto.getGrade())
+                .role(memberDto.getRole())
+                .accountStatus(memberDto.getAccountStatus())
+                .cumulativeAmount(memberDto.getCumulativeAmount())
+                .build();
+    }
 
 
 
