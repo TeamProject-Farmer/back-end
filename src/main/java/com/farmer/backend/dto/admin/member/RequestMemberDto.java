@@ -6,21 +6,33 @@ import com.farmer.backend.entity.Member;
 import com.farmer.backend.entity.UserRole;
 import lombok.*;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class RequestMemberDto {
 
     private Long id;
+    @NotBlank(message = "비밀번호")
     private String password;
+    @NotNull(message = "이름")
     private String username;
     private String email;
     private String address;
     private String ph;
+    @NotBlank(message = "닉네임")
     private String nickname;
+    @NotNull(message = "적립금")
     private Long point;
+    @NotNull(message = "회원등급")
     private Grade grade;
+    @NotNull(message = "회원권한")
     private UserRole role;
+    @NotNull(message = "계정상태")
     private AccountStatus accountStatus;
+    @NotNull(message = "총 구매금액")
     private Long cumulativeAmount;
 
     @Builder

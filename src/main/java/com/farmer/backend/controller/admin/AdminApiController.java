@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -71,7 +73,7 @@ public class AdminApiController {
     @ApiDocumentResponse
     @Operation(summary = "관리자 권한 계정 수정", description = "관리자 권한을 가진 유저들을 수정합니다.")
     @PostMapping("/account/managers-update")
-    public Long updateManager(@ModelAttribute RequestMemberDto memberDto) {
+    public Long updateManager(@Valid @ModelAttribute RequestMemberDto memberDto) {
         return memberService.updateMember(memberDto);
     }
 
@@ -111,7 +113,7 @@ public class AdminApiController {
     @ApiDocumentResponse
     @Operation(summary = "회원 수정", description = "회원 정보를 수정합니다.")
     @PostMapping("/members/update")
-    public Long updateMember(@ModelAttribute RequestMemberDto memberDto) {
+    public Long updateMember(@Valid @ModelAttribute RequestMemberDto memberDto) {
         return memberService.updateMember(memberDto);
     }
 
