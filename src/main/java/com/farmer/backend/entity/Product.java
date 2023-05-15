@@ -37,6 +37,8 @@ public class Product extends BaseTimeEntity {
     @NotNull
     private int sellQuantity;
 
+    private Integer discountRate;
+
     @Column(length = 255)
     private String thumbnailImg;
 
