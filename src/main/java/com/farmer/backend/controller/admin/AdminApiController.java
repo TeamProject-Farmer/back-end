@@ -13,6 +13,7 @@ import com.farmer.backend.service.admin.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -183,20 +184,11 @@ public class AdminApiController {
     @Operation(summary = "Q&A 수정", description = "Q&A를 수정합니다.")
     @PostMapping("/board/qna/update")
     public Long updateQnA(@ModelAttribute RequestBoardQnADto qnaDto, BindingResult bindingResult) {
-        log.info(String.valueOf(qnaDto.getProduct_id()));
-
-        if (qnaDto.getProduct()==null){
-            log.info("오류발생");
-            log.info(String.valueOf(bindingResult.getFieldErrors("product")));
-
-        }
-
-        if(bindingResult.hasErrors()){
-            bindingResult.getFieldErrors().forEach(r -> log.error(r.getField()));
-        }
         return boardService.updateQnA(qnaDto);
 
     }
+
+
 
 
     /**
@@ -230,6 +222,15 @@ public class AdminApiController {
 
     }
 
+    /**
+     * 관리자 게시판 Q&A (Q&A 수정)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "Review 수정", description = "Review를 수정합니다.")
+    @PostMapping("/board/review/update")
+    public Long updateReview(@ModelAttribute RequestBoardReviewDto reviewDto) {
+        return boardService.updateReview(reviewDto);
 
+    }
 
 }
