@@ -4,9 +4,14 @@ import com.farmer.backend.config.ApiDocumentResponse;
 import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
-import com.farmer.backend.dto.admin.member.SortOrderMemberCondition;
+import com.farmer.backend.dto.admin.SortOrderCondition;
+import com.farmer.backend.dto.admin.product.RequestProductDto;
+import com.farmer.backend.dto.admin.product.ResponseCategoryDto;
+import com.farmer.backend.dto.admin.product.ResponseProductDto;
+import com.farmer.backend.entity.ProductCategory;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
+import com.farmer.backend.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -26,6 +35,7 @@ import javax.validation.Valid;
 public class AdminApiController {
 
     private final MemberService memberService;
+    private final ProductService productService;
 
     /**
      * 계정 관리 페이지(관리자 권한 계정 리스트)
@@ -34,8 +44,8 @@ public class AdminApiController {
     @Operation(summary = "관리자 권한 계정 리스트", description = "관리자 권한을 가진 유저들을 출력합니다.")
     @GetMapping("/account")
     public Page<ResponseMemberDto> managerList(PageRequest pageRequest,
-                               SortOrderMemberCondition sortOrderMemberCondition,
-                               SearchMemberCondition searchMemberCondition) {
+                                               SortOrderCondition sortOrderMemberCondition,
+                                               SearchMemberCondition searchMemberCondition) {
 
         Page<ResponseMemberDto> managerList = memberService.managerList(
                 pageRequest.of(),
@@ -85,7 +95,7 @@ public class AdminApiController {
     @Operation(summary = "회원 전체 리스트", description = "회원 전체 리스트를 출력합니다.")
     @GetMapping("/member-list")
     public Page<ResponseMemberDto> memberList(PageRequest pageRequest,
-                                              SortOrderMemberCondition sortOrderMemberCondition,
+                                              SortOrderCondition sortOrderMemberCondition,
                                               SearchMemberCondition searchMemberCondition) {
 
         Page<ResponseMemberDto> memberList = memberService.memberList(
@@ -136,5 +146,41 @@ public class AdminApiController {
     public Page<ResponseMemberDto> searchMemberList(PageRequest pageRequest, SearchMemberCondition searchMemberCondition) {
         Page<ResponseMemberDto> searchList = memberService.searchMemberList(pageRequest.of(), searchMemberCondition);
         return ResponseEntity.ok(searchList).getBody();
+    }
+
+
+    /**
+     * 상품 관리 페이지
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "상품 전체 리스트", description = "상품 전체 리스트를 출력합니다.")
+    @GetMapping("/product-list")
+    public Page<ResponseProductDto> productList(PageRequest pageRequest, String productName, SortOrderCondition orderCondition) {
+        return productService.productList(pageRequest.of(), productName, orderCondition.getFieldName());
+    }
+
+    @ApiDocumentResponse
+    @Operation(summary = "상품 단건 조회", description = "선택한 상품 한건을 조회합니다.")
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<ResponseProductDto> findProduct(@PathVariable Long productId) {
+        return ResponseEntity.ok(productService.productOne(productId));
+    }
+
+    @ApiDocumentResponse
+    @Operation(summary = "상품 등록 버튼", description = "상품을 등록폼으로 이동합니다.")
+    @GetMapping("/product/create-form")
+    public ResponseEntity<RequestProductDto> registerProductForm(@ModelAttribute RequestProductDto productDto) {
+        return ResponseEntity.ok(productDto);
+    }
+
+    @ApiDocumentResponse
+    @Operation(summary = "상품 등록", description = "상품 한 건을 등록합니다.")
+    @PostMapping("/product/create")
+    public void registerActionProduct(@ModelAttribute RequestProductDto productDto, BindingResult bindingResult) {
+        log.info("productDto={}", productDto.getName());
+        if (bindingResult.hasErrors()) {
+            bindingResult.getFieldErrors().forEach(r -> log.error(r.getField()));
+        }
+        productService.registerProduct(productDto);
     }
 }

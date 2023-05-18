@@ -1,10 +1,13 @@
 package com.farmer.backend.entity;
 
 import com.sun.istack.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 public class ProductCategory {
 
     @Id

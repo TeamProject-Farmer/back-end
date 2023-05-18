@@ -1,9 +1,7 @@
 package com.farmer.backend.entity;
 
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,8 +9,9 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Builder
 public class Product extends BaseTimeEntity {
 
     @Id
@@ -29,13 +28,13 @@ public class Product extends BaseTimeEntity {
     private String name;
 
     @NotNull
-    private int stockQuantity;
+    private Integer stockQuantity;
 
     @NotNull
-    private int price;
+    private Integer price;
 
     @NotNull
-    private int sellQuantity;
+    private Integer sellQuantity;
 
     private Integer discountRate;
 

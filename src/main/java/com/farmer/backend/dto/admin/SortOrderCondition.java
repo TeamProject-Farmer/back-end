@@ -1,9 +1,9 @@
-package com.farmer.backend.dto.admin.member;
+package com.farmer.backend.dto.admin;
 
 import lombok.Data;
 
 @Data
-public class SortOrderMemberCondition {
+public class SortOrderCondition {
 
     private String fieldName;
 }
