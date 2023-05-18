@@ -1,9 +1,6 @@
 package com.farmer.backend.repository.admin.member;
-
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
-import com.farmer.backend.entity.AccountStatus;
-import com.farmer.backend.entity.Member;
-import com.farmer.backend.entity.UserRole;
+import com.farmer.backend.entity.*;
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -20,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.farmer.backend.entity.QMember.member;
+
 
 @Repository
 @Slf4j
@@ -162,4 +160,6 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     public BooleanExpression likeUsername(String username) {
         return username != null ? member.username.contains(username) : null;
     }
+
+
 }

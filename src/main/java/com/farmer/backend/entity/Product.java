@@ -1,9 +1,7 @@
 package com.farmer.backend.entity;
 
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,8 +9,9 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Builder
 public class Product extends BaseTimeEntity {
 
     @Id
@@ -20,7 +19,8 @@ public class Product extends BaseTimeEntity {
     @Column(name = "product_id")
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne//(fetch = LAZY)
+
     @JoinColumn(name = "pc_id")
     private ProductCategory category;
 
@@ -60,5 +60,6 @@ public class Product extends BaseTimeEntity {
     private String detailImg4;
     @Column(length = 255)
     private String detailImg5;
+
 
 }

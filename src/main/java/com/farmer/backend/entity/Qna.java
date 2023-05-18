@@ -1,9 +1,9 @@
 package com.farmer.backend.entity;
 
+import com.farmer.backend.dto.admin.board.RequestBoardQnADto;
+import com.farmer.backend.dto.admin.board.ResponseBoardQnADto;
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
-
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Qna {
 
     @Id
@@ -50,5 +50,31 @@ public class Qna {
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
     private LocalDateTime aCreatedDate;
+
+    public ResponseBoardQnADto qnaList() {
+        return ResponseBoardQnADto.builder()
+                .id(id)
+                .member(member)
+                .product(product)
+                .subject(subject)
+                .content(content)
+                .answer(answer)
+                .qCreatedDate(qCreatedDate)
+                .aCreatedDate(aCreatedDate)
+                .build();
+    }
+
+    //잘 들어와요,..!! 이렇게 하면
+    public void updateQnA(RequestBoardQnADto qnaDto,Product product){
+        this.id=qnaDto.getId();
+        this.member=qnaDto.getMember();
+        this.product=product;
+        this.subject=qnaDto.getSubject();
+        this.content=qnaDto.getContent();
+        this.answer=qnaDto.getAnswer();
+        this.qCreatedDate=qnaDto.getQCreatedDate();
+        this.aCreatedDate=qnaDto.getACreatedDate();
+    }
+
 
 }
