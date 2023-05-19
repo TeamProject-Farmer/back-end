@@ -99,6 +99,7 @@ public class ProductService {
         for (Long productId : productIds) {
             Product product = productRepository.findById(productId).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
             productRepository.delete(product);
+            //tests
         }
     }
 }
