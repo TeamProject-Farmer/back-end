@@ -155,10 +155,13 @@ public class AdminApiController {
     @ApiDocumentResponse
     @Operation(summary = "상품 전체 리스트", description = "상품 전체 리스트를 출력합니다.")
     @GetMapping("/product-list")
-    public Page<ResponseProductDto> productList(PageRequest pageRequest, String productName, SortOrderCondition orderCondition) {
+    public Page<ResponseProductDto> productList(PageRequest pageRequest, String productName, SortOrderCondition orderCondition, BindingResult bindingResult) {
         return productService.productList(pageRequest.of(), productName, orderCondition.getFieldName());
     }
 
+    /**
+     * 상품 관리 페이지(상품 단건 조회)
+     */
     @ApiDocumentResponse
     @Operation(summary = "상품 단건 조회", description = "선택한 상품 한건을 조회합니다.")
     @GetMapping("/product/{productId}")
@@ -166,13 +169,19 @@ public class AdminApiController {
         return ResponseEntity.ok(productService.productOne(productId));
     }
 
+    /**
+     * 상품 관리 페이지(상품 등록 버튼)
+     */
     @ApiDocumentResponse
-    @Operation(summary = "상품 등록 버튼", description = "상품을 등록폼으로 이동합니다.")
+    @Operation(summary = "상품 등록 버튼", description = "카테고리 리스트를 출력합니다.")
     @GetMapping("/product/create-form")
-    public ResponseEntity<RequestProductDto> registerProductForm(@ModelAttribute RequestProductDto productDto) {
-        return ResponseEntity.ok(productDto);
+    public Map<Long, String> registerProductForm() {
+        return productService.getCategoryList();
     }
 
+    /**
+     * 상품 관리 페이지(상품 등록 기능 수행)
+     */
     @ApiDocumentResponse
     @Operation(summary = "상품 등록", description = "상품 한 건을 등록합니다.")
     @PostMapping("/product/create")
@@ -182,5 +191,25 @@ public class AdminApiController {
             bindingResult.getFieldErrors().forEach(r -> log.error(r.getField()));
         }
         productService.registerProduct(productDto);
+    }
+
+    /**
+     * 상품 관리 페이지(상품 단건 수정)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "상품 수정", description = "상품 한 건을 수정합니다.")
+    @PostMapping("/product/{productId}")
+    public void updateProduct(@PathVariable Long productId, RequestProductDto productDto) {
+        productService.updateActionProduct(productId, productDto);
+    }
+
+    /**
+     * 상품 관리 페이지(회원 삭제)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "상품 삭제", description = "상품을 삭제합니다.")
+    @PostMapping("/product/delete")
+    public void deleteProduct(@RequestParam(value = "product") Long productIds[]) {
+        productService.deleteProduct(productIds);
     }
 }

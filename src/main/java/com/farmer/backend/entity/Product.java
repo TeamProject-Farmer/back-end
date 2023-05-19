@@ -1,15 +1,19 @@
 package com.farmer.backend.entity;
 
+import com.farmer.backend.dto.admin.product.RequestProductDto;
 import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @Getter
 @Builder
 public class Product extends BaseTimeEntity {
@@ -33,7 +37,6 @@ public class Product extends BaseTimeEntity {
     @NotNull
     private Integer price;
 
-    @NotNull
     private Integer sellQuantity;
 
     private Integer discountRate;
@@ -61,5 +64,23 @@ public class Product extends BaseTimeEntity {
     private String detailImg4;
     @Column(length = 255)
     private String detailImg5;
+
+    public void productUpdate(RequestProductDto productDto) {
+        this.category = productDto.getCategory();
+        this.name = productDto.getName();
+        this.stockQuantity = productDto.getStockQuantity();
+        this.price = productDto.getPrice();
+        this.sellQuantity = productDto.getSellQuantity();
+        this.discountRate = productDto.getDiscountRate();
+        this.thumbnailImg = productDto.getThumbnailImg();
+        this.brandName = productDto.getBrandName();
+        this.size = productDto.getSize();
+        this.description = productDto.getDescription();
+        this.detailImg1 = productDto.getDetailImg1();
+        this.detailImg2 = productDto.getDetailImg2();
+        this.detailImg3 = productDto.getDetailImg3();
+        this.detailImg4 = productDto.getDetailImg4();
+        this.detailImg5 = productDto.getDetailImg5();
+    }
 
 }

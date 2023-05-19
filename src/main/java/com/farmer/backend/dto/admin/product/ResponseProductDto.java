@@ -5,6 +5,9 @@ import com.farmer.backend.entity.ProductCategory;
 import com.farmer.backend.entity.ProductSize;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Builder
 @Getter
@@ -16,10 +19,11 @@ public class ResponseProductDto {
     private Long categoryId;
     private String categoryName;
     private String name;
-    private int stockQuantity;
-    private int price;
-    private int sellQuantity;
+    private Integer stockQuantity;
+    private Integer price;
+    private Integer sellQuantity;
     private Integer discountRate;
+    private List<Long> options = new ArrayList<>();
     private String thumbnailImg;
     private String brandName;
     private ProductSize size;

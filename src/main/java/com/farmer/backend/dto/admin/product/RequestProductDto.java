@@ -23,7 +23,7 @@ public class RequestProductDto {
     private Integer stockQuantity;
     @NotNull
     private Integer price;
-    @NotNull
+
     private Integer sellQuantity;
     private Integer discountRate;
     @NotNull
