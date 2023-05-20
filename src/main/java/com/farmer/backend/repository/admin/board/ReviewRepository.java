@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface ReviewRepository  extends JpaRepository<Product_reviews,Long> {
+public interface ReviewRepository  extends JpaRepository<Product_reviews,Long>,BoardQueryRepository {
 
     Optional<Product_reviews> findById(Long reviewId);
 

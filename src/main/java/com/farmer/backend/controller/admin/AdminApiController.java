@@ -6,22 +6,18 @@ import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.admin.member.SortOrderMemberCondition;
-import com.farmer.backend.entity.Product;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
 import com.farmer.backend.service.admin.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 
 @RestController
 @Slf4j
@@ -178,18 +174,48 @@ public class AdminApiController {
     }
 
     /**
+     * 관리자 게시판 Q&A (Q&A 검색(상품 이름, 회원 Email, 회원 이름))
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "Q&A 검색 리스트", description = "Q&A 검색 리스트를 출력합니다.")
+    @GetMapping("/board/qna/search")
+    public Page<ResponseBoardQnADto> searchQnAList(PageRequest pageRequest, SearchQnaCondition searchQnaCondition) {
+        Page<ResponseBoardQnADto> qnaSearchList = boardService.searchQnAList(pageRequest.of(), searchQnaCondition);
+        return ResponseEntity.ok(qnaSearchList).getBody();
+    }
+
+
+    /**
+     * 관리자 게시판 Q&A (Answer 추가 -> 추가버튼 클릭 )
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "Q&A ANSWER 추가",description = "특정 Question에 답변을 답니다.")
+    @PostMapping("/board/qna/add/{id}")
+    public String addAnswer(@ModelAttribute RequestBoardQnADto answerDto,@PathVariable("id") Long qnaId){
+        return boardService.addAns(answerDto,qnaId);
+    }
+
+    /**
      * 관리자 게시판 Q&A (Q&A 수정)
      */
     @ApiDocumentResponse
     @Operation(summary = "Q&A 수정", description = "Q&A를 수정합니다.")
-    @PostMapping("/board/qna/update")
-    public Long updateQnA(@ModelAttribute RequestBoardQnADto qnaDto, BindingResult bindingResult) {
-        return boardService.updateQnA(qnaDto);
+    @PostMapping("/board/qna/update/{id}")
+    public Long updateQnA(@ModelAttribute RequestBoardQnADto qnaDto, @PathVariable("id") Long qna_id) {
+        return boardService.updateQnA(qnaDto,qna_id);
 
     }
 
 
-
+    /**
+     * 관리자 게시판 Q&A (Q&A 삭제)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "qna 삭제", description = "QnA를 삭제합니다.")
+    @PostMapping("/board/qna/del/{id}")
+    public void qnaDel(@PathVariable("id") Long qnaId) {
+        boardService.delQna(qnaId);
+    }
 
     /**
      * 관리자 게시판 관리 페이지(review 전체 리스트)
@@ -223,14 +249,48 @@ public class AdminApiController {
     }
 
     /**
-     * 관리자 게시판 Q&A (Q&A 수정)
+     * 관리자 게시판 Review(리뷰 검색(회원 이름, 회원 아이디))
      */
     @ApiDocumentResponse
-    @Operation(summary = "Review 수정", description = "Review를 수정합니다.")
-    @PostMapping("/board/review/update")
-    public Long updateReview(@ModelAttribute RequestBoardReviewDto reviewDto) {
-        return boardService.updateReview(reviewDto);
+    @Operation(summary = "리뷰 검색 리스트", description = "리뷰 검색 리스트를 출력합니다.")
+    @GetMapping("/board/review/search")
+    public Page<ResponseBoardReviewDto> searchReviewList(PageRequest pageRequest, SearchReviewCondition searchReviewCondition) {
+        Page<ResponseBoardReviewDto> reviewList = boardService.searchReviewList(pageRequest.of(), searchReviewCondition);
+        return ResponseEntity.ok(reviewList).getBody();
+    }
+
+    /**
+     * 관리자 게시판 Review (추가)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "Review 추가" , description = "Review 를 추가합니다.")
+    @PostMapping("board/review/add")
+    public void addReview(RequestBoardReviewDto reviewDto){
+        boardService.addReview(reviewDto);
+    }
+
+
+    /**
+     * 관리자 게시판 Review (수정)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "Review 수정", description = "Review 를 수정합니다.")
+    @PostMapping("/board/review/update/{id}")
+    public Long updateReview(@ModelAttribute RequestBoardReviewDto reviewDto, @PathVariable("id") Long reviewId) {
+        return boardService.updateReview(reviewDto,reviewId);
 
     }
+
+    /**
+     * 관리자 게시판 Review (삭제)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "review 삭제", description = "Review 를 삭제합니다.")
+    @PostMapping("/board/review/del/{id}")
+    public void reviewDel(@PathVariable("id") Long reviewId) {
+        boardService.delReview(reviewId);
+    }
+
+
 
 }

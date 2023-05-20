@@ -11,11 +11,14 @@ import com.farmer.backend.repository.admin.board.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +27,6 @@ public class BoardService {
     private final BoardQueryRepository boardQueryRepositoryImpl;
     private final QnARepository qnaRepository;
     private final ReviewRepository reviewRepository;
-    private final ProductRepository productRepository;
-    private final OrdersRepository ordersRepository;
 
 
     /**
@@ -47,15 +48,47 @@ public class BoardService {
     }
 
     /**
-     * qna 수정
+     * QnA 검색
+     * @param pageable
+     * @param searchQnaCondition
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Page<ResponseBoardQnADto> searchQnAList(Pageable pageable, SearchQnaCondition searchQnaCondition) {
+        Page<Qna> QnAList=boardQueryRepositoryImpl.searchQnAList(pageable,searchQnaCondition);
+        return new PageImpl<>(QnAList.stream().map(qna -> ResponseBoardQnADto.getQnA(qna)).collect(Collectors.toList()));
+
+    }
+
+    /**
+     *  QNA 추가 (답변 달기)
      */
     @Transactional
-    public Long updateQnA(RequestBoardQnADto qnaDto) {
-        Product product = productRepository.findById(qnaDto.getProduct_id()).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
-        qnaRepository.findById(qnaDto.getId()).orElseThrow(() -> new CustomException(ErrorCode.QNA_NOT_FOUND)).updateQnA(qnaDto, product);
+    public String addAns(RequestBoardQnADto answerDto, Long qnaId) {
+        qnaRepository.findById(qnaId).orElseThrow(()-> new CustomException(ErrorCode.QNA_NOT_FOUND)).addAnswer(answerDto);
+        log.info(answerDto.getAnswer());
+        return answerDto.getAnswer();
+    }
+
+    /**
+     *  QNA 수정
+     */
+    @Transactional
+    public Long updateQnA(RequestBoardQnADto qnaDto,Long qnaId) {
+        qnaRepository.findById(qnaId).orElseThrow(() -> new CustomException(ErrorCode.QNA_NOT_FOUND)).updateQnA(qnaDto);
+
         return qnaDto.getId();
     }
 
+    /**
+     * QNA 삭제
+     */
+
+    @Transactional
+    public void delQna(Long qnaId){
+        Qna qna= qnaRepository.findById(qnaId).orElseThrow(()-> new CustomException(ErrorCode.QNA_NOT_FOUND));
+        boardQueryRepositoryImpl.deleteQna(qna.getId());
+    }
 
     /**
      * Review 전체 리스트 조회
@@ -74,11 +107,52 @@ public class BoardService {
         return findReview.map(product_reviews -> ResponseBoardReviewDto.getReview(product_reviews)).orElseThrow(()-> new CustomException(ErrorCode.QNA_NOT_FOUND));
     }
 
+    /**
+     * 리뷰 검색 리스트
+     * @param pageable 페이징
+     * @param searchReviewCondition 검색정보
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Page<ResponseBoardReviewDto> searchReviewList(Pageable pageable, SearchReviewCondition searchReviewCondition) {
+        Page<Product_reviews> reviewList=boardQueryRepositoryImpl.searchReviewList(pageable,searchReviewCondition);
+        return new PageImpl<>(reviewList.stream().map(product_reviews -> ResponseBoardReviewDto.getReview(product_reviews)).collect(Collectors.toList()));
+    }
+
+    /**
+     * Review 수정
+     */
     @Transactional
-    public Long updateReview(RequestBoardReviewDto reviewDto) {
-        Orders orders = ordersRepository.findById(reviewDto.getOrders_id()).orElseThrow(()-> new CustomException(ErrorCode.ORDER_NOT_FOUND));
-        reviewRepository.findById(reviewDto.getId()).orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_FOUND)).updateReview(reviewDto,orders);
+    public Long updateReview(RequestBoardReviewDto reviewDto, Long reviewId) {
+        reviewRepository.findById(reviewId).orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_FOUND)).updateReview(reviewDto);
 
         return reviewDto.getId();
     }
+
+    /**
+     * Review 삭제
+     */
+    @Transactional
+    public void delReview(Long reviewId) {
+        Product_reviews review = reviewRepository.findById(reviewId).orElseThrow(()-> new CustomException(ErrorCode.REVIEW_NOT_FOUND));
+        boardQueryRepositoryImpl.deleteReview(review.getId());
+
+    }
+
+    /**
+     * Review 추가
+     * @param reviewDto REVIEW 데이터
+     */
+    public void addReview(RequestBoardReviewDto reviewDto) {
+
+        log.info(String.valueOf(reviewRepository.findById(reviewDto.getId())));
+        if (reviewRepository.findById(reviewDto.getId()).isPresent()){
+            throw new CustomException(ErrorCode.REVIEW_FOUND);
+        };
+        reviewRepository.save(reviewDto.toEntity());
+    }
+
+
+
+
 }

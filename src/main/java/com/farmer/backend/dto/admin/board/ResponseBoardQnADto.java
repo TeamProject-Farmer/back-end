@@ -54,6 +54,7 @@ public class ResponseBoardQnADto {
                 .aCreatedDate(qna.getACreatedDate())
                 .build();
     }
+
     //ResponseQnADto -> Entity
     public Qna toEntity(){
         return Qna.builder()

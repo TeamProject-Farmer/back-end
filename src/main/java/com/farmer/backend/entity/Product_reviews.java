@@ -61,14 +61,15 @@ public class Product_reviews {
                 .build();
     }
 
-    public void updateReview(RequestBoardReviewDto reviewDto,Orders orders){
+    public void updateReview(RequestBoardReviewDto reviewDto){
         this.id=reviewDto.getId();
         this.member=reviewDto.getMember();
-        this.orders=orders;
+        this.orders=reviewDto.getOrders();
         this.content=reviewDto.getContent();
         this.imgUrl=reviewDto.getImgUrl();
         this.likeCount=reviewDto.getLikeCount();
         this.createdDate=reviewDto.getCreatedDate();
     }
+
 
 }

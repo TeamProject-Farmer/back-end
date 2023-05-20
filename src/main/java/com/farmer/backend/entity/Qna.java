@@ -46,7 +46,6 @@ public class Qna {
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
     private LocalDateTime qCreatedDate;
 
-    @NotNull
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
     private LocalDateTime aCreatedDate;
@@ -64,11 +63,11 @@ public class Qna {
                 .build();
     }
 
-    //잘 들어와요,..!! 이렇게 하면
-    public void updateQnA(RequestBoardQnADto qnaDto,Product product){
+
+    public void updateQnA(RequestBoardQnADto qnaDto){
         this.id=qnaDto.getId();
         this.member=qnaDto.getMember();
-        this.product=product;
+        this.product=qnaDto.getProduct();
         this.subject=qnaDto.getSubject();
         this.content=qnaDto.getContent();
         this.answer=qnaDto.getAnswer();
@@ -76,5 +75,9 @@ public class Qna {
         this.aCreatedDate=qnaDto.getACreatedDate();
     }
 
+    public void addAnswer(RequestBoardQnADto answerDto){
+        this.answer=answerDto.getAnswer();
+        this.aCreatedDate=answerDto.getACreatedDate();
+    }
 
 }

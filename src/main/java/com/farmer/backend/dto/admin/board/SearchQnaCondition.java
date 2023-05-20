@@ -8,7 +8,7 @@ import lombok.Data;
 public class SearchQnaCondition {
 
     private String username;
-    private String userId;
-    private String qnaId;
+    private String userEmail;
+    private String productName;
 
 }

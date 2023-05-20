@@ -16,5 +16,11 @@ public interface BoardQueryRepository
     Page<Product_reviews> findAll(Pageable pageable, String sortReviewCond, SearchReviewCondition searchReviewCondition);
 
 
+    void deleteQna(Long qnaId);
 
+    void deleteReview(Long reviewId);
+
+    Page<Product_reviews> searchReviewList(Pageable pageable, SearchReviewCondition searchReviewCondition);
+
+    Page<Qna> searchQnAList(Pageable pageable, SearchQnaCondition searchQnaCondition);
 }

@@ -141,7 +141,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     public OrderSpecifier<?> sortOrderCondition(String sortOrderCond) {
 
         Order order = Order.DESC;
-
+        log.info(sortOrderCond);
         if (Objects.isNull(sortOrderCond) || sortOrderCond.equals("createdDate")) {
             return new OrderSpecifier<>(order, member.id);
         } else if (sortOrderCond.equals("username")) {
@@ -154,7 +154,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     }
 
     public BooleanExpression likeUserId(String userId) {
-        return userId != null ? member.username.contains(userId) : null;
+        return userId != null ? member.email.contains(userId) : null;
     }
 
     public BooleanExpression likeUsername(String username) {

@@ -14,7 +14,6 @@ public class RequestBoardReviewDto {
 
     private Long id;
     private Member member;
-    private Long orders_id;
     private Orders orders;
     private String content;
     private String imgUrl;
@@ -23,10 +22,10 @@ public class RequestBoardReviewDto {
     private LocalDateTime createdDate;
 
     @Builder
-    public RequestBoardReviewDto (Long id, Member member, Long orders_id, String content, String imgUrl, int likeCount, LocalDateTime createdDate){
+    public RequestBoardReviewDto (Long id, Member member, Orders orders, String content, String imgUrl, int likeCount, LocalDateTime createdDate){
         this.id=id;
         this.member=member;
-        this.orders_id=orders_id;
+        this.orders=orders;
         this.content=content;
         this.imgUrl=imgUrl;
         this.likeCount=likeCount;

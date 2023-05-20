@@ -18,7 +18,6 @@ public class RequestBoardQnADto {
     private Long id;
     private Member member;
 
-    private Long product_id;
     private Product product;
     private String subject;
     private String content;
@@ -29,15 +28,15 @@ public class RequestBoardQnADto {
     private LocalDateTime aCreatedDate;
 
     @Builder
-    public RequestBoardQnADto(Long id, Member member,  Long product_id, String subject, String content, String answer, LocalDateTime qCreatedDate, LocalDateTime aCreatedDate){
+    public RequestBoardQnADto(Long id, Member member,  Product product, String subject, String content, String answer, LocalDateTime qCreatedDate, LocalDateTime aCreatedDate){
         this.id=id;
         this.member=member;
-        this.product_id=product_id;
+        this.product=product;
         this.subject=subject;
         this.content=content;
         this.answer=answer;
         this.qCreatedDate=qCreatedDate;
-        this.aCreatedDate=aCreatedDate;
+        this.aCreatedDate=aCreatedDate; //LocalDateTime.now();로 변경 ?
 
     }
 
