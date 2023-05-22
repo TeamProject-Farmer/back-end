@@ -19,8 +19,7 @@ public class Product extends BaseTimeEntity {
     @Column(name = "product_id")
     private Long id;
 
-    @ManyToOne//(fetch = LAZY)
-
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "pc_id")
     private ProductCategory category;
 

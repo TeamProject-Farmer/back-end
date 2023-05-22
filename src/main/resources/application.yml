@@ -26,6 +26,10 @@ spring:
       pageable:
         default-page-size: 10
 
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
 # Swagger springdoc-ui Configuration
 springdoc:
   packages-to-scan: com.farmer.backend.controller

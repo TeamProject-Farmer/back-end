@@ -2,17 +2,14 @@ package com.farmer.backend.repository.admin.board;
 
 import com.farmer.backend.dto.admin.board.SearchQnaCondition;
 import com.farmer.backend.dto.admin.board.SearchReviewCondition;
-import com.farmer.backend.entity.OrderDetail;
 import com.farmer.backend.entity.Product_reviews;
 import com.farmer.backend.entity.Qna;
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -68,7 +65,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         List<Product_reviews> reviewList = query
                 .select(product_reviews)
                 .from(product_reviews)
-                .where(likeReviewUsername(searchReviewCond.getUsername()),likeReviewUserEmail(searchReviewCond.getEmail()))
+                .where(likeReviewUsername(searchReviewCond.getUserName()),likeReviewUserEmail(searchReviewCond.getUserEmail()))
                 .orderBy(sortOrderReview(sortReviewCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -108,14 +105,13 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     }
 
 
-
     /**
      * QnA검색
      */
     @Override
     public Page<Qna> searchQnAList(Pageable pageable,SearchQnaCondition cond) {
         List<Qna> qnaList = query.selectFrom(qna)
-                .where(likeQnAUserEmail(cond.getUserEmail()),likeQnAUsername(cond.getUserEmail()),likeQnAProductName(cond.getProductName()))
+                .where(likeQnAUserEmail(cond.getUserEmail()),likeQnAUsername(cond.getUserName()),likeQnAProductName(cond.getProductName()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(qna.id.desc())
@@ -124,7 +120,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         Long count = query
                 .select(qna.count())
                 .from(qna)
-                .where(likeQnAUserEmail(cond.getUserEmail()),likeQnAUsername(cond.getUsername()),likeQnAProductName(cond.getProductName()))
+                .where(likeQnAUserEmail(cond.getUserEmail()),likeQnAUsername(cond.getUserName()),likeQnAProductName(cond.getProductName()))
                 .fetchOne();
 
         return new PageImpl<>(qnaList, pageable, count);
@@ -148,7 +144,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     @Override
     public Page<Product_reviews> searchReviewList(Pageable pageable,SearchReviewCondition cond){
         List<Product_reviews> reviewsList = query.selectFrom(product_reviews)
-                .where(likeReviewUserEmail(cond.getEmail()),likeReviewUsername(cond.getUsername()))
+                .where(likeReviewUserEmail(cond.getUserEmail()),likeReviewUsername(cond.getUserName()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(product_reviews.id.desc())
@@ -157,7 +153,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         Long count=query
                 .select(product_reviews.count())
                 .from(product_reviews)
-                .where(likeReviewUsername(cond.getUsername()),likeReviewUserEmail(cond.getEmail()))
+                .where(likeReviewUsername(cond.getUserName()),likeReviewUserEmail(cond.getUserEmail()))
                 .fetchOne();
 
         return new PageImpl<>(reviewsList,pageable,count);

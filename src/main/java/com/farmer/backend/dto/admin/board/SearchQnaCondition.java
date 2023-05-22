@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class SearchQnaCondition {
 
-    private String username;
+    private String userName;
     private String userEmail;
     private String productName;
 

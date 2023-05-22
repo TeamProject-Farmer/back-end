@@ -30,7 +30,7 @@ public class ResponseBoardQnADto {
 
 
     @Builder
-    public  ResponseBoardQnADto(Long id, Member member, Product product, String subject, String content, String answer, LocalDateTime qCreatedDate , LocalDateTime aCreatedDate){
+    public  ResponseBoardQnADto(Long id, Member member, Product product,  String subject, String content, String answer, LocalDateTime qCreatedDate , LocalDateTime aCreatedDate){
         this.id=id;
         this.member=member;
         this.product=product;
@@ -59,7 +59,6 @@ public class ResponseBoardQnADto {
     public Qna toEntity(){
         return Qna.builder()
                 .member(member)
-                .product(product)
                 .subject(subject)
                 .content(content)
                 .answer(answer)

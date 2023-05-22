@@ -1,8 +1,6 @@
 package com.farmer.backend.service.admin;
 
 import com.farmer.backend.dto.admin.board.*;
-import com.farmer.backend.entity.Orders;
-import com.farmer.backend.entity.Product;
 import com.farmer.backend.entity.Product_reviews;
 import com.farmer.backend.entity.Qna;
 import com.farmer.backend.exception.CustomException;
@@ -12,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +31,7 @@ public class BoardService {
      */
     @Transactional(readOnly = true)
     public Page<ResponseBoardQnADto> qnaList(Pageable pageable, String sortQnaCond, SearchQnaCondition searchQnaCondition) {
+
         return boardQueryRepositoryImpl.findAll(pageable,sortQnaCond,searchQnaCondition).map(Qna::qnaList);
     }
 

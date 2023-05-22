@@ -6,8 +6,8 @@ import lombok.Data;
 public class SearchReviewCondition {
 
 
-    private String username;
-    private String Email;
+    private String userName;
+    private String userEmail;
 
 
 

@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -148,6 +149,7 @@ public class AdminApiController {
     @ApiDocumentResponse
     @Operation(summary = "게시판 관리 Q&A 리스트", description = "Q&A 리스트를 출력합니다.")
     @GetMapping("/board/qna")
+    @Transactional(readOnly = true)
     public Page<ResponseBoardQnADto> boardQnAList(PageRequest pageRequest,
                                                   SortOrderQnaCondition sortOrderQnaCondition,
                                                   SearchQnaCondition searchQnaCondition){

@@ -77,7 +77,7 @@ public class Qna {
 
     public void addAnswer(RequestBoardQnADto answerDto){
         this.answer=answerDto.getAnswer();
-        this.aCreatedDate=answerDto.getACreatedDate();
+        this.aCreatedDate=LocalDateTime.now();
     }
 
 }
