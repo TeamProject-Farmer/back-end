@@ -28,9 +28,9 @@ public class Orders {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "delivery_id")
-    private List<Delivery> delivery = new ArrayList<>();
+    private Delivery delivery;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;

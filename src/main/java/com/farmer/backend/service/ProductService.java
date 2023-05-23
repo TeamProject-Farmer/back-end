@@ -14,6 +14,9 @@ import com.farmer.backend.repository.admin.product.OptionRepository;
 import com.farmer.backend.repository.admin.product.ProductQueryRepository;
 import com.farmer.backend.repository.admin.product.ProductRepository;
 import com.farmer.backend.repository.admin.product.category.ProductCategoryRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.jose.shaded.json.JSONArray;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +60,10 @@ public class ProductService {
      */
     @Transactional(readOnly = true)
     public ResponseProductDto productOne(Long productId) {
+
+        List<Options> byProductId = optionRepository.findByProductId(productId);
+
+
         return productRepository.findById(productId).map(ResponseProductDto::getAllProductList).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
