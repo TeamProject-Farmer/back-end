@@ -12,11 +12,8 @@ import com.farmer.backend.dto.admin.product.ResponseProductDto;
 import com.farmer.backend.entity.ProductCategory;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
-<<<<<<< HEAD
 import com.farmer.backend.service.ProductService;
-=======
 import com.farmer.backend.service.admin.BoardService;
->>>>>>> feature/admin/board
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,19 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-<<<<<<< HEAD
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
-=======
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
 
->>>>>>> feature/admin/board
 
 @RestController
 @Slf4j
@@ -46,12 +36,9 @@ import org.springframework.web.bind.annotation.*;
 public class AdminApiController {
 
     private final MemberService memberService;
-<<<<<<< HEAD
     private final ProductService productService;
-
-=======
     private final BoardService boardService;
->>>>>>> feature/admin/board
+
     /**
      * 계정 관리 페이지(관리자 권한 계정 리스트)
      */
@@ -99,12 +86,7 @@ public class AdminApiController {
     @ApiDocumentResponse
     @Operation(summary = "관리자 권한 계정 수정", description = "관리자 권한을 가진 유저들을 수정합니다.")
     @PostMapping("/account/managers-update")
-<<<<<<< HEAD
     public Long updateManager(@Valid @ModelAttribute RequestMemberDto memberDto) {
-=======
-    public Long updateManager(@ModelAttribute RequestMemberDto memberDto )  {
-
->>>>>>> feature/admin/board
         return memberService.updateMember(memberDto);
     }
 
@@ -144,12 +126,7 @@ public class AdminApiController {
     @ApiDocumentResponse
     @Operation(summary = "회원 수정", description = "회원 정보를 수정합니다.")
     @PostMapping("/members/update")
-<<<<<<< HEAD
-    public Long updateMember(@Valid @ModelAttribute RequestMemberDto memberDto) {
-=======
     public Long updateMember(@ModelAttribute RequestMemberDto memberDto) {
-
->>>>>>> feature/admin/board
         return memberService.updateMember(memberDto);
     }
 
@@ -173,8 +150,6 @@ public class AdminApiController {
         Page<ResponseMemberDto> searchList = memberService.searchMemberList(pageRequest.of(), searchMemberCondition);
         return ResponseEntity.ok(searchList).getBody();
     }
-
-<<<<<<< HEAD
 
     /**
      * 상품 관리 페이지
@@ -239,7 +214,7 @@ public class AdminApiController {
     public void deleteProduct(@RequestParam(value = "product") Long productIds[]) {
         productService.deleteProduct(productIds);
     }
-=======
+
     /**
      * 관리자 게시판 관리 페이지(Q&A 전체 리스트)
      */
@@ -390,7 +365,4 @@ public class AdminApiController {
         boardService.delReview(reviewId);
     }
 
-
-
->>>>>>> feature/admin/board
 }

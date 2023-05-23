@@ -1,23 +1,17 @@
 package com.farmer.backend.entity;
 
 import com.sun.istack.NotNull;
-<<<<<<< HEAD
 import lombok.Getter;
 import lombok.Setter;
-=======
 import lombok.*;
->>>>>>> feature/admin/board
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-<<<<<<< HEAD
-=======
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
->>>>>>> feature/admin/board
 public class ProductCategory {
 
     @Id
