@@ -149,10 +149,10 @@ public class AdminApiController {
     @ApiDocumentResponse
     @Operation(summary = "게시판 관리 Q&A 리스트", description = "Q&A 리스트를 출력합니다.")
     @GetMapping("/board/qna")
-    @Transactional(readOnly = true)
     public Page<ResponseBoardQnADto> boardQnAList(PageRequest pageRequest,
                                                   SortOrderQnaCondition sortOrderQnaCondition,
                                                   SearchQnaCondition searchQnaCondition){
+
         Page<ResponseBoardQnADto> qnaList = boardService.qnaList(
                 pageRequest.of(),
                 sortOrderQnaCondition.getFieldName(),
@@ -193,7 +193,7 @@ public class AdminApiController {
     @ApiDocumentResponse
     @Operation(summary = "Q&A ANSWER 추가",description = "특정 Question에 답변을 답니다.")
     @PostMapping("/board/qna/add/{id}")
-    public String addAnswer(@ModelAttribute RequestBoardQnADto answerDto,@PathVariable("id") Long qnaId){
+    public String addAnswer(@ModelAttribute RequestBoardQnADto answerDto, @PathVariable("id") Long qnaId){
         return boardService.addAns(answerDto,qnaId);
     }
 

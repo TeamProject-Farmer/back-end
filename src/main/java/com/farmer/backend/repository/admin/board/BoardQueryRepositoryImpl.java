@@ -41,7 +41,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         List<Qna> qnaList = query
                 .select(qna)
                 .from(qna)
-                .where(likeQnAUserEmail(searchCond.getUserEmail()),likeQnAUsername(searchCond.getUserEmail()),likeQnAProductName(searchCond.getProductName()))
+                .where(likeQnAUserEmail(searchCond.getUserEmail()),likeQnAUsername(searchCond.getUserName()),likeQnAProductName(searchCond.getProductName()))
                 .orderBy(sortOrderQna(sortQnaCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -112,9 +112,9 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     public Page<Qna> searchQnAList(Pageable pageable,SearchQnaCondition cond) {
         List<Qna> qnaList = query.selectFrom(qna)
                 .where(likeQnAUserEmail(cond.getUserEmail()),likeQnAUsername(cond.getUserName()),likeQnAProductName(cond.getProductName()))
+                .orderBy(qna.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(qna.id.desc())
                 .fetch();
 
         Long count = query
