@@ -1,5 +1,9 @@
 package com.farmer.backend.repository.admin.member;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature/admin/board
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.entity.Member;
 import org.springframework.data.domain.Page;

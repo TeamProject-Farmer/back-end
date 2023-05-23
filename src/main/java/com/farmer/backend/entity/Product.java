@@ -13,7 +13,11 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @AllArgsConstructor
+<<<<<<< HEAD
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+=======
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+>>>>>>> feature/admin/board
 @Getter
 @Builder
 public class Product extends BaseTimeEntity {
@@ -65,6 +69,7 @@ public class Product extends BaseTimeEntity {
     @Column(length = 255)
     private String detailImg5;
 
+<<<<<<< HEAD
     public void productUpdate(RequestProductDto productDto) {
         this.category = productDto.getCategory();
         this.name = productDto.getName();
@@ -82,5 +87,7 @@ public class Product extends BaseTimeEntity {
         this.detailImg4 = productDto.getDetailImg4();
         this.detailImg5 = productDto.getDetailImg5();
     }
+=======
+>>>>>>> feature/admin/board
 
 }

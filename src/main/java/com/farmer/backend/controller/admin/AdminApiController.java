@@ -1,6 +1,7 @@
 package com.farmer.backend.controller.admin;
 
 import com.farmer.backend.config.ApiDocumentResponse;
+import com.farmer.backend.dto.admin.board.*;
 import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
@@ -11,7 +12,11 @@ import com.farmer.backend.dto.admin.product.ResponseProductDto;
 import com.farmer.backend.entity.ProductCategory;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
+<<<<<<< HEAD
 import com.farmer.backend.service.ProductService;
+=======
+import com.farmer.backend.service.admin.BoardService;
+>>>>>>> feature/admin/board
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+<<<<<<< HEAD
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +32,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+=======
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+>>>>>>> feature/admin/board
 
 @RestController
 @Slf4j
@@ -35,8 +46,12 @@ import java.util.Map;
 public class AdminApiController {
 
     private final MemberService memberService;
+<<<<<<< HEAD
     private final ProductService productService;
 
+=======
+    private final BoardService boardService;
+>>>>>>> feature/admin/board
     /**
      * 계정 관리 페이지(관리자 권한 계정 리스트)
      */
@@ -52,6 +67,7 @@ public class AdminApiController {
                 sortOrderMemberCondition.getFieldName(),
                 searchMemberCondition
         );
+
         return ResponseEntity.ok(managerList).getBody();
     }
 
@@ -83,7 +99,12 @@ public class AdminApiController {
     @ApiDocumentResponse
     @Operation(summary = "관리자 권한 계정 수정", description = "관리자 권한을 가진 유저들을 수정합니다.")
     @PostMapping("/account/managers-update")
+<<<<<<< HEAD
     public Long updateManager(@Valid @ModelAttribute RequestMemberDto memberDto) {
+=======
+    public Long updateManager(@ModelAttribute RequestMemberDto memberDto )  {
+
+>>>>>>> feature/admin/board
         return memberService.updateMember(memberDto);
     }
 
@@ -123,7 +144,12 @@ public class AdminApiController {
     @ApiDocumentResponse
     @Operation(summary = "회원 수정", description = "회원 정보를 수정합니다.")
     @PostMapping("/members/update")
+<<<<<<< HEAD
     public Long updateMember(@Valid @ModelAttribute RequestMemberDto memberDto) {
+=======
+    public Long updateMember(@ModelAttribute RequestMemberDto memberDto) {
+
+>>>>>>> feature/admin/board
         return memberService.updateMember(memberDto);
     }
 
@@ -148,6 +174,7 @@ public class AdminApiController {
         return ResponseEntity.ok(searchList).getBody();
     }
 
+<<<<<<< HEAD
 
     /**
      * 상품 관리 페이지
@@ -212,4 +239,158 @@ public class AdminApiController {
     public void deleteProduct(@RequestParam(value = "product") Long productIds[]) {
         productService.deleteProduct(productIds);
     }
+=======
+    /**
+     * 관리자 게시판 관리 페이지(Q&A 전체 리스트)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "게시판 관리 Q&A 리스트", description = "Q&A 리스트를 출력합니다.")
+    @GetMapping("/board/qna")
+    public Page<ResponseBoardQnADto> boardQnAList(PageRequest pageRequest,
+                                                  SortOrderQnaCondition sortOrderQnaCondition,
+                                                  SearchQnaCondition searchQnaCondition){
+
+        Page<ResponseBoardQnADto> qnaList = boardService.qnaList(
+                pageRequest.of(),
+                sortOrderQnaCondition.getFieldName(),
+                searchQnaCondition
+        );
+
+        return ResponseEntity.ok(qnaList).getBody();
+    }
+
+
+    /**
+     * 관리자 게시판 Q&A (Q&A 단건 조회)
+
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "Q&A 단건 조회", description = "특정 Q&A를 열람합니다.")
+    @GetMapping("/board/qna/{qnaId}")
+    public ResponseEntity<ResponseBoardQnADto> findQnA(@PathVariable Long qnaId) {
+        ResponseBoardQnADto oneQnA = boardService.findOneQnA(qnaId);
+        return new ResponseEntity<>(oneQnA, HttpStatus.OK);
+    }
+
+    /**
+     * 관리자 게시판 Q&A (Q&A 검색(상품 이름, 회원 Email, 회원 이름))
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "Q&A 검색 리스트", description = "Q&A 검색 리스트를 출력합니다.")
+    @GetMapping("/board/qna/search")
+    public Page<ResponseBoardQnADto> searchQnAList(PageRequest pageRequest, SearchQnaCondition searchQnaCondition) {
+        Page<ResponseBoardQnADto> qnaSearchList = boardService.searchQnAList(pageRequest.of(), searchQnaCondition);
+        return ResponseEntity.ok(qnaSearchList).getBody();
+    }
+
+
+    /**
+     * 관리자 게시판 Q&A (Answer 추가 -> 추가버튼 클릭 )
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "Q&A ANSWER 추가",description = "특정 Question에 답변을 답니다.")
+    @PostMapping("/board/qna/add/{id}")
+    public String addAnswer(@ModelAttribute RequestBoardQnADto answerDto, @PathVariable("id") Long qnaId){
+        return boardService.addAns(answerDto,qnaId);
+    }
+
+    /**
+     * 관리자 게시판 Q&A (Q&A 수정)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "Q&A 수정", description = "Q&A를 수정합니다.")
+    @PostMapping("/board/qna/update/{id}")
+    public Long updateQnA(@ModelAttribute RequestBoardQnADto qnaDto, @PathVariable("id") Long qna_id) {
+        return boardService.updateQnA(qnaDto,qna_id);
+
+    }
+
+
+    /**
+     * 관리자 게시판 Q&A (Q&A 삭제)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "qna 삭제", description = "QnA를 삭제합니다.")
+    @PostMapping("/board/qna/del/{id}")
+    public void qnaDel(@PathVariable("id") Long qnaId) {
+        boardService.delQna(qnaId);
+    }
+
+    /**
+     * 관리자 게시판 관리 페이지(review 전체 리스트)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "게시판 관리 review 리스트", description = "review 리스트를 출력합니다.")
+    @GetMapping("/board/review")
+    public Page<ResponseBoardReviewDto> boardReviewList(PageRequest pageRequest,
+                                                        SortOrderReviewCondition sortOrderReviewCondition,
+                                                        SearchReviewCondition searchReviewCondition){
+        Page<ResponseBoardReviewDto> reviewList = boardService.reviewList(
+                pageRequest.of(),
+                sortOrderReviewCondition.getFieldName(),
+                searchReviewCondition
+        );
+
+        return ResponseEntity.ok(reviewList).getBody();
+    }
+
+    /**
+     * 관리자 게시판 Review (단건 조회)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "Review 단건 조회", description = "특정 Review 를 열람합니다.")
+    @GetMapping("/board/review/{reviewId}")
+    public ResponseEntity<ResponseBoardReviewDto> findReview(@PathVariable Long reviewId) {
+
+        ResponseBoardReviewDto oneReview = boardService.findOneReview(reviewId);
+        return new ResponseEntity<>(oneReview, HttpStatus.OK);
+
+    }
+
+    /**
+     * 관리자 게시판 Review(리뷰 검색(회원 이름, 회원 아이디))
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "리뷰 검색 리스트", description = "리뷰 검색 리스트를 출력합니다.")
+    @GetMapping("/board/review/search")
+    public Page<ResponseBoardReviewDto> searchReviewList(PageRequest pageRequest, SearchReviewCondition searchReviewCondition) {
+        Page<ResponseBoardReviewDto> reviewList = boardService.searchReviewList(pageRequest.of(), searchReviewCondition);
+        return ResponseEntity.ok(reviewList).getBody();
+    }
+
+    /**
+     * 관리자 게시판 Review (추가)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "Review 추가" , description = "Review 를 추가합니다.")
+    @PostMapping("board/review/add")
+    public void addReview(RequestBoardReviewDto reviewDto){
+        boardService.addReview(reviewDto);
+    }
+
+
+    /**
+     * 관리자 게시판 Review (수정)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "Review 수정", description = "Review 를 수정합니다.")
+    @PostMapping("/board/review/update/{id}")
+    public Long updateReview(@ModelAttribute RequestBoardReviewDto reviewDto, @PathVariable("id") Long reviewId) {
+        return boardService.updateReview(reviewDto,reviewId);
+
+    }
+
+    /**
+     * 관리자 게시판 Review (삭제)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "review 삭제", description = "Review 를 삭제합니다.")
+    @PostMapping("/board/review/del/{id}")
+    public void reviewDel(@PathVariable("id") Long reviewId) {
+        boardService.delReview(reviewId);
+    }
+
+
+
+>>>>>>> feature/admin/board
 }

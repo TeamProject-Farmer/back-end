@@ -1,9 +1,6 @@
 package com.farmer.backend.repository.admin.member;
-
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
-import com.farmer.backend.entity.AccountStatus;
-import com.farmer.backend.entity.Member;
-import com.farmer.backend.entity.UserRole;
+import com.farmer.backend.entity.*;
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -20,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.farmer.backend.entity.QMember.member;
+
 
 @Repository
 @Slf4j
@@ -143,7 +141,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     public OrderSpecifier<?> sortOrderCondition(String sortOrderCond) {
 
         Order order = Order.DESC;
-
+        log.info(sortOrderCond);
         if (Objects.isNull(sortOrderCond) || sortOrderCond.equals("createdDate")) {
             return new OrderSpecifier<>(order, member.id);
         } else if (sortOrderCond.equals("username")) {
@@ -156,10 +154,12 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     }
 
     public BooleanExpression likeUserId(String userId) {
-        return userId != null ? member.username.contains(userId) : null;
+        return userId != null ? member.email.contains(userId) : null;
     }
 
     public BooleanExpression likeUsername(String username) {
         return username != null ? member.username.contains(username) : null;
     }
+
+
 }
