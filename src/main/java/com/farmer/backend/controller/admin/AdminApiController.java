@@ -6,6 +6,7 @@ import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.admin.SortOrderCondition;
+import com.farmer.backend.dto.admin.product.RequestOptionDto;
 import com.farmer.backend.dto.admin.product.RequestProductDto;
 import com.farmer.backend.dto.admin.product.ResponseCategoryDto;
 import com.farmer.backend.dto.admin.product.ResponseProductDto;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -171,6 +173,13 @@ public class AdminApiController {
         return ResponseEntity.ok(productService.productOne(productId));
     }
 
+    @ApiDocumentResponse
+    @Operation(summary = "옵션 추가", description = "옵션 하나를 추가합니다.")
+    @GetMapping("/product/{productId}/add-option")
+    public void addOptions(@PathVariable Long productId, @ModelAttribute RequestOptionDto optionDto) {
+        productService.addOptions(productId, optionDto);
+    }
+
     /**
      * 상품 관리 페이지(상품 등록 버튼)
      */
@@ -188,7 +197,7 @@ public class AdminApiController {
     @Operation(summary = "상품 등록", description = "상품 한 건을 등록합니다.")
     @PostMapping("/product/create")
     public void registerActionProduct(@ModelAttribute RequestProductDto productDto, BindingResult bindingResult) {
-        log.info("productDto={}", productDto.getName());
+        log.info("productDto={}", productDto.toString());
         if (bindingResult.hasErrors()) {
             bindingResult.getFieldErrors().forEach(r -> log.error(r.getField()));
         }

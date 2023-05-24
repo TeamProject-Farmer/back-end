@@ -1,17 +1,21 @@
 package com.farmer.backend.dto.admin.product;
 
+import com.farmer.backend.entity.Options;
 import com.farmer.backend.entity.Product;
 import com.farmer.backend.entity.ProductCategory;
 import com.farmer.backend.entity.ProductSize;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class RequestProductDto {
 
     private Long id;
@@ -38,6 +42,16 @@ public class RequestProductDto {
     private String detailImg4;
     private String detailImg5;
 
+    @JsonProperty(value = "optionId")
+    private Long optionId;
+    @JsonProperty(value = "optionName")
+    private String optionName;
+    @JsonProperty(value = "optionPrice")
+    private Integer optionPrice;
+    @JsonProperty(value = "product")
+    private Product product;
+
+
     public Product toEntity() {
         return Product.builder()
                 .id(id)
@@ -57,4 +71,13 @@ public class RequestProductDto {
                 .detailImg5(detailImg5)
                 .build();
     }
+
+    public Options toEntityOptions(Product product) {
+        return Options.builder()
+                .product(product)
+                .optionName(optionName)
+                .optionPrice(optionPrice)
+                .build();
+    }
+
 }

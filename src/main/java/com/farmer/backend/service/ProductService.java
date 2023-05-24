@@ -1,11 +1,6 @@
 package com.farmer.backend.service;
 
-import com.farmer.backend.dto.admin.member.ResponseMemberDto;
-import com.farmer.backend.dto.admin.product.RequestProductDto;
-import com.farmer.backend.dto.admin.product.ResponseCategoryDto;
-import com.farmer.backend.dto.admin.product.ResponseProductDto;
-import com.farmer.backend.entity.Member;
-import com.farmer.backend.entity.Options;
+import com.farmer.backend.dto.admin.product.*;
 import com.farmer.backend.entity.Product;
 import com.farmer.backend.entity.ProductCategory;
 import com.farmer.backend.exception.CustomException;
@@ -14,9 +9,6 @@ import com.farmer.backend.repository.admin.product.OptionRepository;
 import com.farmer.backend.repository.admin.product.ProductQueryRepository;
 import com.farmer.backend.repository.admin.product.ProductRepository;
 import com.farmer.backend.repository.admin.product.category.ProductCategoryRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.jose.shaded.json.JSONArray;
-import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,10 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,11 +49,9 @@ public class ProductService {
      */
     @Transactional(readOnly = true)
     public ResponseProductDto productOne(Long productId) {
-
-        List<Options> byProductId = optionRepository.findByProductId(productId);
-
-
-        return productRepository.findById(productId).map(ResponseProductDto::getAllProductList).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        Map<String, Object> options = new HashMap<>();
+        List<ResponseOptionDto> byProductId = optionRepository.findByProductId(productId).stream().map(o -> ResponseOptionDto.optionList(o)).collect(Collectors.toList());
+        return productRepository.findById(productId).map(p -> ResponseProductDto.getOneProduct(p, byProductId)).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
     /**
@@ -81,21 +68,27 @@ public class ProductService {
 
     /**
      * 상품 등록
+     *
      * @param productDto 상품 등록 폼
      */
     @Transactional
     public void registerProduct(RequestProductDto productDto) {
-        productRepository.save(productDto.toEntity());
+        Product product = productRepository.save(productDto.toEntity());
+        if (productDto.getOptionName() != null) {
+            optionRepository.save(productDto.toEntityOptions(product));
+        }
     }
 
     /**
      * 상품 수정
-     * @param productId 상품 고유번호
+     *
+     * @param productId  상품 고유번호
      * @param productDto 상품 수정폼
      */
     @Transactional
     public void updateActionProduct(Long productId, RequestProductDto productDto) {
         productRepository.findById(productId).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND)).productUpdate(productDto);
+        optionRepository.findById(productDto.getOptionId()).orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND)).optionUpdate(productDto);
     }
 
     /**
@@ -109,5 +102,10 @@ public class ProductService {
             productRepository.delete(product);
             //tests
         }
+    }
+
+    @Transactional
+    public void addOptions(Long productId, RequestOptionDto optionDto) {
+        optionRepository.save(optionDto.toEntity());
     }
 }
