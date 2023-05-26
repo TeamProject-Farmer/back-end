@@ -6,10 +6,7 @@ import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.admin.SortOrderCondition;
-import com.farmer.backend.dto.admin.product.RequestOptionDto;
-import com.farmer.backend.dto.admin.product.RequestProductDto;
-import com.farmer.backend.dto.admin.product.ResponseCategoryDto;
-import com.farmer.backend.dto.admin.product.ResponseProductDto;
+import com.farmer.backend.dto.admin.product.*;
 import com.farmer.backend.entity.ProductCategory;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
@@ -27,6 +24,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 
@@ -173,13 +171,6 @@ public class AdminApiController {
         return ResponseEntity.ok(productService.productOne(productId));
     }
 
-    @ApiDocumentResponse
-    @Operation(summary = "옵션 추가", description = "옵션 하나를 추가합니다.")
-    @GetMapping("/product/{productId}/add-option")
-    public void addOptions(@PathVariable Long productId, @ModelAttribute RequestOptionDto optionDto) {
-        productService.addOptions(productId, optionDto);
-    }
-
     /**
      * 상품 관리 페이지(상품 등록 버튼)
      */
@@ -188,6 +179,13 @@ public class AdminApiController {
     @GetMapping("/product/create-form")
     public Map<Long, String> registerProductForm() {
         return productService.getCategoryList();
+    }
+
+    @ApiDocumentResponse
+    @Operation(summary = "옵션 등록", description = "옵션 한 건을 등록합니다.")
+    @PostMapping("/product/add-option")
+    public void addOption(@ModelAttribute RequestOptionDto optionDto) {
+        productService.addOptionAction(optionDto);
     }
 
     /**
@@ -215,7 +213,7 @@ public class AdminApiController {
     }
 
     /**
-     * 상품 관리 페이지(회원 삭제)
+     * 상품 관리 페이지(상품 삭제)
      */
     @ApiDocumentResponse
     @Operation(summary = "상품 삭제", description = "상품을 삭제합니다.")
@@ -288,7 +286,6 @@ public class AdminApiController {
         return boardService.updateQnA(qnaDto,qna_id);
 
     }
-
 
     /**
      * 관리자 게시판 Q&A (Q&A 삭제)

@@ -42,14 +42,14 @@ public class RequestProductDto {
     private String detailImg4;
     private String detailImg5;
 
-    @JsonProperty(value = "optionId")
-    private Long optionId;
-    @JsonProperty(value = "optionName")
-    private String optionName;
-    @JsonProperty(value = "optionPrice")
-    private Integer optionPrice;
-    @JsonProperty(value = "product")
-    private Product product;
+//    @JsonProperty(value = "optionId")
+//    private Long optionId;
+//    @JsonProperty(value = "optionName")
+//    private String optionName;
+//    @JsonProperty(value = "optionPrice")
+//    private Integer optionPrice;
+//    @JsonProperty(value = "product")
+//    private Product product;
 
 
     public Product toEntity() {
@@ -72,12 +72,12 @@ public class RequestProductDto {
                 .build();
     }
 
-    public Options toEntityOptions(Product product) {
-        return Options.builder()
-                .product(product)
-                .optionName(optionName)
-                .optionPrice(optionPrice)
-                .build();
-    }
+//    public Options toEntityOptions(Product product) {
+//        return Options.builder()
+//                .product(product)
+//                .optionName(optionName)
+//                .optionPrice(optionPrice)
+//                .build();
+//    }
 
 }

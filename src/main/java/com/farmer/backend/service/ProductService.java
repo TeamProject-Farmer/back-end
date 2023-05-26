@@ -1,6 +1,7 @@
 package com.farmer.backend.service;
 
 import com.farmer.backend.dto.admin.product.*;
+import com.farmer.backend.entity.Options;
 import com.farmer.backend.entity.Product;
 import com.farmer.backend.entity.ProductCategory;
 import com.farmer.backend.exception.CustomException;
@@ -68,15 +69,11 @@ public class ProductService {
 
     /**
      * 상품 등록
-     *
      * @param productDto 상품 등록 폼
      */
     @Transactional
     public void registerProduct(RequestProductDto productDto) {
         Product product = productRepository.save(productDto.toEntity());
-        if (productDto.getOptionName() != null) {
-            optionRepository.save(productDto.toEntityOptions(product));
-        }
     }
 
     /**
@@ -88,7 +85,7 @@ public class ProductService {
     @Transactional
     public void updateActionProduct(Long productId, RequestProductDto productDto) {
         productRepository.findById(productId).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND)).productUpdate(productDto);
-        optionRepository.findById(productDto.getOptionId()).orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND)).optionUpdate(productDto);
+//        optionRepository.findById(productDto.getOptionId()).orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND)).optionUpdate(productDto);
     }
 
     /**
@@ -100,12 +97,15 @@ public class ProductService {
         for (Long productId : productIds) {
             Product product = productRepository.findById(productId).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
             productRepository.delete(product);
-            //tests
+            List<Options> findOptions = optionRepository.findByProductId(productId);
+            for (Options findOption : findOptions) {
+                optionRepository.delete(findOption);
+            }
         }
     }
 
     @Transactional
-    public void addOptions(Long productId, RequestOptionDto optionDto) {
+    public void addOptionAction(RequestOptionDto optionDto) {
         optionRepository.save(optionDto.toEntity());
     }
 }

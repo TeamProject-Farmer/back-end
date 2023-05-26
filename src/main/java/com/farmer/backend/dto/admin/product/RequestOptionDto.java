@@ -10,17 +10,16 @@ import lombok.*;
 @AllArgsConstructor
 public class RequestOptionDto {
 
-    private Long id;
     private String optionName;
     private Product product;
     private Integer optionPrice;
 
     public Options toEntity() {
         return Options.builder()
-                .id(id)
                 .product(product)
                 .optionName(optionName)
                 .optionPrice(optionPrice)
                 .build();
     }
+
 }
