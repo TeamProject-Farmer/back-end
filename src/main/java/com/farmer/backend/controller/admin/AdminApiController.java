@@ -6,9 +6,7 @@ import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.admin.SortOrderCondition;
-import com.farmer.backend.dto.admin.product.RequestProductDto;
-import com.farmer.backend.dto.admin.product.ResponseCategoryDto;
-import com.farmer.backend.dto.admin.product.ResponseProductDto;
+import com.farmer.backend.dto.admin.product.*;
 import com.farmer.backend.entity.ProductCategory;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
@@ -20,11 +18,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 
@@ -41,6 +41,7 @@ public class AdminApiController {
 
     /**
      * 계정 관리 페이지(관리자 권한 계정 리스트)
+     * 검색, 정렬
      */
     @ApiDocumentResponse
     @Operation(summary = "관리자 권한 계정 리스트", description = "관리자 권한을 가진 유저들을 출력합니다.")
@@ -93,6 +94,7 @@ public class AdminApiController {
 
     /**
      * 회원 관리 페이지(회원 전체 리스트)
+     * 검색, 정렬
      */
     @ApiDocumentResponse
     @Operation(summary = "회원 전체 리스트", description = "회원 전체 리스트를 출력합니다.")
@@ -153,11 +155,12 @@ public class AdminApiController {
 
     /**
      * 상품 관리 페이지
+     * 검색, 정렬
      */
     @ApiDocumentResponse
     @Operation(summary = "상품 전체 리스트", description = "상품 전체 리스트를 출력합니다.")
     @GetMapping("/product-list")
-    public Page<ResponseProductDto> productList(PageRequest pageRequest, String productName, SortOrderCondition orderCondition, BindingResult bindingResult) {
+    public Page<ResponseProductDto> productList(PageRequest pageRequest, String productName, SortOrderCondition orderCondition) {
         return productService.productList(pageRequest.of(), productName, orderCondition.getFieldName());
     }
 
@@ -182,13 +185,40 @@ public class AdminApiController {
     }
 
     /**
+     * 상품 관리 페이지(옵션 등록)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "옵션 등록", description = "옵션 한 건을 등록합니다.")
+    @PostMapping("/product/add-option")
+    public void addOption(@ModelAttribute RequestOptionDto optionDto) {
+        productService.addOptionAction(optionDto);
+    }
+
+    @ApiDocumentResponse
+    @Operation(summary = "옵션 수정 폼", description = "옵션 수정 폼으로 이동합니다.")
+    @PostMapping("/product/{optionId}/option")
+    public void updateOption(@PathVariable Long optionId, RequestOptionDto optionDto) {
+        productService.updateActionOption(optionId, optionDto);
+    }
+
+    /**
+     * 상품 관리 페이지(옵션 삭제)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "옵션 삭제", description = "옵션 한 건을 삭제합니다.")
+    @PostMapping("/product/option-remove/{optionId}")
+    public void removeOption(@PathVariable Long optionId) {
+        productService.removeOption(optionId);
+    }
+
+    /**
      * 상품 관리 페이지(상품 등록 기능 수행)
      */
     @ApiDocumentResponse
     @Operation(summary = "상품 등록", description = "상품 한 건을 등록합니다.")
     @PostMapping("/product/create")
     public void registerActionProduct(@ModelAttribute RequestProductDto productDto, BindingResult bindingResult) {
-        log.info("productDto={}", productDto.getName());
+        log.info("productDto={}", productDto.toString());
         if (bindingResult.hasErrors()) {
             bindingResult.getFieldErrors().forEach(r -> log.error(r.getField()));
         }
@@ -206,13 +236,23 @@ public class AdminApiController {
     }
 
     /**
-     * 상품 관리 페이지(회원 삭제)
+     * 상품 관리 페이지(상품 삭제)
      */
     @ApiDocumentResponse
     @Operation(summary = "상품 삭제", description = "상품을 삭제합니다.")
     @PostMapping("/product/delete")
     public void deleteProduct(@RequestParam(value = "product") Long productIds[]) {
         productService.deleteProduct(productIds);
+    }
+
+    /**
+     * 상품 관리 페이지(상품 검색)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "상품 검색", description = "상품 검색 리스트를 출력합니다.")
+    @GetMapping("/product/search")
+    public Page<ResponseProductDto> searchProductList(PageRequest pageRequest, String productName) {
+        return productService.searchActionProductList(pageRequest.of(), productName);
     }
 
     /**
@@ -237,7 +277,6 @@ public class AdminApiController {
 
     /**
      * 관리자 게시판 Q&A (Q&A 단건 조회)
-
      */
     @ApiDocumentResponse
     @Operation(summary = "Q&A 단건 조회", description = "특정 Q&A를 열람합니다.")
@@ -279,7 +318,6 @@ public class AdminApiController {
         return boardService.updateQnA(qnaDto,qna_id);
 
     }
-
 
     /**
      * 관리자 게시판 Q&A (Q&A 삭제)

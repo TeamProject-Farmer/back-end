@@ -6,7 +6,10 @@ import com.farmer.backend.entity.ProductCategory;
 import com.farmer.backend.entity.ProductSize;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.*;
+import lombok.extern.java.Log;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +28,7 @@ public class ResponseProductDto {
     private Integer price;
     private Integer sellQuantity;
     private Integer discountRate;
-    private Map<Long, Object> options;
+    private List<ResponseOptionDto> options;
     private String thumbnailImg;
     private String brandName;
     private ProductSize size;
@@ -58,7 +61,7 @@ public class ResponseProductDto {
                 .build();
     }
 
-    public static ResponseProductDto getOneProduct(Product product, JSONObject jsonObject) {
+    public static ResponseProductDto getOneProduct(Product product, List<ResponseOptionDto> options) {
         return ResponseProductDto.builder()
                 .id(product.getId())
                 .categoryId(product.getCategory().getId())
@@ -68,6 +71,7 @@ public class ResponseProductDto {
                 .price(product.getPrice())
                 .sellQuantity(product.getSellQuantity())
                 .discountRate(product.getDiscountRate())
+                .options(options)
                 .thumbnailImg(product.getThumbnailImg())
                 .brandName(product.getBrandName())
                 .size(product.getSize())

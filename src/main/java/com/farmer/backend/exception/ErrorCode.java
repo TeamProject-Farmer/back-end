@@ -15,6 +15,7 @@ public enum ErrorCode {
 
     MEMBER_NOT_FOUND(BAD_REQUEST, "해당 회원이 존재하지 않습니다."),
     PRODUCT_NOT_FOUND(BAD_REQUEST, "해당 상품이 존재하지 않습니다."),
+    OPTION_NOT_FOUND(BAD_REQUEST, "해당 옵션이 존재하지 않습니다."),
     REVIEW_NOT_FOUND(BAD_REQUEST, "해당 리뷰가 존재하지 않습니다."),
     REVIEW_FOUND(BAD_REQUEST,"해당 리뷰 ID가 이미 존재합니다."),
     QNA_NOT_FOUND (BAD_REQUEST, "해당 QNA가 존재하지 않습니다."),
