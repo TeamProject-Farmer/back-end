@@ -33,11 +33,11 @@ public class Options {
     private String optionName;
     private Integer optionPrice;
 
-//    public void optionUpdate(RequestProductDto productDto) {
-//        this.id = productDto.getOptionId();
-//        this.product = productDto.getProduct();
-//        this.optionName = productDto.getOptionName();
-//        this.optionPrice = productDto.getOptionPrice();
-//    }
+    public void optionUpdate(RequestOptionDto optionDto) {
+        this.id = optionDto.getId();
+        this.product = optionDto.getProduct();
+        this.optionName = optionDto.getOptionName();
+        this.optionPrice = optionDto.getOptionPrice();
+    }
 
 }
