@@ -1,30 +1,42 @@
 package com.farmer.backend.controller.admin;
 
 import com.farmer.backend.config.ApiDocumentResponse;
-import com.farmer.backend.dto.admin.board.*;
+import com.farmer.backend.dto.admin.board.faq.RequestFaqDto;
+import com.farmer.backend.dto.admin.board.faq.ResponseFaqDto;
+import com.farmer.backend.dto.admin.board.faq.SearchFaqCondition;
+import com.farmer.backend.dto.admin.board.notice.RequestNoticeDto;
+import com.farmer.backend.dto.admin.board.notice.ResponseNoticeDto;
+import com.farmer.backend.dto.admin.board.notice.SearchNoticeCondition;
+import com.farmer.backend.dto.admin.board.qna.RequestBoardQnADto;
+import com.farmer.backend.dto.admin.board.qna.ResponseBoardQnADto;
+import com.farmer.backend.dto.admin.board.qna.SearchQnaCondition;
+import com.farmer.backend.dto.admin.board.qna.SortOrderQnaCondition;
+import com.farmer.backend.dto.admin.board.review.RequestBoardReviewDto;
+import com.farmer.backend.dto.admin.board.review.ResponseBoardReviewDto;
+import com.farmer.backend.dto.admin.board.review.SearchReviewCondition;
+import com.farmer.backend.dto.admin.board.review.SortOrderReviewCondition;
 import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.admin.SortOrderCondition;
 import com.farmer.backend.dto.admin.product.*;
-import com.farmer.backend.entity.ProductCategory;
+import com.farmer.backend.entity.Faq;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
 import com.farmer.backend.service.ProductService;
 import com.farmer.backend.service.admin.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
 
 
@@ -402,5 +414,147 @@ public class AdminApiController {
     public void reviewDel(@PathVariable("id") Long reviewId) {
         boardService.delReview(reviewId);
     }
+
+    /**
+     * 관리자 게시판 공지사항 ( 전체 조회 )
+     */
+
+    @ApiDocumentResponse
+    @Operation(summary = "공지사항 전체 조회", description = "공지사항을 전체 조회합니다.")
+    @GetMapping("/board/notice")
+    public Page<ResponseNoticeDto> boardNoticeList(PageRequest pageRequest,
+                                                   SearchNoticeCondition searchNoticeCondition,
+                                                   SortOrderCondition sortOrderCondition){
+        Page<ResponseNoticeDto> noticeList=
+                boardService.noticelist(pageRequest.of(),searchNoticeCondition,sortOrderCondition.getFieldName());
+
+        return ResponseEntity.ok(noticeList).getBody();
+    }
+
+    /**
+     * 관리자 게시판 공지사항 ( 공지사항 단건 조회 )
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "공지사항 단건 조회" , description = "특정 공지사항을 열람합니다.")
+    @GetMapping("/board/notice/{noticeId}")
+    public ResponseEntity<ResponseNoticeDto> findNotice(@PathVariable Long noticeId){
+
+        ResponseNoticeDto oneNotice = boardService.findOneNotice(noticeId);
+        return new ResponseEntity<>(oneNotice, HttpStatus.OK);
+
+    }
+
+    /**
+     * 관리자 게시판 공지사항 (공지사항 검색(관리자 이름, 관리자 이메일, 공지사항 제목))
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "공지사항 검색",description = "공지사항을 검색합니다.")
+    @GetMapping("/board/notice/search")
+    public Page<ResponseNoticeDto> searchNoticeList(PageRequest pageRequest, SearchNoticeCondition searchNoticeCondition) {
+        Page<ResponseNoticeDto> noticeList = boardService.searchNoticeList(pageRequest.of(), searchNoticeCondition);
+        return ResponseEntity.ok(noticeList).getBody();
+    }
+
+    /**
+     * 관리자 게시판 공지사항 (추가)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "공지사항 추가", description = "공지사항을 등록합니다.")
+    @PostMapping("/board/notice/add")
+    public void addNotice(RequestNoticeDto noticeDto){
+        boardService.addNotice(noticeDto);
+    }
+
+    /**
+     * 관리자 게시판 공지사항 (수정)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "공지사항 수정", description = "공지사항을 수정합니다.")
+    @PostMapping("/board/notice/update/{noticeId}")
+    public Long updateNotice(@ModelAttribute RequestNoticeDto noticeDto ,@PathVariable("noticeId") Long noticeId){
+
+        return boardService.updateNotice(noticeDto,noticeId);
+    }
+
+    /**
+     * 관리자 게시판 공지사항 (삭제)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "공지사항 삭제",description = "공지사항을 삭제합니다.")
+    @PostMapping("/board/notice/del/{noticeId}")
+    public void delNotice(@PathVariable("noticeId") Long noticeId) {
+        boardService.delNotice(noticeId);
+    }
+
+    /**
+     * 관리자 게시판 자주 묻는 질문(전체 조회)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "자주 묻는 질문 조회",description = "자주 묻는 질문을 조회합니다.")
+    @GetMapping("/board/faq")
+    public Page<ResponseFaqDto> boardFaqList(PageRequest pageRequest,
+                                             SearchFaqCondition searchFaqCondition,
+                                             SortOrderCondition sortOrderCondition){
+        Page<ResponseFaqDto> faqList=
+                boardService.faqlist(pageRequest.of(),searchFaqCondition,sortOrderCondition.getFieldName());
+
+        return ResponseEntity.ok(faqList).getBody();
+    }
+
+    /**
+     * 관리자 게시판 자주 묻는 질문 (단건 조회)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "자주 묻는 질문 단건 조회", description = "특정 자주 묻는 질문을 조회합니다.")
+    @GetMapping("/board/faq/{faqId}")
+    public ResponseEntity<ResponseFaqDto> findFaq(@PathVariable Long faqId){
+
+        ResponseFaqDto onefaq = boardService.findOneFaq(faqId);
+        return new ResponseEntity<>(onefaq, HttpStatus.OK);
+
+    }
+    /**
+     * 자주 묻는 질문 검색 (카테고리 이름, 회원 이름, 회원 아이디)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "자주 묻는 질문 검색",description = "자주 묻는 질문을 검색합니다.")
+    @GetMapping("/board/faq/search")
+    public Page<ResponseFaqDto> searchFaqList(PageRequest pageRequest, SearchFaqCondition searchFaqCondition) {
+        Page<ResponseFaqDto> faqList = boardService.searchFaqList(pageRequest.of(), searchFaqCondition);
+        return ResponseEntity.ok(faqList).getBody();
+    }
+
+
+    /**
+     * 관리자 게시판 자주 묻는 질문 (답변 추가)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "자주 묻는 질문 답변 추가",description = "특정 질문에 답변을 추가합니다.")
+    @PostMapping("/board/faq/add/{faqId}")
+    public String faqAddAnswer(@ModelAttribute RequestFaqDto faqDto, @PathVariable("faqId") Long faqId){
+        return boardService.faqAddAnswer(faqDto,faqId);
+    }
+
+    /**
+     *  관리자 게시판 자주 묻는 질문 (자주 묻는 질문 수정)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "자주 묻는 질문 수정",description = "자주 묻는 질문을 수정합니다.")
+    @PostMapping("/board/faq/update/{faqId}")
+    public Long updatFaq(@ModelAttribute RequestFaqDto faqDto ,@PathVariable("faqId") Long faqId){
+
+        return boardService.updateFaq(faqDto,faqId);
+    }
+
+    /**
+     * 관리자 게시판 자주 묻는 질문 (자주 묻는 질문 삭제)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "자주 묻는 질문 삭제",description = "자주 묻는 질문을 삭제합니다.")
+    @PostMapping("/board/faq/del/{faqId}")
+    public void delFaq(@PathVariable("faqId") Long faqId) {
+        boardService.delFaq(faqId);
+    }
+
 
 }

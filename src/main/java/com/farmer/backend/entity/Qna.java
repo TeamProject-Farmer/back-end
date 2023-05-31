@@ -1,7 +1,7 @@
 package com.farmer.backend.entity;
 
-import com.farmer.backend.dto.admin.board.RequestBoardQnADto;
-import com.farmer.backend.dto.admin.board.ResponseBoardQnADto;
+import com.farmer.backend.dto.admin.board.qna.RequestBoardQnADto;
+import com.farmer.backend.dto.admin.board.qna.ResponseBoardQnADto;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

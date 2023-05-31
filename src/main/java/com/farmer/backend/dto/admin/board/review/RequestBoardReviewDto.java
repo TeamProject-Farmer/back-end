@@ -1,4 +1,4 @@
-package com.farmer.backend.dto.admin.board;
+package com.farmer.backend.dto.admin.board.review;
 
 import com.farmer.backend.entity.Member;
 import com.farmer.backend.entity.Orders;

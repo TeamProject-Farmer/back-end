@@ -1,7 +1,7 @@
 package com.farmer.backend.entity;
 
-import com.farmer.backend.dto.admin.board.RequestBoardReviewDto;
-import com.farmer.backend.dto.admin.board.ResponseBoardReviewDto;
+import com.farmer.backend.dto.admin.board.review.RequestBoardReviewDto;
+import com.farmer.backend.dto.admin.board.review.ResponseBoardReviewDto;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -11,8 +11,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
-
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @AllArgsConstructor

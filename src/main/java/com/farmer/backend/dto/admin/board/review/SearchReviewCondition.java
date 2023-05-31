@@ -1,4 +1,4 @@
-package com.farmer.backend.dto.admin.board;
+package com.farmer.backend.dto.admin.board.review;
 
 import lombok.Data;
 
