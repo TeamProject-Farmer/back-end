@@ -1,50 +1,35 @@
 package com.farmer.backend.dto.admin.board.review;
 
-import com.farmer.backend.entity.Member;
-import com.farmer.backend.entity.Orders;
-import com.farmer.backend.entity.Product_reviews;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.farmer.backend.entity.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Getter
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ResponseBoardReviewDto {
 
     private Long id;
 
-    private Member member;
-
-    private Orders orders;
-
+    private String memberName;
+    private String memberEmail;
     private String content;
-
+    private List productName;
     private String imgUrl;
 
     private int likeCount;
 
     private LocalDateTime createdDate;
 
-    @Builder
-    public ResponseBoardReviewDto(Long id, Member member, Orders orders, String content, String imgUrl, int likeCount , LocalDateTime createdDate){
-        this.id=id;
-        this.member=member;
-        this.orders=orders;
-        this.content=content;
-        this.imgUrl=imgUrl;
-        this.likeCount=likeCount;
-        this.createdDate=createdDate;
-    }
-
-    //Entity -> ResponseReviewDto
-    public static ResponseBoardReviewDto getReview(Product_reviews reviews){
+    public static ResponseBoardReviewDto getReview(Product_reviews reviews, List<String> productList){
         return ResponseBoardReviewDto.builder()
                 .id(reviews.getId())
-                .member(reviews.getMember())
-                .orders(reviews.getOrders())
+                .memberName(reviews.getMember().getUsername())
+                .memberEmail(reviews.getMember().getEmail())
+                .productName(productList)
                 .content(reviews.getContent())
                 .imgUrl(reviews.getImgUrl())
                 .likeCount(reviews.getLikeCount())
@@ -52,16 +37,5 @@ public class ResponseBoardReviewDto {
                 .build();
     }
 
-    //ResponseReviewDto-> Entity
-    public Product_reviews toEntity(){
-        return Product_reviews.builder()
-                .member(member)
-                .orders(orders)
-                .content(content)
-                .imgUrl(imgUrl)
-                .likeCount(likeCount)
-                .createdDate(createdDate)
-                .build();
-    }
 
 }
