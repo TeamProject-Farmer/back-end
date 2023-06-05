@@ -1,15 +1,9 @@
 package com.farmer.backend.dto.admin.orders;
 
-import com.farmer.backend.entity.Delivery;
-import com.farmer.backend.entity.Member;
 import com.farmer.backend.entity.OrderStatus;
-import com.sun.istack.NotNull;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
-import net.minidev.json.annotate.JsonIgnore;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,13 +12,26 @@ import java.time.LocalDateTime;
 @Builder
 public class ResponseOrdersDto {
 
+//    private Long id;
+//    private Member member;
+//    private Delivery delivery;
+//    private String orderNumber;
+//    private OrderStatus orderStatus;
+//    private Long orderPrice;
+//    private String payMethod;
+//    private Integer totalQuantity;
+//    private String comment;
+//    private LocalDateTime createdDate;
+
     private Long id;
-    private Member member;
-    private Delivery delivery;
+    private String memberName;
+    private String email;
+    private String hp;
     private OrderStatus orderStatus;
     private Long orderPrice;
     private String payMethod;
     private Integer totalQuantity;
     private String comment;
     private LocalDateTime createdDate;
+
 }

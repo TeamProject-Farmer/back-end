@@ -7,7 +7,9 @@ import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.admin.SortOrderCondition;
 import com.farmer.backend.dto.admin.orders.ResponseOrdersDto;
+import com.farmer.backend.dto.admin.orders.SearchOrdersCondition;
 import com.farmer.backend.dto.admin.product.*;
+import com.farmer.backend.entity.Orders;
 import com.farmer.backend.entity.ProductCategory;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
@@ -261,8 +263,8 @@ public class AdminApiController {
     @ApiDocumentResponse
     @Operation(summary = "주문 전체 리스트", description = "주문 전체 리스트를 출력합니다.")
     @GetMapping("/order-list")
-    public Page<ResponseOrdersDto> orderList(PageRequest pageRequest, String memberName, SortOrderCondition orderCondition) {
-        return orderService.orderList(pageRequest.of(), memberName, orderCondition.getFieldName());
+    public List<ResponseOrdersDto> orderList(PageRequest pageRequest, SearchOrdersCondition ordersCondition, SortOrderCondition orderCondition) {
+        return orderService.orderList(pageRequest.of(), ordersCondition, orderCondition.getFieldName());
     }
 
     /**
