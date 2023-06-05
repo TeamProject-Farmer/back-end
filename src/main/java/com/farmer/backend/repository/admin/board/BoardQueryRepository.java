@@ -4,11 +4,12 @@ import com.farmer.backend.dto.admin.board.faq.SearchFaqCondition;
 import com.farmer.backend.dto.admin.board.notice.SearchNoticeCondition;
 import com.farmer.backend.dto.admin.board.qna.SearchQnaCondition;
 import com.farmer.backend.dto.admin.board.review.SearchReviewCondition;
-import com.farmer.backend.entity.*;
+import com.farmer.backend.entity.Faq;
+import com.farmer.backend.entity.Notice;
+import com.farmer.backend.entity.Product_reviews;
+import com.farmer.backend.entity.Qna;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface BoardQueryRepository
 
@@ -21,9 +22,6 @@ public interface BoardQueryRepository
     Page<Notice> findAll(Pageable pageable, String sortNoticeCond, SearchNoticeCondition searchNoticeCondition);
 
     Page<Faq> findAll(Pageable pageable, String sortQnaCond, SearchFaqCondition searchFaqCondition);
-
-    List<OrderDetail> orderProductFindAll();
-
     void deleteQna(Long qnaId);
 
     void deleteReview(Long reviewId);
@@ -40,5 +38,4 @@ public interface BoardQueryRepository
 
 
     Page<Faq> searchFaqList(Pageable pageable, SearchFaqCondition searchFaqCond);
-
 }

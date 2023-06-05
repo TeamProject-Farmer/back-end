@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 public class RequestNoticeDto {
 
+    private Long id;
     private Long memberId;
     private  String title;
     private String content;
@@ -17,6 +18,7 @@ public class RequestNoticeDto {
 
     public Notice toEntity(Member member){
         return Notice.builder()
+                .id(id)
                 .member(member)
                 .title(title)
                 .content(content)

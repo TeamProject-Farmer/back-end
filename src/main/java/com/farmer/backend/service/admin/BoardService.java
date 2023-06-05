@@ -9,6 +9,7 @@ import com.farmer.backend.dto.admin.board.notice.SearchNoticeCondition;
 import com.farmer.backend.dto.admin.board.qna.RequestBoardQnADto;
 import com.farmer.backend.dto.admin.board.qna.ResponseBoardQnADto;
 import com.farmer.backend.dto.admin.board.qna.SearchQnaCondition;
+import com.farmer.backend.dto.admin.board.review.RequestBoardReviewDto;
 import com.farmer.backend.dto.admin.board.review.ResponseBoardReviewDto;
 import com.farmer.backend.dto.admin.board.review.SearchReviewCondition;
 import com.farmer.backend.entity.*;
@@ -20,11 +21,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,13 +40,8 @@ public class BoardService {
     private final MemberRepository memberRepository;
     private final FaqRepository faqRepository;
     private final FaqCategoryRepository faqCategoryRepository;
-
     /**
      * QnA 전체 리스트 조회
-     * @param pageable 페이징
-     * @param sortQnaCond 정렬값 (question 날짜순, answer 날짜순, 회원 이름순, 상품 이름순)
-     * @param searchQnaCondition 검색값 (회원 이름, 회원 이메일, 상품이름)
-     * @return Page<ResponseBoardQnADto>
      */
     @Transactional(readOnly = true)
     public Page<ResponseBoardQnADto> qnaList(Pageable pageable, String sortQnaCond, SearchQnaCondition searchQnaCondition) {
@@ -54,11 +51,8 @@ public class BoardService {
 
 
     /**
-     * QnA 단건 조회
-     * @param qnaId 조회할 QnA ID
-     * @return ResponseBoardQnADto
+     *QnA 단건 조회
      */
-
     @Transactional(readOnly = true)
     public ResponseBoardQnADto findOneQnA(Long qnaId) {
         Optional<Qna> findQnA= qnaRepository.findById(qnaId);
@@ -67,9 +61,9 @@ public class BoardService {
 
     /**
      * QnA 검색
-     * @param pageable 페이징
-     * @param searchQnaCondition 검색값 (회원 이름, 회원 이메일, 상품이름)
-     * @return Page<ResponseBoardQnADto>
+     * @param pageable
+     * @param searchQnaCondition
+     * @return
      */
     @Transactional(readOnly = true)
     public Page<ResponseBoardQnADto> searchQnAList(Pageable pageable, SearchQnaCondition searchQnaCondition) {
@@ -80,31 +74,28 @@ public class BoardService {
 
     /**
      *  QNA 추가 (답변 달기)
-     * @param answerDto 답변 데이터
-     * @param qnaId 답변을 달아줄 QnA ID
      */
     @Transactional
-    public void addAns(RequestBoardQnADto answerDto, Long qnaId) {
+    public String addAns(RequestBoardQnADto answerDto, Long qnaId) {
+        qnaRepository.findById(qnaId).orElseThrow(()-> new CustomException(ErrorCode.QNA_NOT_FOUND)).addAnswer(answerDto);
 
-        qnaRepository.findById(qnaId).orElseThrow(()-> new CustomException(ErrorCode.QNA_NOT_FOUND)).qnaAnswer(answerDto);
-
+        return answerDto.getAnswer();
     }
 
     /**
-     * QnA 답변 수정
-     * @param qnaDto QnA 답변 데이터
-     * @param qnaId 수정할 QnA ID
+     *  QNA 수정
      */
     @Transactional
-    public void updateQnA(RequestBoardQnADto qnaDto,Long qnaId) {
-        qnaRepository.findById(qnaId).orElseThrow(() -> new CustomException(ErrorCode.QNA_NOT_FOUND)).qnaAnswer(qnaDto);
+    public Long updateQnA(RequestBoardQnADto qnaDto,Long qnaId) {
+        qnaRepository.findById(qnaId).orElseThrow(() -> new CustomException(ErrorCode.QNA_NOT_FOUND)).updateQnA(qnaDto);
 
+        return qnaDto.getId();
     }
 
     /**
-     * QnA 삭제
-     * @param qnaId 삭제할 QnA ID
+     * QNA 삭제
      */
+
     @Transactional
     public void delQna(Long qnaId){
         Qna qna= qnaRepository.findById(qnaId).orElseThrow(()-> new CustomException(ErrorCode.QNA_NOT_FOUND));
@@ -113,99 +104,45 @@ public class BoardService {
 
     /**
      * Review 전체 리스트 조회
-     * @param pageable 페이징
-     * @param sortReviewCond 정렬값 (리뷰 날짜순, 회원 이름순)
-     * @param searchReviewCondition 검색값 (회원 이름, 회원 이메일)
-     * @return Page<ResponseBoardReviewDto>
      */
     @Transactional(readOnly = true)
     public Page<ResponseBoardReviewDto> reviewList(Pageable pageable, String sortReviewCond, SearchReviewCondition searchReviewCondition) {
-
-        Page<Product_reviews> reviewList = boardQueryRepositoryImpl.findAll(pageable,sortReviewCond,searchReviewCondition);
-        List<OrderDetail> orderDetails = boardQueryRepositoryImpl.orderProductFindAll();
-
-        HashMap<Long,ArrayList<String>> products= new HashMap<>();
-
-        for (Product_reviews review : reviewList) {
-
-            ArrayList<String> orderProductName = new ArrayList<>();
-            Long orderId = review.getOrders().getId();
-
-            for (OrderDetail orderProduct : orderDetails){
-                if (orderProduct.getOrders().getId().equals(orderId)){
-                    orderProductName.add(orderProduct.getProduct().getName());
-                }
-            }
-
-            products.put(orderId, orderProductName);
-
-        }
-
-        return new PageImpl<>(reviewList.stream().map(product_reviews -> ResponseBoardReviewDto.getReview(product_reviews,products.get(product_reviews.getOrders().getId()))).collect(Collectors.toList()));
-
+        return boardQueryRepositoryImpl.findAll(pageable,sortReviewCond,searchReviewCondition).map(Product_reviews::reviewList);
     }
 
     /**
-     * Review 단건 조회
-     * @param reviewId 조회할 Review ID
-     * @return ResponseBoardReviewDto
+     *Review 단건 조회
      */
     @Transactional(readOnly = true)
     public ResponseBoardReviewDto findOneReview(Long reviewId) {
-
-        List<OrderDetail> oneReviewDetail = boardQueryRepositoryImpl.orderProductFindAll();
-        Product_reviews findReview= reviewRepository.findById(reviewId).orElseThrow(()-> new CustomException(ErrorCode.REVIEW_NOT_FOUND));
-
-        ArrayList<String> orderProductName = new ArrayList<>();
-
-        for(OrderDetail orders : oneReviewDetail){
-
-            if(orders.getOrders().getId().equals(findReview.getOrders().getId())){
-
-                orderProductName.add(orders.getProduct().getName());
-            }
-        }
-
-        return ResponseBoardReviewDto.getReview(findReview,orderProductName);
+        Optional<Product_reviews> findReview= reviewRepository.findById(reviewId);
+        return findReview.map(product_reviews -> ResponseBoardReviewDto.getReview(product_reviews)).orElseThrow(()-> new CustomException(ErrorCode.QNA_NOT_FOUND));
     }
 
     /**
      * 리뷰 검색 리스트
      * @param pageable 페이징
-     * @param searchReviewCondition 검색값 (회원 이름, 회원 이메일)
-     * @return Page<ResponseBoardReviewDto>
+     * @param searchReviewCondition 검색정보
+     * @return
      */
     @Transactional(readOnly = true)
     public Page<ResponseBoardReviewDto> searchReviewList(Pageable pageable, SearchReviewCondition searchReviewCondition) {
+        Page<Product_reviews> reviewList=boardQueryRepositoryImpl.searchReviewList(pageable,searchReviewCondition);
+        return new PageImpl<>(reviewList.stream().map(product_reviews -> ResponseBoardReviewDto.getReview(product_reviews)).collect(Collectors.toList()));
+    }
 
-        Page<Product_reviews> searchReviewList=boardQueryRepositoryImpl.searchReviewList(pageable,searchReviewCondition);
-        List<OrderDetail> searchOrder = boardQueryRepositoryImpl.orderProductFindAll();
+    /**
+     * Review 수정
+     */
+    @Transactional
+    public Long updateReview(RequestBoardReviewDto reviewDto, Long reviewId) {
+        reviewRepository.findById(reviewId).orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_FOUND)).updateReview(reviewDto);
 
-
-        HashMap<Long,ArrayList<String>> products= new HashMap<>();
-
-        for (Product_reviews review : searchReviewList) {
-
-            ArrayList<String> orderProductName = new ArrayList<>();
-
-            Long orderId = review.getOrders().getId();
-
-            for (OrderDetail orderProduct : searchOrder){
-                if (orderProduct.getOrders().getId().equals(orderId)){
-                    orderProductName.add(orderProduct.getProduct().getName());
-                }
-            }
-
-            products.put(orderId, orderProductName);
-
-        }
-
-        return new PageImpl<>(searchReviewList.stream().map(product_reviews -> ResponseBoardReviewDto.getReview(product_reviews,products.get(product_reviews.getOrders().getId()))).collect(Collectors.toList()));
+        return reviewDto.getId();
     }
 
     /**
      * Review 삭제
-     * @param reviewId 삭제할 review ID
      */
     @Transactional
     public void delReview(Long reviewId) {
@@ -214,37 +151,49 @@ public class BoardService {
 
     }
 
+    /**
+     * Review 추가
+     * @param reviewDto REVIEW 데이터
+     */
+    @Transactional
+    public void addReview(RequestBoardReviewDto reviewDto) {
+
+        if (reviewRepository.findById(reviewDto.getId()).isPresent()){
+            throw new CustomException(ErrorCode.REVIEW_FOUND);
+        };
+        reviewRepository.save(reviewDto.toEntity());
+    }
+
 
     /**
      * 공지사항 전체 리스트 조회
      * @param pageable 페이징
-     * @param searchNoticeCondition 검색값 (제목, 회원 이메일, 회원 이름)
-     * @param sortNoticeCond 정렬값 (공지 날짜, 회원 이름, 회원 이메일)
-     * @return Page<ResponseNoticeDto>
+     * @param searchNoticeCondition 공지사항 검색
+     * @param sortNoticeCond 공지사항 정렬
+     * @return
      */
 
     @Transactional(readOnly = true)
-    public Page<ResponseNoticeDto> noticeList(Pageable pageable, SearchNoticeCondition searchNoticeCondition, String sortNoticeCond) {
+    public Page<ResponseNoticeDto> noticelist(Pageable pageable, SearchNoticeCondition searchNoticeCondition, String sortNoticeCond) {
 
         return boardQueryRepositoryImpl.findAll(pageable,sortNoticeCond,searchNoticeCondition).map(Notice::noticeList);
     }
 
     /**
      * 공지사항 단건 조회
-     * @param noticeId 조회할 공지사항 ID
-     * @return ResponseNoticeDto
+     * @param noticeId
+     * @return
      */
     @Transactional(readOnly = true)
     public ResponseNoticeDto findOneNotice(Long noticeId) {
         Optional<Notice> findNotice= noticeRepository.findById(noticeId);
         return findNotice.map(notice -> ResponseNoticeDto.getNoticeList(notice)).orElseThrow(()-> new CustomException(ErrorCode.NOTICE_NOT_FOUND));
     }
-
     /**
      * 공지사항 검색
      * @param pageable 페이징
-     * @param searchNoticeCondition 검색값 (관리자 이름, 관리자 이메일, 공지사항 제목)
-     * @return Page<ResponseNoticeDto>
+     * @param searchNoticeCondition 검색명 (관리자 이름, 관리자 이메일, 공지사항 제목)
+     * @return
      */
     public Page<ResponseNoticeDto> searchNoticeList(Pageable pageable, SearchNoticeCondition searchNoticeCondition) {
 
@@ -267,18 +216,21 @@ public class BoardService {
     /**
      * 공지사항 수정
      * @param noticeDto 공지사항 데이터
-     * @param noticeId 수정할 공지사항 ID
+     * @param noticeId
+     * @return
      */
     @Transactional
-    public void updateNotice(RequestNoticeDto noticeDto, Long noticeId) {
+    public Long updateNotice(RequestNoticeDto noticeDto, Long noticeId) {
         Member member=memberRepository.findById(noticeDto.getMemberId()).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         noticeRepository.findById(noticeId).orElseThrow(()-> new CustomException(ErrorCode.NOTICE_NOT_FOUND)).updateNotice(noticeDto,member);
+
+        return noticeDto.getId();
 
     }
 
     /**
      * 공지사항 삭제
-     * @param noticeId 삭제할 공지사항 ID
+     * @param noticeId 삭제할 공지사항 id값
      */
     @Transactional
     public void delNotice(Long noticeId) {
@@ -289,12 +241,12 @@ public class BoardService {
     /**
      * 자주묻는 질문 전체 리스트 조회
      * @param pageable 페이징
-     * @param searchFaqCondition 검색값 (카테고리 이름, 회원 이름, 회원 이메일)
-     * @param sortFaqCond 정렬값 (생성 날짜, 회원 이름, 회원 이메일, 카테고리 이름)
-     * @return Page<ResponseFaqDto>
+     * @param searchFaqCondition 검색값
+     * @param sortFaqCond 정렬값
+     * @return
      */
     @Transactional(readOnly = true)
-    public Page<ResponseFaqDto> faqList(Pageable pageable, SearchFaqCondition searchFaqCondition, String sortFaqCond) {
+    public Page<ResponseFaqDto> faqlist(Pageable pageable, SearchFaqCondition searchFaqCondition, String sortFaqCond) {
 
         return boardQueryRepositoryImpl.findAll(pageable,sortFaqCond,searchFaqCondition).map(Faq::faqList);
 
@@ -302,8 +254,8 @@ public class BoardService {
 
     /**
      * 자주묻는 질문 단건 조회
-     * @param faqId 조회할 자주 묻는 질문 ID
-     * @return ResponseFaqDto
+     * @param faqId
+     * @return
      */
     @Transactional(readOnly = true)
     public ResponseFaqDto findOneFaq(Long faqId) {
@@ -313,9 +265,9 @@ public class BoardService {
 
     /**
      * 자주 묻는 질문 검색
-     * @param pageable 페이징
-     * @param searchFaqCond 검색값 (회원 이름, 회원 이메일, 카테고리 이름)
-     * @return Page<ResponseFaqDto>
+     * @param of
+     * @param searchFaqCondition
+     * @return
      */
     @Transactional
     public Page<ResponseFaqDto> searchFaqList(Pageable pageable, SearchFaqCondition searchFaqCond) {
@@ -326,30 +278,35 @@ public class BoardService {
 
     /**
      * 자주 묻는 질문 답변 추가
-     * @param faqDto 자주 묻는 질문 답변
-     * @param faqId 답변 추가할 자주 묻는 질문 ID
+     * @param faqDto
+     * @param faqId
+     * @return
      */
     @Transactional
-    public void faqAddAnswer(RequestFaqDto faqDto, Long faqId) {
-        faqRepository.findById(faqId).orElseThrow(()-> new CustomException(ErrorCode.FAQ_NOT_FOUND)).faqAnswer(faqDto);
-
+    public String faqAddAnswer(RequestFaqDto faqDto, Long faqId) {
+        faqRepository.findById(faqId).orElseThrow(()-> new CustomException(ErrorCode.FAQ_NOT_FOUND)).addFaqAnswer(faqDto);
+        return faqDto.getAnswer();
     }
 
     /**
-     * 자주 묻는 질문 답변 수정
-     * @param faqDto 자주 묻는 질문 답변
-     * @param faqId 수정할 자주 묻는 질문 ID
+     * 자주 묻는 질문 수정
+     * @param faqDto
+     * @param faqId
+     * @return
      */
     @Transactional
-    public void updateFaq(RequestFaqDto faqDto, Long faqId) {
+    public Long updateFaq(RequestFaqDto faqDto, Long faqId) {
+        Member member=memberRepository.findById(faqDto.getMemberId()).orElseThrow(()-> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        FaqCategory faqCategory= faqCategoryRepository.findById(faqDto.getCategory()).orElseThrow(()-> new CustomException(ErrorCode.FAQCATEGORY_NOT_FOUND));
 
-        faqRepository.findById(faqId).orElseThrow(()-> new CustomException(ErrorCode.FAQ_NOT_FOUND)).faqAnswer(faqDto);
+        faqRepository.findById(faqId).orElseThrow(()-> new CustomException(ErrorCode.FAQ_NOT_FOUND)).updateFaq(faqDto,member,faqCategory);
 
+        return faqDto.getId();
     }
 
     /**
      * 자주 묻는 질문 삭제
-     * @param faqId 삭제할 자주 묻는 질문 ID
+     * @param faqId
      */
     @Transactional
     public void delFaq(Long faqId) {

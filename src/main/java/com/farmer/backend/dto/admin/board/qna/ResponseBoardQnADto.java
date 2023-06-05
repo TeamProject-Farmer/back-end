@@ -10,15 +10,13 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class ResponseBoardQnADto {
 
     private Long id;
 
-    private String memberEmail;
-    private String memberName;
+    private Member member;
 
-    private String productName;
+    private Product product;
 
     private String subject;
 
@@ -31,19 +29,41 @@ public class ResponseBoardQnADto {
     private LocalDateTime aCreatedDate;
 
 
+    @Builder
+    public  ResponseBoardQnADto(Long id, Member member, Product product,  String subject, String content, String answer, LocalDateTime qCreatedDate , LocalDateTime aCreatedDate){
+        this.id=id;
+        this.member=member;
+        this.product=product;
+        this.subject=subject;
+        this.content=content;
+        this.answer=answer;
+        this.qCreatedDate=qCreatedDate;
+        this.aCreatedDate=aCreatedDate;
+    }
 
     //Entity -> ResponseQnADto
     public static ResponseBoardQnADto getQnA(Qna qna){
         return ResponseBoardQnADto.builder()
                 .id(qna.getId())
-                .memberEmail(qna.getMember().getEmail())
-                .memberName(qna.getMember().getUsername())
-                .productName(qna.getProduct().getName())
+                .member(qna.getMember())
+                .product(qna.getProduct())
                 .subject(qna.getSubject())
                 .content(qna.getContent())
                 .answer(qna.getAnswer())
                 .qCreatedDate(qna.getQCreatedDate())
                 .aCreatedDate(qna.getACreatedDate())
+                .build();
+    }
+
+    //ResponseQnADto -> Entity
+    public Qna toEntity(){
+        return Qna.builder()
+                .member(member)
+                .subject(subject)
+                .content(content)
+                .answer(answer)
+                .qCreatedDate(qCreatedDate)
+                .aCreatedDate(aCreatedDate)
                 .build();
     }
 

@@ -55,9 +55,16 @@ public class Faq extends BaseTimeEntity{
                 .build();
     }
 
-    public void faqAnswer(RequestFaqDto faqDto) {
+    public void addFaqAnswer(RequestFaqDto faqDto) {
         this.answer=faqDto.getAnswer();
     }
 
-
+    public void updateFaq(RequestFaqDto faqDto, Member member, FaqCategory faqCategory) {
+        this.id=faqDto.getId();
+        this.member=member;
+        this.faqCategory=faqCategory;
+        this.question=faqDto.getQuestion();
+        this.answer=faqDto.getAnswer();
+        this.imgLink=faqDto.getImgLink();
+    }
 }

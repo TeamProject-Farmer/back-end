@@ -4,12 +4,15 @@ import com.farmer.backend.dto.admin.board.faq.SearchFaqCondition;
 import com.farmer.backend.dto.admin.board.notice.SearchNoticeCondition;
 import com.farmer.backend.dto.admin.board.qna.SearchQnaCondition;
 import com.farmer.backend.dto.admin.board.review.SearchReviewCondition;
-import com.farmer.backend.entity.*;
+import com.farmer.backend.entity.Faq;
+import com.farmer.backend.entity.Notice;
+import com.farmer.backend.entity.Product_reviews;
+import com.farmer.backend.entity.Qna;
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,8 +26,6 @@ import java.util.Objects;
 
 import static com.farmer.backend.entity.QFaq.faq;
 import static com.farmer.backend.entity.QNotice.notice;
-import static com.farmer.backend.entity.QOrderDetail.orderDetail;
-import static com.farmer.backend.entity.QOrders.orders;
 import static com.farmer.backend.entity.QProduct_reviews.product_reviews;
 import static com.farmer.backend.entity.QQna.qna;
 
@@ -84,20 +85,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
                 .from(product_reviews)
                 .fetchOne();
 
-        return new PageImpl<>(reviewList,pageable, count);
-    }
-
-    /**
-     * 리뷰 product 전체 리스트
-     */
-    @Override
-    public List<OrderDetail> orderProductFindAll(){
-        List<OrderDetail> orderProduct = query
-                .select(orderDetail)
-                .from(orderDetail)
-                .fetch();
-
-        return orderProduct;
+        return new PageImpl<>(reviewList, pageable, count);
     }
 
     /**
@@ -108,8 +96,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         List<Notice> noticeList = query
                 .select(notice)
                 .from(notice)
-                .where(likeNoticeTitle(searchNoticeCond.getTitle()),likeNoticeUserEmail(searchNoticeCond.getUserEmail()),
-                        likeNoticeUserName(searchNoticeCond.getUserName()))
+                .where(likeNoticeTitle(searchNoticeCond.getTitle()),likeNoticeUserEmail(searchNoticeCond.getUserEmail()),likeNoticeUserName(searchNoticeCond.getUserName()))
                 .orderBy(sortOrderNotice(sortNoticeCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -131,8 +118,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         List<Faq> faqList = query
                 .select(faq)
                 .from(faq)
-                .where(likeFaqCategoryName(searchFaqCond.getCategoryName()),likeFaqUserName(searchFaqCond.getUserName()),
-                        likeFaqUserEmail(searchFaqCond.getUserEmail()))
+                .where(likeFaqCategoryName(searchFaqCond.getCategoryName()),likeFaqUserName(searchFaqCond.getUserName()),likeFaqUserEmail(searchFaqCond.getUserEmail()))
                 .orderBy(sortOrderFaq(sortFaqCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -154,7 +140,6 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     @Override
     public void deleteQna(Long qnaId){
         query
-
                 .delete(qna)
                 .where(qna.id.eq(qnaId))
                 .execute();
@@ -330,11 +315,11 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         if(Objects.isNull(sortOrderCond) || sortOrderCond.equals("qCreatedDate")){
             return new OrderSpecifier<>(order,qna.id);
         } else if (sortOrderCond.equals("aCreatedDate")){
-            return new OrderSpecifier<>(order,qna.aCreatedDate);
+            return new OrderSpecifier<>(order_A,qna.aCreatedDate);
         }else if(sortOrderCond.equals("userName")){
-            return new OrderSpecifier<>(order_A,qna.member.username);
+            return new OrderSpecifier<>(order,qna.member.username);
         }else if(sortOrderCond.equals("productName")){
-            return new OrderSpecifier<>(order_A,qna.product.name);
+            return new OrderSpecifier<>(order,qna.product.name);
         }
         return new OrderSpecifier(Order.DESC,NullExpression.DEFAULT,OrderSpecifier.NullHandling.Default);
     }
@@ -345,13 +330,11 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     public OrderSpecifier<?> sortOrderReview(String sortOrderCond){
 
         Order order=Order.DESC;
-        Order order_A= Order.ASC;
 
         if(Objects.isNull(sortOrderCond) || sortOrderCond.equals("createdDate")){
             return new OrderSpecifier<>(order,product_reviews.id);
-
-        }else if (sortOrderCond.equals("userName")){
-            return new OrderSpecifier<>(order_A,product_reviews.member.username);
+        }else if (sortOrderCond.equals("memberName")){
+            return new OrderSpecifier<>(order,product_reviews.member.username);
         }
 
         return new OrderSpecifier(Order.DESC,NullExpression.DEFAULT,OrderSpecifier.NullHandling.Default);
@@ -362,16 +345,14 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
      */
     public OrderSpecifier<?> sortOrderNotice(String sortOrderCond){
         Order order=Order.DESC;
-        Order order_A= Order.ASC;
-
         if(Objects.isNull(sortOrderCond) || sortOrderCond.equals("noticeId") || sortOrderCond.equals("createdDate")){
             return new OrderSpecifier<>(order,notice.id);
         }
         else if (sortOrderCond.equals("userName")){
-            return new OrderSpecifier<>(order_A,notice.member.username);
+            return new OrderSpecifier<>(order,notice.member.username);
         }
         else if(sortOrderCond.equals("userEmail")){
-            return new OrderSpecifier<>(order_A,notice.member.email);
+            return new OrderSpecifier<>(order,notice.member.email);
         }
 
         return new OrderSpecifier(Order.DESC,NullExpression.DEFAULT,OrderSpecifier.NullHandling.Default);
@@ -383,23 +364,22 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
      */
     public OrderSpecifier<?> sortOrderFaq(String sortOrderCond){
         Order order=Order.DESC;
-        Order order_A= Order.ASC;
-
         if(Objects.isNull(sortOrderCond) || sortOrderCond.equals("faqId") || sortOrderCond.equals("createdDate")){
             return new OrderSpecifier<>(order,faq.id);
         }
         else if (sortOrderCond.equals("userName")){
-            return new OrderSpecifier<>(order_A,faq.member.username);
+            return new OrderSpecifier<>(order,faq.member.username);
         }
         else if(sortOrderCond.equals("userEmail")){
-            return new OrderSpecifier<>(order_A,faq.member.email);
+            return new OrderSpecifier<>(order,faq.member.email);
         }
         else if (sortOrderCond.equals("categoryName")){
-            return new OrderSpecifier<>(order_A,faq.faqCategory.name);
+            return new OrderSpecifier<>(order,faq.faqCategory.name);
         }
 
         return new OrderSpecifier(Order.DESC,NullExpression.DEFAULT,OrderSpecifier.NullHandling.Default);
 
     }
+
 
 }

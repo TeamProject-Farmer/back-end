@@ -3,33 +3,26 @@ package com.farmer.backend.dto.admin.board.review;
 import com.farmer.backend.entity.Member;
 import com.farmer.backend.entity.Orders;
 import com.farmer.backend.entity.Product_reviews;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-@Getter
-@Builder
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ResponseBoardReviewDto {
+@Getter
+public class RequestBoardReviewDto {
 
     private Long id;
-
     private Member member;
-
     private Orders orders;
-
     private String content;
-
     private String imgUrl;
-
-    private int likeCount;
-
+    private Integer likeCount;
+    @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
     private LocalDateTime createdDate;
 
     @Builder
-    public ResponseBoardReviewDto(Long id, Member member, Orders orders, String content, String imgUrl, int likeCount , LocalDateTime createdDate){
+    public RequestBoardReviewDto (Long id, Member member, Orders orders, String content, String imgUrl, int likeCount, LocalDateTime createdDate){
         this.id=id;
         this.member=member;
         this.orders=orders;
@@ -39,22 +32,10 @@ public class ResponseBoardReviewDto {
         this.createdDate=createdDate;
     }
 
-    //Entity -> ResponseReviewDto
-    public static ResponseBoardReviewDto getReview(Product_reviews reviews){
-        return ResponseBoardReviewDto.builder()
-                .id(reviews.getId())
-                .member(reviews.getMember())
-                .orders(reviews.getOrders())
-                .content(reviews.getContent())
-                .imgUrl(reviews.getImgUrl())
-                .likeCount(reviews.getLikeCount())
-                .createdDate(reviews.getCreatedDate())
-                .build();
-    }
-
-    //ResponseReviewDto-> Entity
+    //RequestDto-> Entity
     public Product_reviews toEntity(){
         return Product_reviews.builder()
+                .id(id)
                 .member(member)
                 .orders(orders)
                 .content(content)

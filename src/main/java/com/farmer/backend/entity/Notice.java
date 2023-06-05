@@ -55,6 +55,7 @@ public class Notice extends BaseTimeEntity {
 
     public void updateNotice(RequestNoticeDto noticeDto,Member updatemember) {
 
+        this.id=noticeDto.getId();
         this.member=updatemember;
         this.content=noticeDto.getContent();
         this.title=noticeDto.getTitle();
