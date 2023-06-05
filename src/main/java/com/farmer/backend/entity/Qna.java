@@ -53,8 +53,9 @@ public class Qna {
     public ResponseBoardQnADto qnaList() {
         return ResponseBoardQnADto.builder()
                 .id(id)
-                .member(member)
-                .product(product)
+                .memberEmail(member.getEmail())
+                .memberName(member.getUsername())
+                .productName(product.getName())
                 .subject(subject)
                 .content(content)
                 .answer(answer)
@@ -64,20 +65,10 @@ public class Qna {
     }
 
 
-    public void updateQnA(RequestBoardQnADto qnaDto){
-        this.id=qnaDto.getId();
-        this.member=qnaDto.getMember();
-        this.product=qnaDto.getProduct();
-        this.subject=qnaDto.getSubject();
-        this.content=qnaDto.getContent();
+    public void qnaAnswer(RequestBoardQnADto qnaDto){
         this.answer=qnaDto.getAnswer();
-        this.qCreatedDate=qnaDto.getQCreatedDate();
-        this.aCreatedDate=qnaDto.getACreatedDate();
-    }
-
-    public void addAnswer(RequestBoardQnADto answerDto){
-        this.answer=answerDto.getAnswer();
         this.aCreatedDate=LocalDateTime.now();
     }
+
 
 }
