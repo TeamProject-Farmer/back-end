@@ -9,7 +9,6 @@ import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,7 +23,6 @@ import java.util.Objects;
 import static com.farmer.backend.entity.QFaq.faq;
 import static com.farmer.backend.entity.QNotice.notice;
 import static com.farmer.backend.entity.QOrderDetail.orderDetail;
-import static com.farmer.backend.entity.QOrders.orders;
 import static com.farmer.backend.entity.QProduct_reviews.product_reviews;
 import static com.farmer.backend.entity.QQna.qna;
 
