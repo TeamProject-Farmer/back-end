@@ -88,7 +88,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     }
 
     /**
-     * 리뷰 product 전체 리스트
+     * orderDetail 전체 리스트
      */
     @Override
     public List<OrderDetail> orderProductFindAll(){
