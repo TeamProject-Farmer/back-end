@@ -33,4 +33,6 @@ public class OrderDetail {
 
     @NotNull
     private Integer count;
+
+
 }

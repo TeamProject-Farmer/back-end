@@ -1,9 +1,9 @@
 package com.farmer.backend.entity;
 
+import com.farmer.backend.dto.admin.board.qna.RequestBoardQnADto;
+import com.farmer.backend.dto.admin.board.qna.ResponseBoardQnADto;
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
-
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Qna {
 
     @Id
@@ -46,9 +46,29 @@ public class Qna {
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
     private LocalDateTime qCreatedDate;
 
-    @NotNull
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
     private LocalDateTime aCreatedDate;
+
+    public ResponseBoardQnADto qnaList() {
+        return ResponseBoardQnADto.builder()
+                .id(id)
+                .memberEmail(member.getEmail())
+                .memberName(member.getUsername())
+                .productName(product.getName())
+                .subject(subject)
+                .content(content)
+                .answer(answer)
+                .qCreatedDate(qCreatedDate)
+                .aCreatedDate(aCreatedDate)
+                .build();
+    }
+
+
+    public void qnaAnswer(RequestBoardQnADto qnaDto){
+        this.answer=qnaDto.getAnswer();
+        this.aCreatedDate=LocalDateTime.now();
+    }
+
 
 }

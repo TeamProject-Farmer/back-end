@@ -83,4 +83,5 @@ public class Product extends BaseTimeEntity {
         this.detailImg5 = productDto.getDetailImg5();
     }
 
+
 }

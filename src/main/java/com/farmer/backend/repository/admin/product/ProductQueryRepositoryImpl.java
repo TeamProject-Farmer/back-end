@@ -41,7 +41,8 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long count = query.select(product.count())
+        Long count = query
+                .select(product.count())
                 .from(product)
                 .where(likeProductName(productName))
                 .fetchOne();

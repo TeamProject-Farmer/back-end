@@ -4,6 +4,7 @@ import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,12 +26,13 @@ public class Orders {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "delivery_id")
-    private List<Delivery> delivery = new ArrayList<>();
+    private Delivery delivery;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
