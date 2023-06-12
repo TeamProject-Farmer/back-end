@@ -34,6 +34,9 @@ public class Orders {
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
+    @Column(length = 20)
+    private String orderNumber;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
