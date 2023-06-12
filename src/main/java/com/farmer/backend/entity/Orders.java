@@ -25,7 +25,7 @@ public class Orders {
     @Column(name = "orders_id")
     private Long id;
 
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "member_id")
     private Member member;

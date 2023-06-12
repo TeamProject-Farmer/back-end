@@ -1,7 +1,17 @@
 package com.farmer.backend.controller.admin;
 
 import com.farmer.backend.config.ApiDocumentResponse;
-import com.farmer.backend.dto.admin.board.*;
+import com.farmer.backend.dto.admin.board.faq.RequestFaqDto;
+import com.farmer.backend.dto.admin.board.faq.ResponseFaqDto;
+import com.farmer.backend.dto.admin.board.faq.SearchFaqCondition;
+import com.farmer.backend.dto.admin.board.notice.RequestNoticeDto;
+import com.farmer.backend.dto.admin.board.notice.ResponseNoticeDto;
+import com.farmer.backend.dto.admin.board.notice.SearchNoticeCondition;
+import com.farmer.backend.dto.admin.board.qna.RequestBoardQnADto;
+import com.farmer.backend.dto.admin.board.qna.ResponseBoardQnADto;
+import com.farmer.backend.dto.admin.board.qna.SearchQnaCondition;
+import com.farmer.backend.dto.admin.board.review.ResponseBoardReviewDto;
+import com.farmer.backend.dto.admin.board.review.SearchReviewCondition;
 import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
@@ -9,8 +19,6 @@ import com.farmer.backend.dto.admin.SortOrderCondition;
 import com.farmer.backend.dto.admin.orders.ResponseOrdersDto;
 import com.farmer.backend.dto.admin.orders.SearchOrdersCondition;
 import com.farmer.backend.dto.admin.product.*;
-import com.farmer.backend.entity.OrderDetail;
-import com.farmer.backend.entity.OrderStatus;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
 import com.farmer.backend.service.OrderService;
@@ -287,12 +295,12 @@ public class AdminApiController {
     @Operation(summary = "게시판 관리 Q&A 리스트", description = "Q&A 리스트를 출력합니다.")
     @GetMapping("/board/qna")
     public Page<ResponseBoardQnADto> boardQnAList(PageRequest pageRequest,
-                                                  SortOrderQnaCondition sortOrderQnaCondition,
+                                                  SortOrderCondition sortOrderCondition,
                                                   SearchQnaCondition searchQnaCondition){
 
         Page<ResponseBoardQnADto> qnaList = boardService.qnaList(
                 pageRequest.of(),
-                sortOrderQnaCondition.getFieldName(),
+                sortOrderCondition.getFieldName(),
                 searchQnaCondition
         );
 
@@ -329,18 +337,18 @@ public class AdminApiController {
     @ApiDocumentResponse
     @Operation(summary = "Q&A ANSWER 추가",description = "특정 Question에 답변을 답니다.")
     @PostMapping("/board/qna/add/{id}")
-    public String addAnswer(@ModelAttribute RequestBoardQnADto answerDto, @PathVariable("id") Long qnaId){
-        return boardService.addAns(answerDto,qnaId);
+    public void addAnswer(@ModelAttribute RequestBoardQnADto answerDto, @PathVariable("id") Long qnaId){
+        boardService.addAns(answerDto,qnaId);
     }
 
     /**
-     * 관리자 게시판 Q&A (Q&A 수정)
+     * 관리자 게시판 Q&A (Q&A 답변 수정)
      */
     @ApiDocumentResponse
     @Operation(summary = "Q&A 수정", description = "Q&A를 수정합니다.")
     @PostMapping("/board/qna/update/{id}")
-    public Long updateQnA(@ModelAttribute RequestBoardQnADto qnaDto, @PathVariable("id") Long qna_id) {
-        return boardService.updateQnA(qnaDto,qna_id);
+    public void updateQnA(@ModelAttribute RequestBoardQnADto qnaDto, @PathVariable("id") Long qna_id) {
+        boardService.updateQnA(qnaDto,qna_id);
 
     }
 
@@ -361,11 +369,11 @@ public class AdminApiController {
     @Operation(summary = "게시판 관리 review 리스트", description = "review 리스트를 출력합니다.")
     @GetMapping("/board/review")
     public Page<ResponseBoardReviewDto> boardReviewList(PageRequest pageRequest,
-                                                        SortOrderReviewCondition sortOrderReviewCondition,
+                                                        SortOrderCondition sortOrderCondition,
                                                         SearchReviewCondition searchReviewCondition){
         Page<ResponseBoardReviewDto> reviewList = boardService.reviewList(
                 pageRequest.of(),
-                sortOrderReviewCondition.getFieldName(),
+                sortOrderCondition.getFieldName(),
                 searchReviewCondition
         );
 
@@ -388,7 +396,7 @@ public class AdminApiController {
     /**
      * 관리자 게시판 Review(리뷰 검색(회원 이름, 회원 아이디))
      */
-    @ApiDocumentResponse
+
     @Operation(summary = "리뷰 검색 리스트", description = "리뷰 검색 리스트를 출력합니다.")
     @GetMapping("/board/review/search")
     public Page<ResponseBoardReviewDto> searchReviewList(PageRequest pageRequest, SearchReviewCondition searchReviewCondition) {
@@ -396,27 +404,6 @@ public class AdminApiController {
         return ResponseEntity.ok(reviewList).getBody();
     }
 
-    /**
-     * 관리자 게시판 Review (추가)
-     */
-    @ApiDocumentResponse
-    @Operation(summary = "Review 추가" , description = "Review 를 추가합니다.")
-    @PostMapping("board/review/add")
-    public void addReview(RequestBoardReviewDto reviewDto){
-        boardService.addReview(reviewDto);
-    }
-
-
-    /**
-     * 관리자 게시판 Review (수정)
-     */
-    @ApiDocumentResponse
-    @Operation(summary = "Review 수정", description = "Review 를 수정합니다.")
-    @PostMapping("/board/review/update/{id}")
-    public Long updateReview(@ModelAttribute RequestBoardReviewDto reviewDto, @PathVariable("id") Long reviewId) {
-        return boardService.updateReview(reviewDto,reviewId);
-
-    }
 
     /**
      * 관리자 게시판 Review (삭제)
@@ -427,5 +414,147 @@ public class AdminApiController {
     public void reviewDel(@PathVariable("id") Long reviewId) {
         boardService.delReview(reviewId);
     }
+
+    /**
+     * 관리자 게시판 공지사항 ( 전체 조회 )
+     */
+
+    @ApiDocumentResponse
+    @Operation(summary = "공지사항 전체 조회", description = "공지사항을 전체 조회합니다.")
+    @GetMapping("/board/notice")
+    public Page<ResponseNoticeDto> boardNoticeList(PageRequest pageRequest,
+                                                   SearchNoticeCondition searchNoticeCondition,
+                                                   SortOrderCondition sortOrderCondition){
+        Page<ResponseNoticeDto> noticeList=
+                boardService.noticeList(pageRequest.of(),searchNoticeCondition,sortOrderCondition.getFieldName());
+
+        return ResponseEntity.ok(noticeList).getBody();
+    }
+
+    /**
+     * 관리자 게시판 공지사항 ( 공지사항 단건 조회 )
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "공지사항 단건 조회" , description = "특정 공지사항을 열람합니다.")
+    @GetMapping("/board/notice/{noticeId}")
+    public ResponseEntity<ResponseNoticeDto> findNotice(@PathVariable Long noticeId){
+
+        ResponseNoticeDto oneNotice = boardService.findOneNotice(noticeId);
+        return new ResponseEntity<>(oneNotice, HttpStatus.OK);
+
+    }
+
+    /**
+     * 관리자 게시판 공지사항 (공지사항 검색(관리자 이름, 관리자 이메일, 공지사항 제목))
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "공지사항 검색",description = "공지사항을 검색합니다.")
+    @GetMapping("/board/notice/search")
+    public Page<ResponseNoticeDto> searchNoticeList(PageRequest pageRequest, SearchNoticeCondition searchNoticeCondition) {
+        Page<ResponseNoticeDto> noticeList = boardService.searchNoticeList(pageRequest.of(), searchNoticeCondition);
+        return ResponseEntity.ok(noticeList).getBody();
+    }
+
+    /**
+     * 관리자 게시판 공지사항 (추가)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "공지사항 추가", description = "공지사항을 등록합니다.")
+    @PostMapping("/board/notice/add")
+    public void addNotice(RequestNoticeDto noticeDto){
+        boardService.addNotice(noticeDto);
+    }
+
+    /**
+     * 관리자 게시판 공지사항 (수정)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "공지사항 수정", description = "공지사항을 수정합니다.")
+    @PostMapping("/board/notice/update/{noticeId}")
+    public void updateNotice(@ModelAttribute RequestNoticeDto noticeDto ,@PathVariable("noticeId") Long noticeId){
+
+        boardService.updateNotice(noticeDto,noticeId);
+    }
+
+    /**
+     * 관리자 게시판 공지사항 (삭제)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "공지사항 삭제",description = "공지사항을 삭제합니다.")
+    @PostMapping("/board/notice/del/{noticeId}")
+    public void delNotice(@PathVariable("noticeId") Long noticeId) {
+        boardService.delNotice(noticeId);
+    }
+
+    /**
+     * 관리자 게시판 자주 묻는 질문(전체 조회)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "자주 묻는 질문 조회",description = "자주 묻는 질문을 조회합니다.")
+    @GetMapping("/board/faq")
+    public Page<ResponseFaqDto> boardFaqList(PageRequest pageRequest,
+                                             SearchFaqCondition searchFaqCondition,
+                                             SortOrderCondition sortOrderCondition){
+        Page<ResponseFaqDto> faqList=
+                boardService.faqList(pageRequest.of(),searchFaqCondition,sortOrderCondition.getFieldName());
+
+        return ResponseEntity.ok(faqList).getBody();
+    }
+
+    /**
+     * 관리자 게시판 자주 묻는 질문 (단건 조회)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "자주 묻는 질문 단건 조회", description = "특정 자주 묻는 질문을 조회합니다.")
+    @GetMapping("/board/faq/{faqId}")
+    public ResponseEntity<ResponseFaqDto> findFaq(@PathVariable Long faqId){
+
+        ResponseFaqDto oneFaq = boardService.findOneFaq(faqId);
+        return new ResponseEntity<>(oneFaq, HttpStatus.OK);
+
+    }
+    /**
+     * 자주 묻는 질문 검색 (카테고리 이름, 회원 이름, 회원 아이디)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "자주 묻는 질문 검색",description = "자주 묻는 질문을 검색합니다.")
+    @GetMapping("/board/faq/search")
+    public Page<ResponseFaqDto> searchFaqList(PageRequest pageRequest, SearchFaqCondition searchFaqCondition) {
+        Page<ResponseFaqDto> faqList = boardService.searchFaqList(pageRequest.of(), searchFaqCondition);
+        return ResponseEntity.ok(faqList).getBody();
+    }
+
+
+    /**
+     * 관리자 게시판 자주 묻는 질문 (답변 추가)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "자주 묻는 질문 답변 추가",description = "특정 질문에 답변을 추가합니다.")
+    @PostMapping("/board/faq/add/{faqId}")
+    public void faqAddAnswer(@ModelAttribute RequestFaqDto faqDto, @PathVariable("faqId") Long faqId){
+        boardService.faqAddAnswer(faqDto,faqId);
+    }
+
+    /**
+     *  관리자 게시판 자주 묻는 질문 (자주 묻는 질문 수정)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "자주 묻는 질문 수정",description = "자주 묻는 질문을 수정합니다.")
+    @PostMapping("/board/faq/update/{faqId}")
+    public void updateFaq(@ModelAttribute RequestFaqDto faqDto ,@PathVariable("faqId") Long faqId){
+
+        boardService.updateFaq(faqDto,faqId);
+    }
+
+    /**
+     * 관리자 게시판 자주 묻는 질문 (자주 묻는 질문 삭제)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "자주 묻는 질문 삭제",description = "자주 묻는 질문을 삭제합니다.")
+    @PostMapping("/board/faq/del/{faqId}")
+    public void delFaq(@PathVariable("faqId") Long faqId) {
+        boardService.delFaq(faqId);
+    }
+
 
 }

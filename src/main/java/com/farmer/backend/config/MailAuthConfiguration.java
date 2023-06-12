@@ -23,8 +23,8 @@ public class MailAuthConfiguration {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.naver.com");
         mailSender.setPort(465);
-        mailSender.setUsername("아이디");
-        mailSender.setPassword("비밀번호");
+        mailSender.setUsername("kce2360");
+        mailSender.setPassword("farmer123");
         mailSender.setJavaMailProperties(properties);
 
         return mailSender;
