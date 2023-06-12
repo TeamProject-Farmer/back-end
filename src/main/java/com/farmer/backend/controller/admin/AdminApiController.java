@@ -16,9 +16,12 @@ import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.admin.SortOrderCondition;
+import com.farmer.backend.dto.admin.orders.ResponseOrdersDto;
+import com.farmer.backend.dto.admin.orders.SearchOrdersCondition;
 import com.farmer.backend.dto.admin.product.*;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
+import com.farmer.backend.service.OrderService;
 import com.farmer.backend.service.ProductService;
 import com.farmer.backend.service.admin.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +35,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 
@@ -45,6 +49,7 @@ public class AdminApiController {
     private final MemberService memberService;
     private final ProductService productService;
     private final BoardService boardService;
+    private final OrderService orderService;
 
     /**
      * 계정 관리 페이지(관리자 권한 계정 리스트)
@@ -261,6 +266,27 @@ public class AdminApiController {
     public Page<ResponseProductDto> searchProductList(PageRequest pageRequest, String productName) {
         return productService.searchActionProductList(pageRequest.of(), productName);
     }
+
+    /**
+     * 주문 관리 페이지
+     * (검색, 정렬)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "주문 전체 리스트", description = "주문 전체 리스트를 출력합니다.")
+    @GetMapping("/order-list")
+    public Page<ResponseOrdersDto> orderList(PageRequest pageRequest, SearchOrdersCondition searchCond, SortOrderCondition sortCond) {
+        return orderService.orderList(pageRequest.of(), searchCond, sortCond.getFieldName());
+    }
+
+    /**
+     * 주문 관리 페이지(주문 단건 조회)
+     */
+    @GetMapping("/order/{orderId}")
+    public List<Object> orderInfo(@PathVariable Long orderId) {
+        return orderService.orderInfo(orderId);
+    }
+
+
 
     /**
      * 관리자 게시판 관리 페이지(Q&A 전체 리스트)
