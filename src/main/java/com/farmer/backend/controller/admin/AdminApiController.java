@@ -9,8 +9,8 @@ import com.farmer.backend.dto.admin.SortOrderCondition;
 import com.farmer.backend.dto.admin.orders.ResponseOrdersDto;
 import com.farmer.backend.dto.admin.orders.SearchOrdersCondition;
 import com.farmer.backend.dto.admin.product.*;
-import com.farmer.backend.entity.Orders;
-import com.farmer.backend.entity.ProductCategory;
+import com.farmer.backend.entity.OrderDetail;
+import com.farmer.backend.entity.OrderStatus;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
 import com.farmer.backend.service.OrderService;
@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -260,12 +259,26 @@ public class AdminApiController {
         return productService.searchActionProductList(pageRequest.of(), productName);
     }
 
+    /**
+     * 주문 관리 페이지
+     * (검색, 정렬)
+     */
     @ApiDocumentResponse
     @Operation(summary = "주문 전체 리스트", description = "주문 전체 리스트를 출력합니다.")
     @GetMapping("/order-list")
-    public List<ResponseOrdersDto> orderList(PageRequest pageRequest, SearchOrdersCondition ordersCondition, SortOrderCondition orderCondition) {
-        return orderService.orderList(pageRequest.of(), ordersCondition, orderCondition.getFieldName());
+    public Page<ResponseOrdersDto> orderList(PageRequest pageRequest, SearchOrdersCondition searchCond, OrderStatus sortCond) {
+        return orderService.orderList(pageRequest.of(), searchCond, sortCond);
     }
+
+    /**
+     * 주문 관리 페이지(주문 단건 조회)
+     */
+    @GetMapping("/order/{orderId}")
+    public List<Object> orderInfo(@PathVariable Long orderId) {
+        return orderService.orderInfo(orderId);
+    }
+
+
 
     /**
      * 관리자 게시판 관리 페이지(Q&A 전체 리스트)
