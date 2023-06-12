@@ -15,8 +15,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -24,7 +24,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @RequiredArgsConstructor
@@ -36,6 +35,13 @@ public class SecurityConfig  {
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
 
+    @Bean
+    public WebSecurityCustomizer configure() {
+        return (web) -> web.ignoring().antMatchers(
+                "/v3/api-docs",
+                "/swagger-ui/**"
+        );
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -51,13 +57,15 @@ public class SecurityConfig  {
                 .cors()
                 .and()
                 .authorizeRequests()//특정 리소스의 접근 허용 또는 특정 권한을 가진 사용자만 접근 가능하도록 설정
+                .antMatchers("/v3/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html")
+                .authenticated();
                 //.antMatchers("/member/login/oauth2/code/kakao").permitAll()
-                .antMatchers("/member").permitAll()
-                .antMatchers("/member/mail").permitAll()
-                .antMatchers("/member/join").permitAll() //permitall() -> 리소스의 접근을 인증절차 없이 허용
-                .antMatchers("/api/admin/**").permitAll()
-                .antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                .anyRequest().authenticated();// 나머지는 인증된 사용자의 접근만 허용
+//                .antMatchers("/member").permitAll()
+//                .antMatchers("/member/mail").permitAll()
+//                .antMatchers("/member/join").permitAll() //permitall() -> 리소스의 접근을 인증절차 없이 허용
+//                .antMatchers("/api/admin/**").permitAll()
+//                .antMatchers("/v3/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+//                .anyRequest().authenticated();// 나머지는 인증된 사용자의 접근만 허용
 //               .and()
 //               .oauth2Login();
 //               .successHandler(oAuth2LoginSuccessHandler) // 동의하고 계속하기를 눌렀을 때 Handler 설정
