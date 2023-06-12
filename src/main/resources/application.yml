@@ -34,10 +34,11 @@ spring:
 # Swagger springdoc-ui Configuration
 springdoc:
   packages-to-scan: com.farmer.backend.controller
-  default-consumes-media-type: application/json;charset=UTF-8
-  default-produces-media-type: application/json;charset=UTF-8
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
   swagger-ui:
     path: /swagger-ui.html            # Swagger UI ?? => localhost:8000//swagger-ui.html
+    disable-swagger-default-url: true
     tags-sorter: alpha                # alpha: ??? ? ?? ??, method: HTTP Method ? ??
     operations-sorter: alpha          # alpha: ??? ? ?? ??, method: HTTP Method ? ??
   api-docs:
@@ -46,6 +47,7 @@ springdoc:
       enabled: true
   cache:
     disabled: true
+  show-login-endpoint: true
 
 server:
   error:
@@ -53,6 +55,7 @@ server:
     include-message: always       # Response 에 Exception Message 를 표시할지 (never | always | on_param)
     include-stacktrace: on_param  # Response 에 Stack Trace 를 표시할지 (never | always | on_param) on_trace_params 은 deprecated
     whitelabel.enabled: true      # 에러 발생 시 Spring 기본 에러 페이지 노출 여부
+  forward-headers-strategy: framework
 
 logging:
   level:
