@@ -11,6 +11,7 @@ import com.farmer.backend.repository.admin.orders.OrderDetailRepository;
 import com.farmer.backend.repository.admin.orders.OrderQueryRepository;
 import com.farmer.backend.repository.admin.orders.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class OrderService {
 
@@ -36,8 +39,10 @@ public class OrderService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Page<ResponseOrdersDto> orderList(Pageable pageable, SearchOrdersCondition searchCondition, OrderStatus sortOrderCond) {
-        if (sortOrderCond.equals(OrderStatus.ORDER)) {
+    public Page<ResponseOrdersDto> orderList(Pageable pageable, SearchOrdersCondition searchCondition, String sortOrderCond) {
+        if (Objects.isNull(sortOrderCond)) {
+            return orderQueryRepositoryImpl.findAll(pageable, searchCondition);
+        } else if (sortOrderCond.toString().equals("ORDER")) {
             return orderQueryRepositoryImpl.findOrderList(pageable, searchCondition, sortOrderCond);
         }
         return orderQueryRepositoryImpl.findOrderStatusList(pageable, searchCondition, sortOrderCond);
