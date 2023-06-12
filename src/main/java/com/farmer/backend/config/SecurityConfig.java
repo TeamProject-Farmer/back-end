@@ -54,6 +54,7 @@ public class SecurityConfig  {
                 .antMatchers("/member/mail").permitAll()
                 .antMatchers("/member/join").permitAll() //permitall() -> 리소스의 접근을 인증절차 없이 허용
                 .antMatchers("/api/admin/**").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
                 .anyRequest().authenticated();// 나머지는 인증된 사용자의 접근만 허용
 //               .and()
 //               .oauth2Login();
