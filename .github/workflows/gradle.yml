@@ -67,7 +67,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         aws deploy create-deployment \
-        --apllication-name farmer-cicd \
+        --application-name farmer-cicd \
         --deployment-group-name farmer-project-cicd \
         --file-exists-behavior OVERWRITE \
         --s3-location bucket=back-end,bundleType=zip,key=back-end-build.zip \
