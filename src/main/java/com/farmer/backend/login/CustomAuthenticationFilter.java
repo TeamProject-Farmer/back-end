@@ -1,5 +1,6 @@
 package com.farmer.backend.login;
 
+import com.farmer.backend.config.ApiDocumentResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,36 +19,24 @@ import java.util.Map;
 
 public class CustomAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static final String DEFAULT_LOGIN_REQUEST_URL = "/member/login"; // "/login"으로 오는 요청을 처리
-    private static final String HTTP_METHOD = "POST"; // 로그인 HTTP 메소드는 POST
-    private static final String CONTENT_TYPE = "application/json"; // JSON 타입의 데이터로 오는 로그인 요청만 처리
-    private static final String USERNAME_KEY = "email"; // 회원 로그인 시 이메일 요청 JSON Key : "email"
-    private static final String PASSWORD_KEY = "password"; // 회원 로그인 시 비밀번호 요청 JSon Key : "password"
-    private static final AntPathRequestMatcher DEFAULT_LOGIN_PATH_REQUEST_MATCHER =
-            new AntPathRequestMatcher(DEFAULT_LOGIN_REQUEST_URL, HTTP_METHOD); // "/login" + POST로 온 요청에 매칭된다.
-
+    private static final String DEFAULT_LOGIN_REQUEST_URL = "/api/member/login";
+    private static final String HTTP_METHOD = "POST";
     private final ObjectMapper objectMapper;
+    private static final AntPathRequestMatcher DEFAULT_LOGIN_PATH_REQUEST_MATCHER =
+            new AntPathRequestMatcher(DEFAULT_LOGIN_REQUEST_URL, HTTP_METHOD);
 
     public CustomAuthenticationFilter(ObjectMapper objectMapper) {
-        super(DEFAULT_LOGIN_PATH_REQUEST_MATCHER); // 위에서 설정한 "login" + POST로 온 요청을 처리하기 위해 설정
+        super(DEFAULT_LOGIN_PATH_REQUEST_MATCHER);
         this.objectMapper = objectMapper;
     }
-
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
 
-        if(request.getContentType() == null || !request.getContentType().equals(CONTENT_TYPE)  ) {
-            throw new AuthenticationServiceException("Authentication Content-Type not supported: " + request.getContentType());
-        }
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
 
-        String messageBody = StreamUtils.copyToString(request.getInputStream(), StandardCharsets.UTF_8);
-
-        Map<String, String> usernamePasswordMap = objectMapper.readValue(messageBody, Map.class);
-
-        String email = usernamePasswordMap.get(USERNAME_KEY);
-        String password = usernamePasswordMap.get(PASSWORD_KEY);
-
+        System.out.print(email+password);
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);//principal 과 credentials 전달
 
         return this.getAuthenticationManager().authenticate(authRequest);

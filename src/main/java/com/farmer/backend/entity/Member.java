@@ -2,6 +2,8 @@ package com.farmer.backend.entity;
 
 import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
+import com.farmer.backend.dto.user.EmailDto;
+import com.farmer.backend.dto.user.RequestJoinDto;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,10 +12,11 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Member extends BaseTimeEntity{
+
 
 
     @Id
@@ -71,33 +74,15 @@ public class Member extends BaseTimeEntity{
     private String refreshToken;
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);
-    }
-
-    public void updateRefreshToken(String updateRefreshToken) {
-        this.refreshToken=updateRefreshToken;
+        this.pwcheck=passwordEncoder.encode(pwcheck);
     }
 
     public void updateEmailAuth(String updateEmailAuth) {
         this.emailAuth=updateEmailAuth;
     }
 
-    public void updatePassword(String updatePassword) {
-        this.password=updatePassword;
-    }
-    public void updatePwcheck(String updatePwcheck) {
-        this.pwcheck=updatePwcheck;
-    }
-    public void updateUsername(String updateUsername) {
-        this.username=updateUsername;
-    }
-    public void updatePh(String updatePh) {
-        this.ph=updatePh;
-    }
-    public void updateAddress(String updateAddress){
-        this.address=updateAddress;
-    }
-    public void updateNickname(String updateNickname){
-        this.nickname=updateNickname;
+    public void updateRefreshToken(String updateRefreshToken) {
+        this.refreshToken=updateRefreshToken;
     }
 
     public ResponseMemberDto memberList() {
@@ -132,8 +117,19 @@ public class Member extends BaseTimeEntity{
         this.cumulativeAmount = memberDto.getCumulativeAmount();
     }
 
+    public void joinMember(RequestJoinDto requestJoinDto){
+        this.emailAuth="JoinDone";
+        this.password=requestJoinDto.getPassword();
+        this.pwcheck=requestJoinDto.getPwcheck();
+        this.username=requestJoinDto.getUsername();
+        this.ph=requestJoinDto.getPh();
+        this.address=requestJoinDto.getAddress();
+        this.nickname=requestJoinDto.getNickname();
+    }
 
 
-
-
+    public void emailSeveralRequest(EmailDto emailDto,String emailAuth){
+        this.emailAuth=emailAuth;
+        this.email=emailDto.getEmail();
+    }
 }
