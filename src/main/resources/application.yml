@@ -15,12 +15,13 @@ spring:
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
-    show-sql: true
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
+        show_sql: true
         format_sql: true
+        use_sql_comments: true
   data:
     web:
       pageable:
@@ -29,6 +30,10 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 # Swagger springdoc-ui Configuration
 springdoc:
@@ -40,7 +45,7 @@ springdoc:
     tags-sorter: alpha                # alpha: ??? ? ?? ??, method: HTTP Method ? ??
     operations-sorter: alpha          # alpha: ??? ? ?? ??, method: HTTP Method ? ??
   api-docs:
-    path: /api-docs/json
+    path: /api-docs
     groups:
       enabled: true
   cache:
@@ -52,10 +57,16 @@ server:
     include-message: always       # Response 에 Exception Message 를 표시할지 (never | always | on_param)
     include-stacktrace: on_param  # Response 에 Stack Trace 를 표시할지 (never | always | on_param) on_trace_params 은 deprecated
     whitelabel.enabled: true      # 에러 발생 시 Spring 기본 에러 페이지 노출 여부
+  forward-headers-strategy: framework
 
 logging:
   level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace
-    org.springframework: debug
-    org.springframework.web: debug
+#    org.hibernate.SQL: debug
+#    org.hibernate.type: trace
+#    org.springframework: debug
+#    org.springframework.web: debug
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
