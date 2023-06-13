@@ -51,7 +51,7 @@ jobs:
         aws s3 cp \
         --region ap-northeast-2 \
         --acl private \
-        ./back-end-build.zip s3://back-end-build/
+        ./back-end-build.zip s3://farmer-project-bucket/
       
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
