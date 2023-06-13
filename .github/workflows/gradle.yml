@@ -30,6 +30,9 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+        
     # build    
     - name: Build with Gradle
       run: ./gradlew clean build
@@ -39,6 +42,9 @@ jobs:
       
     - name: Copy jar
       run: cp ./build/libs/*.jar ./deploy/
+      
+    - name: Copy appspec
+      run: cp appspec.yml ./deploy/
       
     - name: Make zip file
       run: zip -r -qq -j ./back-end-build.zip ./deploy
@@ -52,6 +58,19 @@ jobs:
         --region ap-northeast-2 \
         --acl private \
         ./back-end-build.zip s3://farmer-project-bucket/
+        
+    #Deploy
+    - name: Deploy
+    env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws deploy create-deployment \
+        --apllication-name farmer-cicd \
+        --deployment-group-name farmer-project-cicd \
+        --file-exists-behavior OVERWRITE \
+        --s3-location bucket=back-end,bundleType=zip,key=back-end-build.zip \
+        --region ap-northeast-2
+    
       
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+    
