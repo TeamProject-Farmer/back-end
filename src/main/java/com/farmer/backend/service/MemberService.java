@@ -4,7 +4,7 @@ import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.user.EmailDto;
-import com.farmer.backend.dto.user.MemberDto;
+import com.farmer.backend.dto.user.RequestJoinDto;
 import com.farmer.backend.entity.Member;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -119,73 +120,72 @@ public class MemberService {
     }
 
 
-    //같은 회원이 이메일 인증을 2번 이상 시도할 때
-    @Transactional(readOnly = true)
-    public String emailAuthent(EmailDto emailDto) throws Exception{
-        if (memberRepository.findByEmail(emailDto.getEmail()).isPresent()) {
-            throw new Exception("이미 존재하는 이메일입니다.");
+    /**
+     * 이메일 인증 시도한 이메일 저장
+     * @param emailDto 이메일 데이터
+     * @return 인증 시도한 이메일
+     */
+    @Transactional
+    public String emailStore(EmailDto emailDto,String emailKey){
+
+        memberRepository.findByEmail(emailDto.getEmail()).ifPresentOrElse(
+                member -> {
+                    member.emailSeveralRequest(emailDto,emailKey);
+                },
+                ()->memberRepository.save(emailDto.toEntity(emailKey))
+        );
+        return emailDto.getEmail();
+
+    }
+
+    /**
+     * 이메일 인증코드 확인
+     * @param mailInfo 이메일,인증코드
+     */
+    @Transactional
+    public String codeCheck(Map<String,String> mailInfo) {
+        String checkKey = mailInfo.get("authKey");
+        String checkEmail= mailInfo.get("email");
+
+        Member member=memberRepository.findByEmail(checkEmail).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        if(member.getEmailAuth().equals("DONE") ||member.getEmailAuth().equals("JoinDone") ){
+            throw new CustomException(ErrorCode.EMAIL_AUTHENTICATION);
+        }
+        else if(!member.getEmailAuth().equals(checkKey) || member.getEmailAuth() == null){
+            throw new CustomException(ErrorCode.EMAIL_NOT_AUTHENTICATION);
+        }
+        member.updateEmailAuth("DONE");
+        return checkKey;
+    }
+
+    /**
+     * 회원가입
+     * @param requestDto 회원 정보
+     */
+    @Transactional
+    public void signUp(RequestJoinDto requestDto) {
+
+        Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        if (!requestDto.getPassword().equals(requestDto.getPwcheck())){
+            throw new CustomException(ErrorCode.PASSWORD_NOT_EQUALS);
+        }
+        else if(member.getEmailAuth().equals("JoinDone")){
+            throw new CustomException(ErrorCode.MEMBER_FOUND);
+        }
+        else if(!member.getEmailAuth().equals("DONE")){
+            throw new CustomException(ErrorCode.EMAIL_YET_AUTHENTICATION);
         }
 
-        Member member = memberRepository.save(emailDto.toEntity());
-
-        return member.getEmail();
-
-    }
-    @Transactional(readOnly = true)
-    public void signUp(MemberDto requestDto) throws Exception {
-
-        memberRepository.findByEmail(requestDto.getEmail()).ifPresentOrElse(
-                member -> {
-                    if(!requestDto.getPassword().equals(requestDto.getPwcheck())){
-                        log.info("비밀번호가 일치하지 않습니다.");
-                    }
-                    else{
-                        member.updatePassword(requestDto.getPassword());
-                        member.updatePwcheck(requestDto.getPwcheck());
-                        member.updateUsername(requestDto.getUsername());
-                        member.updatePh(requestDto.getPh());
-                        member.updateAddress(requestDto.getAddress());
-                        member.updateNickname(requestDto.getNickname());
-
-                        member.encodePassword(passwordEncoder);
-                    }
-
-                },
-
-                () -> log.info("이메일 인증이 완료되지 않았습니다.")//new Exception("이메일 인증이 완료되지 않았습니다.")
-
-        );
-
-
-
+        member.joinMember(requestDto);
+        member.encodePassword(passwordEncoder);
 
     }
 
-    @Transactional(readOnly = true)
-    public void checkAuthent(String checkEmail,String checkKey) throws  Exception{
-        System.out.println(checkEmail+checkKey);
-        memberRepository.findByEmail(checkEmail).ifPresentOrElse(
-                member -> {
-                    if(member.getEmailAuth().equals(checkKey)){
-                        log.info("인증 성공");
-                    }
-                    else{
-                        log.info("인증 실패");
-                    }
-                },
-                () -> new Exception("이메일 인증에 실패하였습니다.")
-        );
-    }
 
-    @Transactional(readOnly = true)
-    public void updateemailkey(String email, String emailKey) throws Exception{
 
-        memberRepository.findByEmail(email).ifPresentOrElse(
-                member -> member.updateEmailAuth(emailKey),
-                () -> new Exception("이메일을 다시 입력해주세요.")
-        );
 
-    }
 
 
 }

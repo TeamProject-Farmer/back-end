@@ -2,6 +2,7 @@ package com.farmer.backend.jwt;
 
 import com.farmer.backend.entity.Member;
 import com.farmer.backend.repository.admin.member.MemberRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,8 +13,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.print.DocFlavor;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -22,7 +25,7 @@ import java.io.*;
 @Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
-    private static final String NO_CHECK_URL ="/member/login";
+    private static final String NO_CHECK_URL ="/api/member/login/*";
 
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
@@ -30,12 +33,11 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException{
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException{
 
-        if(request.getRequestURI().equals(NO_CHECK_URL)){
-
-            log.info("일반로그인 실행");
-            filterChain.doFilter(request,response); //login으로 요청이 들어오면 다음 필터 호출 (일반 로그인 진행)
+        if(!request.getRequestURI().equals(NO_CHECK_URL)){
+            filterChain.doFilter(request,response);
             return;
         }
 

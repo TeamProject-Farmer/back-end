@@ -14,6 +14,13 @@ public enum ErrorCode {
     SUCCESS(OK, "success"),
 
     MEMBER_NOT_FOUND(BAD_REQUEST, "해당 회원이 존재하지 않습니다."),
+    MEMBER_FOUND(BAD_REQUEST, "해당 회원이 이미 존재합니다."),
+    MEMBER_EMAIL_FOUND(BAD_REQUEST,"해당 이메일이 존재합니다."),
+
+    PASSWORD_NOT_EQUALS(BAD_REQUEST,"비밀번호가 일치하지 않습니다."),
+    EMAIL_AUTHENTICATION(BAD_REQUEST,"인증이 완료된 이메일입니다."),
+    EMAIL_YET_AUTHENTICATION(BAD_REQUEST,"이메일 인증이 완료되지 않았습니다."),
+    EMAIL_NOT_AUTHENTICATION(BAD_REQUEST,"이메일 인증에 실패하였습니다."),
     PRODUCT_NOT_FOUND(BAD_REQUEST, "해당 상품이 존재하지 않습니다."),
     OPTION_NOT_FOUND(BAD_REQUEST, "해당 옵션이 존재하지 않습니다."),
     REVIEW_NOT_FOUND(BAD_REQUEST, "해당 리뷰가 존재하지 않습니다."),

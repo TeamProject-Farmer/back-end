@@ -8,7 +8,7 @@ spring:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://farmer-db.cfnicvrzrvza.ap-northeast-2.rds.amazonaws.com/farmerDB?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://farmer-db.cfnicvrzrvza.ap-northeast-2.rds.amazonaws.com/farmerDB?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: admin
     password: farmer123
 

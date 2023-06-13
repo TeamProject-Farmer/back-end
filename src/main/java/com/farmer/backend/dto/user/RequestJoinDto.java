@@ -8,31 +8,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberDto {
+public class RequestJoinDto {
 
-    @NotBlank(message = "이메일")
     private String email;
-
-    @NotBlank(message = "비밀번호")
     private String password;
-
-    @NotBlank(message = "비밀번호 확인")
     private String pwcheck;
-    @NotBlank
     private String username;
-
-    @NotBlank(message = "전화번호")
     private String ph;
-    @NotBlank(message = "전화번호")
     private String address;
-
-    @NotBlank(message = "별명")
     private String nickname;
 
     @Builder
