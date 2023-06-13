@@ -18,14 +18,13 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class EmailDto {
 
-    @NotBlank(message = "이메일")
     private String email;
 
     @Builder
-    public Member toEntity(){
+    public Member toEntity(String emailKey){
         return Member.builder()
                 .email(email)
-                .emailAuth("emailAuth")
+                .emailAuth(emailKey)
                 .password("password")
                 .pwcheck("pwcheck")
                 .username("username")
