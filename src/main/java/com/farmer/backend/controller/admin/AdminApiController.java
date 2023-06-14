@@ -16,6 +16,7 @@ import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.admin.SortOrderCondition;
+import com.farmer.backend.dto.admin.orders.ResponseOrderDetailDto;
 import com.farmer.backend.dto.admin.orders.ResponseOrdersDto;
 import com.farmer.backend.dto.admin.orders.SearchOrdersCondition;
 import com.farmer.backend.dto.admin.product.*;
@@ -282,8 +283,17 @@ public class AdminApiController {
      * 주문 관리 페이지(주문 단건 조회)
      */
     @GetMapping("/order/{orderId}")
-    public List<Object> orderInfo(@PathVariable Long orderId) {
+    public List<ResponseOrderDetailDto> orderInfo(@PathVariable Long orderId) {
         return orderService.orderInfo(orderId);
+    }
+
+    /**
+     * 주문 관리 페이지(주문 삭제)
+     */
+    @PostMapping("/order/delete/{orderId}")
+    public ResponseEntity orderRemove(@PathVariable Long orderId) {
+        orderService.orderRemove(orderId);
+        return ResponseEntity.ok(orderId);
     }
 
 
