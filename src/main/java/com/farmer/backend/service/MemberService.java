@@ -130,6 +130,9 @@ public class MemberService {
 
         memberRepository.findByEmail(emailDto.getEmail()).ifPresentOrElse(
                 member -> {
+                    if(member.getEmailAuth().equals("DONE") || member.getEmailAuth().equals("JoinDone")){
+                        throw new CustomException(ErrorCode.EMAIL_AUTHENTICATION);
+                    }
                     member.emailSeveralRequest(emailDto,emailKey);
                 },
                 ()->memberRepository.save(emailDto.toEntity(emailKey))
@@ -140,23 +143,21 @@ public class MemberService {
 
     /**
      * 이메일 인증코드 확인
-     * @param mailInfo 이메일,인증코드
+     * @param memberEmail 이메일,인증코드
      */
     @Transactional
-    public String codeCheck(Map<String,String> mailInfo) {
-        String checkKey = mailInfo.get("authKey");
-        String checkEmail= mailInfo.get("email");
+    public String codeCheck(String memberEmail) {
 
-        Member member=memberRepository.findByEmail(checkEmail).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Member member=memberRepository.findByEmail(memberEmail).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         if(member.getEmailAuth().equals("DONE") ||member.getEmailAuth().equals("JoinDone") ){
             throw new CustomException(ErrorCode.EMAIL_AUTHENTICATION);
         }
-        else if(!member.getEmailAuth().equals(checkKey) || member.getEmailAuth() == null){
+        else if(!member.getEmailAuth().equals(member.getEmailAuth()) || member.getEmailAuth() == null){
             throw new CustomException(ErrorCode.EMAIL_NOT_AUTHENTICATION);
         }
         member.updateEmailAuth("DONE");
-        return checkKey;
+        return member.getEmailAuth();
     }
 
     /**
@@ -183,9 +184,20 @@ public class MemberService {
 
     }
 
+    /**
+     * 이메일 인증 확인 여부
+     * @param memberEmail 사용자 이메일
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public String emailAuth(String memberEmail) {
 
+        String emailKey=memberRepository.findByEmail(memberEmail).get().getEmailAuth();
 
+        if (!emailKey.equals("DONE")){
+            throw new CustomException(ErrorCode.EMAIL_YET_AUTHENTICATION);
+        }
 
-
-
+        return emailKey;
+    }
 }

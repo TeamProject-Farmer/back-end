@@ -1,23 +1,19 @@
 package com.farmer.backend.login;
 
-import com.farmer.backend.config.ApiDocumentResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.util.StreamUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 
-public class CustomAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class CustomLonginFilter extends AbstractAuthenticationProcessingFilter {
+
 
     private static final String DEFAULT_LOGIN_REQUEST_URL = "/api/member/login";
     private static final String HTTP_METHOD = "POST";
@@ -25,7 +21,7 @@ public class CustomAuthenticationFilter extends AbstractAuthenticationProcessing
     private static final AntPathRequestMatcher DEFAULT_LOGIN_PATH_REQUEST_MATCHER =
             new AntPathRequestMatcher(DEFAULT_LOGIN_REQUEST_URL, HTTP_METHOD);
 
-    public CustomAuthenticationFilter(ObjectMapper objectMapper) {
+    public CustomLonginFilter(ObjectMapper objectMapper) {
         super(DEFAULT_LOGIN_PATH_REQUEST_MATCHER);
         this.objectMapper = objectMapper;
     }

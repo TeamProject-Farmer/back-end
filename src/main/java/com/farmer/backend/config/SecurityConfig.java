@@ -3,7 +3,7 @@ package com.farmer.backend.config;
 
 import com.farmer.backend.jwt.JwtAuthenticationProcessingFilter;
 import com.farmer.backend.jwt.JwtService;
-import com.farmer.backend.login.CustomAuthenticationFilter;
+import com.farmer.backend.login.CustomLonginFilter;
 import com.farmer.backend.login.LoginService;
 import com.farmer.backend.login.handler.LoginFailureHandler;
 import com.farmer.backend.login.handler.LoginSuccessHandler;
@@ -66,7 +66,7 @@ public class SecurityConfig  {
 //                .anyRequest().authenticated();
 
         http.addFilterAfter(customAuthenticationFilter(), LogoutFilter.class);
-        http.addFilterBefore(jwtAuthenticationFilter(), CustomAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter(), CustomLonginFilter.class);
      return http.build();
 
     }
@@ -77,9 +77,9 @@ public class SecurityConfig  {
     }
 
     @Bean
-    public CustomAuthenticationFilter customAuthenticationFilter() {
-        CustomAuthenticationFilter customLoginFilter
-                = new CustomAuthenticationFilter(objectMapper);
+    public CustomLonginFilter customAuthenticationFilter() {
+        CustomLonginFilter customLoginFilter
+                = new CustomLonginFilter(objectMapper);
 
         customLoginFilter.setAuthenticationManager(authenticationManager());
         customLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler());
