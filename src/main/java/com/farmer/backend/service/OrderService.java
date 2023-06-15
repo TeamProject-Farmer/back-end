@@ -1,5 +1,6 @@
 package com.farmer.backend.service;
 
+import com.farmer.backend.dto.admin.orders.ResponseOrderDetailDto;
 import com.farmer.backend.dto.admin.orders.ResponseOrdersDto;
 import com.farmer.backend.dto.admin.orders.SearchOrdersCondition;
 import com.farmer.backend.entity.OrderStatus;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,8 +50,24 @@ public class OrderService {
         return orderQueryRepositoryImpl.findOrderStatusList(pageable, searchCondition, sortOrderCond);
     }
 
+    /**
+     * 주문 상세 조회
+     * @param orderId 주문 일련번호
+     * @return
+     */
     @Transactional(readOnly = true)
-    public List<Object> orderInfo(Long orderId) {
-        return null;
+    public List<ResponseOrderDetailDto> orderInfo(Long orderId) {
+        List<ResponseOrderDetailDto> orderDetail = orderQueryRepositoryImpl.findOrderDetail(orderId);
+        return orderDetail;
+    }
+
+    /**
+     * 주문 삭제
+     * @param orderId 주문 일련번호
+     * @return
+     */
+    public void orderRemove(Long orderId) {
+        Orders findOrder = orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
+        orderRepository.delete(findOrder);
     }
 }

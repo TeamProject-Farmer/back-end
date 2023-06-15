@@ -2,7 +2,6 @@ package com.farmer.backend.repository.admin.orders;
 
 import com.farmer.backend.dto.admin.orders.*;
 import com.farmer.backend.entity.*;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,9 +13,9 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 import static com.farmer.backend.entity.QMember.member;
+import static com.farmer.backend.entity.QOrderDetail.orderDetail;
 import static com.farmer.backend.entity.QOrders.orders;
 
 @Repository
@@ -104,7 +103,7 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
     }
 
     @Override
-    public List<String> findOrderDetail(Long orderId) {
+    public List<ResponseOrderDetailDto> findOrderDetail(Long orderId) {
         return null;
     }
 
