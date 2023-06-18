@@ -26,7 +26,6 @@ public class EmailDto {
                 .email(email)
                 .emailAuth(emailKey)
                 .password("password")
-                .pwcheck("pwcheck")
                 .username("username")
                 .ph("ph")
                 .address("address")

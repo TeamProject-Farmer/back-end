@@ -10,6 +10,7 @@ import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.repository.admin.member.MemberQueryRepository;
 import com.farmer.backend.repository.admin.member.MemberRepository;
+import com.farmer.backend.service.user.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,6 +31,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class MemberService {
+
+    private final MailService mailService;
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -126,16 +129,20 @@ public class MemberService {
      * @return 인증 시도한 이메일
      */
     @Transactional
-    public String emailStore(EmailDto emailDto,String emailKey){
+    public String emailStore(EmailDto emailDto){
 
         memberRepository.findByEmail(emailDto.getEmail()).ifPresentOrElse(
                 member -> {
                     if(member.getEmailAuth().equals("DONE") || member.getEmailAuth().equals("JoinDone")){
                         throw new CustomException(ErrorCode.EMAIL_AUTHENTICATION);
                     }
+                    String emailKey = mailService.sendAuthMail(member.getEmail());
                     member.emailSeveralRequest(emailDto,emailKey);
                 },
-                ()->memberRepository.save(emailDto.toEntity(emailKey))
+                ()->{
+                    String emailKey = mailService.sendAuthMail(emailDto.getEmail());
+                    memberRepository.save(emailDto.toEntity(emailKey));
+                }
         );
         return emailDto.getEmail();
 
@@ -146,7 +153,7 @@ public class MemberService {
      * @param memberEmail 이메일,인증코드
      */
     @Transactional
-    public String codeCheck(String memberEmail) {
+    public void codeCheck(String memberEmail) {
 
         Member member=memberRepository.findByEmail(memberEmail).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -157,7 +164,6 @@ public class MemberService {
             throw new CustomException(ErrorCode.EMAIL_NOT_AUTHENTICATION);
         }
         member.updateEmailAuth("DONE");
-        return member.getEmailAuth();
     }
 
     /**
@@ -169,10 +175,7 @@ public class MemberService {
 
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        if (!requestDto.getPassword().equals(requestDto.getPwcheck())){
-            throw new CustomException(ErrorCode.PASSWORD_NOT_EQUALS);
-        }
-        else if(member.getEmailAuth().equals("JoinDone")){
+        if(member.getEmailAuth().equals("JoinDone")){
             throw new CustomException(ErrorCode.MEMBER_FOUND);
         }
         else if(!member.getEmailAuth().equals("DONE")){
