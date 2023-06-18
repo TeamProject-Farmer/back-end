@@ -8,18 +8,31 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestJoinDto {
 
+    @NotBlank
     private String email;
+    @NotBlank
     private String password;
-    private String pwcheck;
+    @NotBlank
     private String username;
+    @NotBlank
     private String ph;
+    @NotBlank
+    private Long zipcode;
+    @NotBlank
     private String address;
+    @NotBlank
+    private String detailAddress;
+    @NotBlank
     private String nickname;
 
     @Builder
@@ -27,10 +40,11 @@ public class RequestJoinDto {
         return Member.builder()
                 .email(email)
                 .password(password)
-                .pwcheck(pwcheck)
                 .username(username)
                 .ph(ph)
+                .zipCode(zipcode)
                 .address(address)
+                .detailAddress(detailAddress)
                 .nickname(nickname)
                 .build();
     }
