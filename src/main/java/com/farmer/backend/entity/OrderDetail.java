@@ -28,6 +28,10 @@ public class OrderDetail {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @ManyToOne
+    @JoinColumn(name = "option_id")
+    private Options options;
+
     @NotNull
     private Long orderPrice;
 

@@ -16,9 +16,7 @@ import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.admin.SortOrderCondition;
-import com.farmer.backend.dto.admin.orders.ResponseOrderDetailDto;
-import com.farmer.backend.dto.admin.orders.ResponseOrdersDto;
-import com.farmer.backend.dto.admin.orders.SearchOrdersCondition;
+import com.farmer.backend.dto.admin.orders.*;
 import com.farmer.backend.dto.admin.product.*;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
@@ -282,9 +280,19 @@ public class AdminApiController {
     /**
      * 주문 관리 페이지(주문 단건 조회)
      */
+    @ApiDocumentResponse
+    @Operation(summary = "주문 단건 조회", description = "주문 한건을 조회합니다")
     @GetMapping("/order/{orderId}")
-    public List<ResponseOrderDetailDto> orderInfo(@PathVariable Long orderId) {
+    public List<Object> orderInfo(@PathVariable Long orderId) {
         return orderService.orderInfo(orderId);
+    }
+
+    @ApiDocumentResponse
+    @Operation(summary = "주문 상태 변경", description = "주문 한 건 상태를 변경합니다.")
+    @PostMapping("/order-update/{orderId}")
+    public ResponseEntity orderUpdate(@PathVariable Long orderId, String orderStatus) {
+        orderService.orderStatusUpdate(orderId, orderStatus);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
