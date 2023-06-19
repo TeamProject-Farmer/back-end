@@ -1,9 +1,6 @@
 package com.farmer.backend.service;
 
-import com.farmer.backend.dto.admin.orders.ResponseOrderDetailDto;
-import com.farmer.backend.dto.admin.orders.ResponseOrdersDto;
-import com.farmer.backend.dto.admin.orders.SearchOrdersCondition;
-import com.farmer.backend.entity.OrderStatus;
+import com.farmer.backend.dto.admin.orders.*;
 import com.farmer.backend.entity.Orders;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
@@ -11,6 +8,8 @@ import com.farmer.backend.repository.admin.orders.OrderDetailQueryRepository;
 import com.farmer.backend.repository.admin.orders.OrderDetailRepository;
 import com.farmer.backend.repository.admin.orders.OrderQueryRepository;
 import com.farmer.backend.repository.admin.orders.OrderRepository;
+import com.farmer.backend.repository.admin.payment.PaymentQueryRepository;
+import com.farmer.backend.repository.admin.payment.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,9 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -32,6 +29,8 @@ public class OrderService {
     private final OrderQueryRepository orderQueryRepositoryImpl;
     private final OrderDetailRepository orderDetailRepository;
     private final OrderDetailQueryRepository orderDetailQueryRepositoryImpl;
+    private final PaymentRepository paymentRepository;
+    private final PaymentQueryRepository paymentQueryRepositoryImpl;
 
     /**
      * 주문 전체 리스트
@@ -56,9 +55,23 @@ public class OrderService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<ResponseOrderDetailDto> orderInfo(Long orderId) {
-        List<ResponseOrderDetailDto> orderDetail = orderQueryRepositoryImpl.findOrderDetail(orderId);
-        return orderDetail;
+    public List<Object> orderInfo(Long orderId) {
+        List<Object> orderDetailContent = new ArrayList<>();
+        Map<String, List<ResponseOrdersAndPaymentDto>> ordersAndPaymentMap = new HashMap<>();
+        Map<String, List<ResponseOrderDetailDto>> orderDetailMap = new HashMap<>();
+        List<ResponseOrdersAndPaymentDto> ordersAndPayment = orderQueryRepositoryImpl.findOrdersAndPayment(orderId);
+        List<ResponseOrderDetailDto> orderDetail = orderDetailQueryRepositoryImpl.findOrderDetail(orderId);
+
+        ordersAndPaymentMap.put("주문 결제정보", ordersAndPayment);
+        orderDetailMap.put("주문상품 상세정보", orderDetail);
+        orderDetailContent.add(ordersAndPaymentMap);
+        orderDetailContent.add(orderDetailMap);
+
+        return orderDetailContent;
+    }
+    @Transactional
+    public void orderStatusUpdate(Long orderId, String orderStatus) {
+        orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND)).orderStatusUpdateAction(orderStatus);
     }
 
     /**
@@ -66,8 +79,10 @@ public class OrderService {
      * @param orderId 주문 일련번호
      * @return
      */
+    @Transactional
     public void orderRemove(Long orderId) {
         Orders findOrder = orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
         orderRepository.delete(findOrder);
     }
+
 }

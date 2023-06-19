@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -15,8 +16,8 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.farmer.backend.entity.QMember.member;
-import static com.farmer.backend.entity.QOrderDetail.orderDetail;
 import static com.farmer.backend.entity.QOrders.orders;
+import static com.farmer.backend.entity.QPayment.payment;
 
 @Repository
 public class OrderQueryRepositoryImpl implements OrderQueryRepository {
@@ -103,8 +104,31 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
     }
 
     @Override
-    public List<ResponseOrderDetailDto> findOrderDetail(Long orderId) {
-        return null;
+    public List<ResponseOrdersAndPaymentDto> findOrdersAndPayment(Long orderId) {
+        List<ResponseOrdersAndPaymentDto> fetch = query
+                .select(Projections.constructor(ResponseOrdersAndPaymentDto.class,
+                        orders.id,
+                        orders.orderNumber,
+                        orders.member.username,
+                        orders.member.ph,
+                        orders.member.email,
+                        orders.delivery.address,
+                        orders.delivery.deliveryStatus,
+                        orders.delivery.memo,
+                        orders.orderPrice,
+                        payment.discountPrice,
+                        payment.deliveryPrice,
+                        payment.usePointPrice,
+                        payment.addPoint,
+                        orders.payMethod,
+                        payment.finalAmount
+                        )
+                )
+                .from(payment)
+                .join(payment.orders, orders)
+                .where(orders.id.eq(orderId))
+                .fetch();
+        return fetch;
     }
 
     @Override
