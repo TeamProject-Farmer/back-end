@@ -1,6 +1,9 @@
 package com.farmer.backend.service.user;
 
 
+import com.farmer.backend.exception.CustomException;
+import com.farmer.backend.exception.ErrorCode;
+import com.farmer.backend.repository.admin.member.MemberRepository;
 import com.farmer.backend.util.MailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,6 +17,8 @@ import java.util.Random;
 public class MailService {
     @Autowired
     private JavaMailSender mailSender;
+
+    private MemberRepository memberRepository;
     private int size;
 
     //인증키 생성
@@ -36,12 +41,9 @@ public class MailService {
         return buffer.toString();
     }
 
-    //인증메일 보내기
     public String sendAuthMail(String email) {
 
-        //6자리 난수 인증번호 생성
         String authKey = getKey(6);
-        //인증메일 보내기
 
         try {
             MailUtils sendMail = new MailUtils(mailSender);
@@ -63,6 +65,7 @@ public class MailService {
         } catch (javax.mail.MessagingException e) {
             throw new RuntimeException(e);
         }
+
 
         return authKey;
     }

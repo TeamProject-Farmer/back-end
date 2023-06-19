@@ -4,7 +4,6 @@ import com.farmer.backend.config.ApiDocumentResponse;
 import com.farmer.backend.dto.user.EmailDto;
 import com.farmer.backend.dto.user.RequestJoinDto;
 import com.farmer.backend.service.MemberService;
-import com.farmer.backend.service.user.MailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,7 +24,6 @@ import javax.validation.Valid;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MailService mailService;
 
 
     /**
@@ -35,10 +34,11 @@ public class MemberController {
     @PostMapping(value = "/join/mail")
     public ResponseEntity<String> emailSend(@ModelAttribute EmailDto emailDto) {
 
-        String emailKey = mailService.sendAuthMail(emailDto.getEmail());
-        memberService.emailStore(emailDto,emailKey);
+
+        memberService.emailStore(emailDto);
 
         return new ResponseEntity<>("ok", HttpStatus.OK);
+
     }
 
     /**
@@ -47,8 +47,12 @@ public class MemberController {
     @ApiDocumentResponse
     @Operation(summary = "인증 확인 URL 클릭", description = "사용자가 인증 URL을 클릭합니다.")
     @GetMapping(value = "/join/mail/checkDone")
-    public void emailCheck(@RequestParam String email){
+    public ModelAndView emailCheck(@RequestParam String email){
+
         memberService.codeCheck(email);
+        ModelAndView mailView=new ModelAndView("mailAuthentication");
+
+        return mailView;
     }
 
     /**
@@ -61,9 +65,9 @@ public class MemberController {
         return memberService.emailAuth(memberEmail);
     }
 
-        /**
-         * 회원가입
-         */
+    /**
+     * 회원가입
+     */
     @ApiDocumentResponse
     @Operation(summary = "회원가입", description = "회원가입을 진행합니다.")
     @PostMapping(value = "/join/membership",

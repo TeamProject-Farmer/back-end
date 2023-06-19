@@ -34,17 +34,20 @@ public class Member extends BaseTimeEntity{
     private String password;
 
     @NotNull
-    private String pwcheck;
-
-    @NotNull
     @Column(length = 50)
     private String username;
 
     @Column(length = 20)
     private String ph;
 
+    @Column(length = 10)
+    private Long zipCode;
+
     @Column(length = 50)
     private String address;
+
+    @Column(length = 50)
+    private String detailAddress;
 
     @NotNull
     @Column(length = 50)
@@ -74,7 +77,6 @@ public class Member extends BaseTimeEntity{
     private String refreshToken;
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);
-        this.pwcheck=passwordEncoder.encode(pwcheck);
     }
 
     public void updateEmailAuth(String updateEmailAuth) {
@@ -120,10 +122,11 @@ public class Member extends BaseTimeEntity{
     public void joinMember(RequestJoinDto requestJoinDto){
         this.emailAuth="JoinDone";
         this.password=requestJoinDto.getPassword();
-        this.pwcheck=requestJoinDto.getPwcheck();
         this.username=requestJoinDto.getUsername();
         this.ph=requestJoinDto.getPh();
         this.address=requestJoinDto.getAddress();
+        this.zipCode=requestJoinDto.getZipcode();
+        this.detailAddress=requestJoinDto.getDetailAddress();
         this.nickname=requestJoinDto.getNickname();
     }
 
