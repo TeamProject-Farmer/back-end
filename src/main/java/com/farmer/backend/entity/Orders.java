@@ -50,4 +50,8 @@ public class Orders {
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
     private LocalDateTime createdDate;
+
+    public void orderStatusUpdateAction(String orderStatus) {
+        this.orderStatus = OrderStatus.valueOf(orderStatus);
+    }
 }
