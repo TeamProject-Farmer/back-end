@@ -72,9 +72,21 @@ public class MemberController {
     @ApiDocumentResponse
     @Operation(summary = "회원가입", description = "회원가입을 진행합니다.")
     @PostMapping(value = "/join/membership")
-    public void join (@ModelAttribute RequestJoinDto joinDto) {
+    public String join (@ModelAttribute RequestJoinDto joinDto) {
         memberService.signUp(joinDto);
+
+        return "SUCCESS";
     }
 
+    /**
+     * 로그인
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "일반 로그인", description = "일반 로그인을 진행합니다.")
+    @RequestMapping(value = "/login")
+    public String login(Authentication authentication){
+        System.out.println("되나");
+        return (String) authentication.getPrincipal();
+    }
 
 }

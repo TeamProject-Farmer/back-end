@@ -17,6 +17,8 @@ public enum ErrorCode {
     MEMBER_FOUND(BAD_REQUEST, "해당 회원이 이미 존재합니다."),
     MEMBER_EMAIL_FOUND(BAD_REQUEST,"해당 이메일이 존재합니다."),
 
+    NICKNAME_FOUND(BAD_REQUEST,"해당 닉네임이 존재합니다."),
+
     PASSWORD_NOT_EQUALS(BAD_REQUEST,"비밀번호가 일치하지 않습니다."),
     EMAIL_AUTHENTICATION(BAD_REQUEST,"인증이 완료된 이메일입니다."),
     EMAIL_YET_AUTHENTICATION(BAD_REQUEST,"이메일 인증이 완료되지 않았습니다."),

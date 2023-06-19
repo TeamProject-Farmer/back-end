@@ -1,6 +1,7 @@
 package com.farmer.backend.config;
 
 
+import com.farmer.backend.controller.user.MemberController;
 import com.farmer.backend.jwt.JwtAuthenticationProcessingFilter;
 import com.farmer.backend.jwt.JwtService;
 import com.farmer.backend.login.CustomLoginFilter;
@@ -65,7 +66,7 @@ public class SecurityConfig  {
 //                .antMatchers("/api/admin/**").permitAll()
 //                .anyRequest().authenticated();
 
-        http.addFilterAfter(customAuthenticationFilter(), LogoutFilter.class);
+        http.addFilterAfter(customLoginFilter(), LogoutFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), CustomLoginFilter.class);
      return http.build();
 
@@ -77,7 +78,7 @@ public class SecurityConfig  {
     }
 
     @Bean
-    public CustomLoginFilter customAuthenticationFilter() {
+    public CustomLoginFilter customLoginFilter() {
         CustomLoginFilter customLoginFilter
                 = new CustomLoginFilter(objectMapper);
 
@@ -97,7 +98,7 @@ public class SecurityConfig  {
 
     @Bean
     public LoginSuccessHandler loginSuccessHandler() {
-        return new LoginSuccessHandler(jwtService, memberRepository);
+        return new LoginSuccessHandler(jwtService,memberRepository);
     }
 
     @Bean
