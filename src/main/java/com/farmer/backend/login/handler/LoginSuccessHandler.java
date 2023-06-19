@@ -1,6 +1,7 @@
 package com.farmer.backend.login.handler;
 
 
+import com.farmer.backend.controller.user.MemberController;
 import com.farmer.backend.jwt.JwtService;
 import com.farmer.backend.repository.admin.member.MemberRepository;
 import lombok.RequiredArgsConstructor;

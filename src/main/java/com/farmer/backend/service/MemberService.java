@@ -175,13 +175,16 @@ public class MemberService {
 
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        log.info(member.getDetailAddress());
 
         if(member.getEmailAuth().equals("JoinDone")){
             throw new CustomException(ErrorCode.MEMBER_FOUND);
         }
         else if(!member.getEmailAuth().equals("DONE")){
             throw new CustomException(ErrorCode.EMAIL_YET_AUTHENTICATION);
+        }
+
+        if(memberRepository.findByNickname(requestDto.getNickname()).isPresent()){
+            throw new CustomException(ErrorCode.NICKNAME_FOUND);
         }
 
         member.joinMember(requestDto);
