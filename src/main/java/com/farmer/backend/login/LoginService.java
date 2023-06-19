@@ -1,6 +1,8 @@
 package com.farmer.backend.login;
 
 import com.farmer.backend.entity.Member;
+import com.farmer.backend.exception.CustomException;
+import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.repository.admin.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +20,7 @@ public class LoginService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
 
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(member.getEmail())

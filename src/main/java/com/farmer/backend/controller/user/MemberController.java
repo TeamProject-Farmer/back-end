@@ -9,11 +9,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @RequiredArgsConstructor
@@ -60,7 +61,7 @@ public class MemberController {
      */
     @ApiDocumentResponse
     @Operation(summary = "이메일 인증 여부 확인",description = "인증 확인이 된 이메일인지 체크합니다.")
-    @GetMapping(value = "join/mail/check")
+    @GetMapping(value = "/join/mail/check")
     public String emailAuthentication(@RequestParam String memberEmail) {
         return memberService.emailAuth(memberEmail);
     }
@@ -70,10 +71,10 @@ public class MemberController {
      */
     @ApiDocumentResponse
     @Operation(summary = "회원가입", description = "회원가입을 진행합니다.")
-    @PostMapping(value = "/join/membership",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/join/membership")
     public void join (@ModelAttribute RequestJoinDto joinDto) {
         memberService.signUp(joinDto);
     }
+
 
 }
