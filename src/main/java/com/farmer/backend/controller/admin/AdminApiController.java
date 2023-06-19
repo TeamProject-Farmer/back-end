@@ -50,6 +50,7 @@ public class AdminApiController {
     private final BoardService boardService;
     private final OrderService orderService;
 
+
     /**
      * 계정 관리 페이지(관리자 권한 계정 리스트)
      * 검색, 정렬
@@ -306,6 +307,12 @@ public class AdminApiController {
         return ResponseEntity.ok(orderId);
     }
 
+    @ApiDocumentResponse
+    @Operation(summary = "기타 설정 페이지(쿠폰 관리 리스트, 적립금 관리)", description = "쿠폰 관리 리스트, 적립금 관리을 출력합니다.")
+    @GetMapping("/settings")
+    public List<Object> settings() {
+        return null;
+    }
 
     /**
      * 관리자 게시판 관리 페이지(Q&A 전체 리스트)
