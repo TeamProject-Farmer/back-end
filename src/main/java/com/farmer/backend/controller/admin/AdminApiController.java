@@ -298,12 +298,13 @@ public class AdminApiController {
     /**
      * 주문 관리 페이지(주문 삭제)
      */
+    @ApiDocumentResponse
+    @Operation(summary = "주문 삭제", description = "주문 한건을 삭제합니다")
     @PostMapping("/order/delete/{orderId}")
     public ResponseEntity orderRemove(@PathVariable Long orderId) {
         orderService.orderRemove(orderId);
         return ResponseEntity.ok(orderId);
     }
-
 
 
     /**
