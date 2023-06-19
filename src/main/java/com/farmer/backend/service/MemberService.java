@@ -175,6 +175,8 @@ public class MemberService {
 
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
+        log.info(member.getDetailAddress());
+
         if(member.getEmailAuth().equals("JoinDone")){
             throw new CustomException(ErrorCode.MEMBER_FOUND);
         }
@@ -203,4 +205,8 @@ public class MemberService {
 
         return emailKey;
     }
+
+    /**
+     *
+     */
 }

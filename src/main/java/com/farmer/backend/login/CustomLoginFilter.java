@@ -11,29 +11,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-public class CustomLonginFilter extends AbstractAuthenticationProcessingFilter {
 
-
-    private static final String DEFAULT_LOGIN_REQUEST_URL = "/api/member/login";
+    private static final String LOGIN_REQUEST_URL = "/api/member/login";
     private static final String HTTP_METHOD = "POST";
     private final ObjectMapper objectMapper;
-    private static final AntPathRequestMatcher DEFAULT_LOGIN_PATH_REQUEST_MATCHER =
-            new AntPathRequestMatcher(DEFAULT_LOGIN_REQUEST_URL, HTTP_METHOD);
+    private static final AntPathRequestMatcher LOGIN_REQUEST_MATCHER =
+            new AntPathRequestMatcher(LOGIN_REQUEST_URL, HTTP_METHOD);
 
-    public CustomLonginFilter(ObjectMapper objectMapper) {
-        super(DEFAULT_LOGIN_PATH_REQUEST_MATCHER);
+    public CustomLoginFilter(ObjectMapper objectMapper) {
+        super(LOGIN_REQUEST_MATCHER);
         this.objectMapper = objectMapper;
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        System.out.print(email+password);
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);//principal 과 credentials 전달
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
 
         return this.getAuthenticationManager().authenticate(authRequest);
     }

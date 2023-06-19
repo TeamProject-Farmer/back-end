@@ -1,41 +1,54 @@
 package com.farmer.backend.dto.user;
 
-
-
 import com.farmer.backend.entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.mysema.commons.lang.Assert;
+import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class RequestJoinDto {
 
-    @NotBlank
+    @NotNull
     private String email;
-    @NotBlank
+    @NotNull
     private String password;
-    @NotBlank
+    @NotNull
     private String username;
-    @NotBlank
+    @NotNull
     private String ph;
-    @NotBlank
+    @NotNull
     private Long zipcode;
-    @NotBlank
+    @NotNull
     private String address;
-    @NotBlank
+    @NotNull
     private String detailAddress;
-    @NotBlank
+    @NotNull
     private String nickname;
 
     @Builder
+    public RequestJoinDto(String email ,String password, String username , String ph , String address, Long zipcode, String detailAddress,String nickname) {
+
+        Assert.hasText(email, "이메일을 입력해주세요.");
+        Assert.hasText(password, "비밀번호를 입력해주세요.");
+        Assert.hasText(username, "이름을 입력해주세요.");
+        Assert.hasText(ph, "휴대폰 번호를 입력해주세요.");
+        Assert.hasText(address, "주소를 입력해주세요.");
+        Assert.notNull(zipcode,"우편번호를 입력해주세요.");
+        Assert.hasText(detailAddress, "상세주소를 입력해주세요.");
+        Assert.hasText(nickname, "닉네임을 입력해주세요.");
+
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.address = address;
+        this.ph = ph;
+        this.nickname =  nickname;
+        this.detailAddress=detailAddress;
+        this.zipcode=zipcode;
+    }
+
     public Member toEntity(){
         return Member.builder()
                 .email(email)
