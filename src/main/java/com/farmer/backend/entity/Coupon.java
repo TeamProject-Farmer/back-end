@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -34,6 +36,10 @@ public class Coupon extends BaseTimeEntity {
     private String name;
 
     @NotNull
+    @Column(length = 100)
+    private String benefits;
+
+    @NotNull
     @Column(length = 20)
     @Enumerated(EnumType.STRING)
     private CouponPolicy discountPolicy;
@@ -47,5 +53,8 @@ public class Coupon extends BaseTimeEntity {
     @NotNull
     @Column(length = 1)
     private char useYn;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
+    private LocalDateTime deletedDate;
 
 }
