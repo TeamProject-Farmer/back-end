@@ -318,7 +318,6 @@ public class AdminApiController {
         return settingsService.settingsList();
     }
 
-
     @ApiDocumentResponse
     @Operation(summary = "쿠폰 조회", description = "쿠폰 한장의 정보를 조회합니다.")
     @GetMapping("/settings/coupon/{couponId}")

@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ResponseCouponDetailDto {
 
-
+    private Long couponId;
 }
