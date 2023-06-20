@@ -18,6 +18,7 @@ import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.admin.SortOrderCondition;
 import com.farmer.backend.dto.admin.orders.*;
 import com.farmer.backend.dto.admin.product.*;
+import com.farmer.backend.dto.admin.settings.RequestCouponDto;
 import com.farmer.backend.dto.admin.settings.ResponseCouponListDto;
 import com.farmer.backend.entity.Coupon;
 import com.farmer.backend.paging.PageRequest;
@@ -325,6 +326,12 @@ public class AdminApiController {
         return null;
     }
 
+    @ApiDocumentResponse
+    @Operation(summary = "쿠폰 생성", description = "쿠폰 한장을 생성합니다.")
+    @PostMapping("/settings/coupon")
+    public ResponseEntity createCoupon(@ModelAttribute RequestCouponDto requestCouponDto) {
+        return settingsService.createCouponAction(requestCouponDto);
+    }
 
     /**
      * 관리자 게시판 관리 페이지(Q&A 전체 리스트)

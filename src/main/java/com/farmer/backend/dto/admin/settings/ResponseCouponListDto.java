@@ -19,8 +19,8 @@ public class ResponseCouponListDto {
     private String serialNumber;
     private String benefits;
     private char useYn;
-    private LocalDateTime createdDate;
-    private LocalDateTime deleteDate;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
 
     public static ResponseCouponListDto couponList(Coupon coupon) {
         return ResponseCouponListDto.builder()
@@ -29,8 +29,8 @@ public class ResponseCouponListDto {
                 .serialNumber(coupon.getSerialNumber())
                 .benefits(coupon.getBenefits())
                 .useYn(coupon.getUseYn())
-                .createdDate(coupon.getCreatedDate())
-                .deleteDate(coupon.getDeletedDate())
+                .startDateTime(coupon.getCreatedDate())
+                .endDateTime(coupon.getEndDateTime())
                 .build();
     }
 

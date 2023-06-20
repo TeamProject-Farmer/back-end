@@ -2,6 +2,7 @@ package com.farmer.backend.entity;
 
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Builder
 public class Coupon extends BaseTimeEntity {
 
     @Id
@@ -55,6 +56,9 @@ public class Coupon extends BaseTimeEntity {
     private char useYn;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
-    private LocalDateTime deletedDate;
+    private LocalDateTime startDateTime;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
+    private LocalDateTime endDateTime;
 
 }

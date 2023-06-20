@@ -1,11 +1,13 @@
 package com.farmer.backend.service;
 
 import com.farmer.backend.dto.admin.product.category.ResponseProductCategoryListDto;
+import com.farmer.backend.dto.admin.settings.RequestCouponDto;
 import com.farmer.backend.dto.admin.settings.ResponseCouponListDto;
 import com.farmer.backend.entity.Coupon;
 import com.farmer.backend.repository.admin.coupon.CouponRepository;
 import com.farmer.backend.repository.admin.product.category.ProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,5 +42,11 @@ public class SettingsService {
                         .collect(Collectors.toList()))
         );
         return settingsContents;
+    }
+
+    @Transactional
+    public ResponseEntity createCouponAction(RequestCouponDto requestCouponDto) {
+//        couponRepository.save(requestCouponDto);
+        return null;
     }
 }
