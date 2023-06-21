@@ -40,6 +40,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
 
 
 @RestController
@@ -327,10 +329,17 @@ public class AdminApiController {
     }
 
     @ApiDocumentResponse
+    @Operation(summary = "쿠폰 시리얼번호 생성", description = "쿠폰 고유의 일련번호를 생성합니다.")
+    @GetMapping("/settings/create-serial-number")
+    public String createSerialNumber() {
+        return settingsService.createSerialNumber();
+    }
+
+    @ApiDocumentResponse
     @Operation(summary = "쿠폰 생성", description = "쿠폰 한장을 생성합니다.")
     @PostMapping("/settings/coupon")
     public ResponseEntity createCoupon(@ModelAttribute RequestCouponDto requestCouponDto) {
-        return settingsService.createCouponAction(requestCouponDto);
+        return ResponseEntity.ok(settingsService.createCouponAction(requestCouponDto));
     }
 
     /**

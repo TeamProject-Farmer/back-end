@@ -1,5 +1,6 @@
 package com.farmer.backend.entity;
 
+import com.farmer.backend.dto.admin.settings.RequestCouponDto;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,10 +47,10 @@ public class Coupon extends BaseTimeEntity {
     private CouponPolicy discountPolicy;
 
     @ColumnDefault("0")
-    private int fixedPrice ;
+    private int fixedPrice;
 
     @ColumnDefault("0")
-    private int rateAmount ;
+    private int rateAmount;
 
     @NotNull
     @Column(length = 1)
@@ -60,5 +61,6 @@ public class Coupon extends BaseTimeEntity {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
     private LocalDateTime endDateTime;
+
 
 }
