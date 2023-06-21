@@ -10,8 +10,22 @@ import java.util.Properties;
 @Configuration
 public class MailAuthConfiguration {
 
-    @Bean(name="mailSender")
-    public JavaMailSender javaMailSender() {
+    @Bean
+    public JavaMailSender javaMailService() {
+        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+
+        javaMailSender.setHost("smtp.naver.com");
+        javaMailSender.setUsername("kce2360");
+        javaMailSender.setPassword("farmer123");
+
+        javaMailSender.setPort(465);
+
+        javaMailSender.setJavaMailProperties(getMailProperties());
+
+        return javaMailSender;
+    }
+
+    private Properties getMailProperties() {
         Properties properties = new Properties();
         properties.setProperty("mail.transport.protocol", "smtp");
         properties.setProperty("mail.smtp.auth", "true");
@@ -19,16 +33,7 @@ public class MailAuthConfiguration {
         properties.setProperty("mail.debug", "true");
         properties.setProperty("mail.smtp.ssl.trust","smtp.naver.com");
         properties.setProperty("mail.smtp.ssl.enable","true");
-
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.naver.com");
-        mailSender.setPort(465);
-        mailSender.setUsername("kce2360");
-        mailSender.setPassword("farmer123");
-        mailSender.setJavaMailProperties(properties);
-
-        return mailSender;
-
+        return properties;
     }
 
 }

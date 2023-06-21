@@ -74,6 +74,8 @@ public class Member extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
     private String socialId;
+
+    private String accessToken;
     private String refreshToken;
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);
@@ -83,8 +85,12 @@ public class Member extends BaseTimeEntity{
         this.emailAuth=updateEmailAuth;
     }
 
-    public void updateRefreshToken(String updateRefreshToken) {
+    public void updateRefreshToken(String updateRefreshToken){
         this.refreshToken=updateRefreshToken;
+    }
+    public void updateToken(String updateRefreshToken,String updateAccessToken) {
+        this.refreshToken=updateRefreshToken;
+        this.accessToken=updateAccessToken;
     }
 
     public ResponseMemberDto memberList() {
