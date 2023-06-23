@@ -18,6 +18,7 @@ import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.admin.SortOrderCondition;
 import com.farmer.backend.dto.admin.orders.*;
 import com.farmer.backend.dto.admin.product.*;
+import com.farmer.backend.dto.admin.settings.RequestCouponDetailDto;
 import com.farmer.backend.dto.admin.settings.RequestCouponDto;
 import com.farmer.backend.dto.admin.settings.ResponseCouponDetailDto;
 import com.farmer.backend.dto.admin.settings.ResponseCouponListDto;
@@ -362,7 +363,19 @@ public class AdminApiController {
     @Operation(summary = "쿠폰 삭제", description = "쿠폰 한장 또는 여러장을 삭제합니다.")
     @PostMapping("/settings/remove-coupon/{couponIds}")
     public ResponseEntity removeCoupon(@PathVariable Long[] couponIds) {
-        return ResponseEntity.ok(settingsService.removeCouponAction(couponIds));
+        settingsService.removeCouponAction(couponIds);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    /**
+     * 기타 설정 페이지(쿠폰 수정)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "쿠폰 수정", description = "쿠폰 한장의 정보를 수정합니다")
+    @PostMapping("/settings/coupon-update/{couponId}")
+    public ResponseEntity updateCoupon(@ModelAttribute RequestCouponDetailDto couponDetailDto, @PathVariable Long couponId) {
+        settingsService.updateCouponAction(couponDetailDto, couponId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**

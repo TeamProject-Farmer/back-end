@@ -47,4 +47,6 @@ public class ResponseCouponDetailDto {
                 .endDateTime(coupon.getEndDateTime())
                 .build();
     }
+
+
 }

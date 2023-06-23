@@ -1,6 +1,7 @@
 package com.farmer.backend.service;
 
 import com.farmer.backend.dto.admin.product.category.ResponseProductCategoryListDto;
+import com.farmer.backend.dto.admin.settings.RequestCouponDetailDto;
 import com.farmer.backend.dto.admin.settings.RequestCouponDto;
 import com.farmer.backend.dto.admin.settings.ResponseCouponDetailDto;
 import com.farmer.backend.dto.admin.settings.ResponseCouponListDto;
@@ -30,6 +31,10 @@ public class SettingsService {
     private final CouponRepository couponRepository;
     private final ProductCategoryRepository productCategoryRepository;
 
+    /**
+     * 기타 설정 페이지(쿠폰, 카테고리 리스트)
+     * @return
+     */
     @Transactional(readOnly = true)
     public List<Object> settingsList() {
         List<Object> settingsContents = new ArrayList<>();
@@ -40,11 +45,20 @@ public class SettingsService {
         return settingsContents;
     }
 
+    /**
+     * 쿠폰 생성 기능
+     * @param requestCouponDto 쿠폰 입력 폼
+     * @return
+     */
     @Transactional
     public Long createCouponAction(RequestCouponDto requestCouponDto) {
         return couponRepository.save(requestCouponDto.toEntity()).getId();
     }
 
+    /**
+     * 쿠폰 시리얼 번호 생성 기능
+     * @return
+     */
     @Transactional
     public String createSerialNumber() {
         int serialLengthSize = 20;
@@ -77,17 +91,36 @@ public class SettingsService {
         return serialNum;
     }
 
+    /**
+     * 쿠폰 단건 조회 기능
+     * @param couponId 쿠폰 일련번호(PK)
+     * @return
+     */
     @Transactional(readOnly = true)
     public ResponseCouponDetailDto findByCoupon(Long couponId) {
         return couponRepository.findById(couponId).map(coupon -> ResponseCouponDetailDto.getCouponDetail(coupon)).orElseThrow(() -> new CustomException(COUPON_NOT_FOUND));
     }
 
+    /**
+     * 쿠폰 삭제 기능(단건 & 복수건)
+     * @param couponIds 쿠폰 일련번호 배열(PK)
+     * @return
+     */
     @Transactional
-    public ResponseEntity removeCouponAction(Long[] couponIds) {
+    public void removeCouponAction(Long[] couponIds) {
         for (Long couponId : couponIds) {
             Coupon findCoupon = couponRepository.findById(couponId).orElseThrow(() -> new CustomException(COUPON_NOT_FOUND));
             couponRepository.delete(findCoupon);
         }
-        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    /**
+     * 쿠폰 수정 기능
+     * @param couponDetailDto 쿠폰 정보 폼
+     * @param couponId 쿠폰 일련번호(PK)
+     */
+    @Transactional
+    public void updateCouponAction(RequestCouponDetailDto couponDetailDto, Long couponId) {
+        couponRepository.findById(couponId).orElseThrow(() -> new CustomException(COUPON_NOT_FOUND)).modifiedCoupon(couponDetailDto);
     }
 }

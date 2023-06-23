@@ -1,6 +1,8 @@
 package com.farmer.backend.entity;
 
+import com.farmer.backend.dto.admin.settings.RequestCouponDetailDto;
 import com.farmer.backend.dto.admin.settings.RequestCouponDto;
+import com.farmer.backend.dto.admin.settings.ResponseCouponDetailDto;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -61,6 +63,19 @@ public class Coupon extends BaseTimeEntity {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
     private LocalDateTime endDateTime;
+
+    public void modifiedCoupon(RequestCouponDetailDto couponDetailDto) {
+        this.name = couponDetailDto.getCouponName();
+        this.serialNumber = couponDetailDto.getSerialNumber();
+        this.member = couponDetailDto.getMember();
+        this.benefits = couponDetailDto.getBenefits();
+        this.discountPolicy = couponDetailDto.getDiscountPolicy();
+        this.fixedPrice = couponDetailDto.getFixedPrice();
+        this.rateAmount = couponDetailDto.getRateAmount();
+        this.useYn = couponDetailDto.getUseYn();
+        this.startDateTime = couponDetailDto.getStartDateTime();
+        this.endDateTime = couponDetailDto.getEndDateTime();
+    }
 
 
 }
