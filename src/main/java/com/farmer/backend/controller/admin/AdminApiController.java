@@ -18,10 +18,13 @@ import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.admin.SortOrderCondition;
 import com.farmer.backend.dto.admin.orders.*;
 import com.farmer.backend.dto.admin.product.*;
+import com.farmer.backend.dto.admin.product.category.RequestProductCategoryDto;
 import com.farmer.backend.dto.admin.product.category.ResponseProductCategoryListDto;
 import com.farmer.backend.dto.admin.settings.RequestCouponDetailDto;
 import com.farmer.backend.dto.admin.settings.RequestCouponDto;
 import com.farmer.backend.dto.admin.settings.ResponseCouponDetailDto;
+import com.farmer.backend.entity.ProductCategory;
+import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
 import com.farmer.backend.service.OrderService;
@@ -41,6 +44,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 @RestController
@@ -383,6 +387,17 @@ public class AdminApiController {
     @GetMapping("/settings/product-category/{productCategoryId}")
     public ResponseEntity<ResponseProductCategoryListDto> productCategoryDetail(@PathVariable Long productCategoryId) {
         return ResponseEntity.ok(settingsService.findProductCategory(productCategoryId));
+    }
+
+    @ApiDocumentResponse
+    @Operation(summary = "상품 카테고리 생성", description = "상품 카테고리를 생성합니다.")
+    @PostMapping("/settings/product-category")
+    public ResponseEntity createProductCategory(@ModelAttribute RequestProductCategoryDto productCategoryDto) {
+        ProductCategory productCategory = settingsService.createProductCategoryAction(productCategoryDto);
+        if (Objects.isNull(productCategory)) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**

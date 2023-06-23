@@ -1,14 +1,17 @@
 package com.farmer.backend.service;
 
+import com.farmer.backend.dto.admin.product.category.RequestProductCategoryDto;
 import com.farmer.backend.dto.admin.product.category.ResponseProductCategoryListDto;
 import com.farmer.backend.dto.admin.settings.RequestCouponDetailDto;
 import com.farmer.backend.dto.admin.settings.RequestCouponDto;
 import com.farmer.backend.dto.admin.settings.ResponseCouponDetailDto;
 import com.farmer.backend.dto.admin.settings.ResponseCouponListDto;
 import com.farmer.backend.entity.Coupon;
+import com.farmer.backend.entity.ProductCategory;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.repository.admin.coupon.CouponRepository;
+import com.farmer.backend.repository.admin.product.category.ProductCategoryQueryRepository;
 import com.farmer.backend.repository.admin.product.category.ProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +31,7 @@ public class SettingsService {
 
     private final CouponRepository couponRepository;
     private final ProductCategoryRepository productCategoryRepository;
+    private final ProductCategoryQueryRepository productCategoryQueryRepositoryImpl;
 
     /**
      * 기타 설정 페이지(쿠폰, 카테고리 리스트)
@@ -129,6 +133,13 @@ public class SettingsService {
      */
     @Transactional(readOnly = true)
     public ResponseProductCategoryListDto findProductCategory(Long productCategoryId) {
-        return productCategoryRepository.findById(productCategoryId).map(pc -> ResponseProductCategoryListDto.productCategoryDetail(pc)).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_CATEGORY_NOT_FOUND));
+        return productCategoryRepository.findById(productCategoryId).map(ResponseProductCategoryListDto::productCategoryDetail).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_CATEGORY_NOT_FOUND));
+    }
+
+    @Transactional
+    public ProductCategory createProductCategoryAction(RequestProductCategoryDto productCategoryDto) {
+        Integer descMaxValue = productCategoryQueryRepositoryImpl.findDescMaxValOfProductCategory();
+        productCategoryDto.setSortOrder(descMaxValue + 1);
+        return productCategoryRepository.save(productCategoryDto.toEntity());
     }
 }
