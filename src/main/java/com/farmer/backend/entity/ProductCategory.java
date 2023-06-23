@@ -22,4 +22,10 @@ public class ProductCategory extends BaseTimeEntity {
     @NotNull
     @Column(length = 20)
     private String name;
+
+    @Column(length = 1)
+    @NotNull
+    private char useYn;
+
+    private Integer sortOrder;
 }
