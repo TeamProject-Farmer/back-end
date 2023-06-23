@@ -2,6 +2,7 @@ package com.farmer.backend.service;
 
 import com.farmer.backend.dto.admin.product.category.ResponseProductCategoryListDto;
 import com.farmer.backend.dto.admin.settings.RequestCouponDto;
+import com.farmer.backend.dto.admin.settings.ResponseCouponDetailDto;
 import com.farmer.backend.dto.admin.settings.ResponseCouponListDto;
 import com.farmer.backend.entity.Coupon;
 import com.farmer.backend.exception.CustomException;
@@ -11,12 +12,15 @@ import com.farmer.backend.repository.admin.product.category.ProductCategoryRepos
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.dynamic.DynamicType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.farmer.backend.exception.ErrorCode.COUPON_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -29,20 +33,10 @@ public class SettingsService {
     @Transactional(readOnly = true)
     public List<Object> settingsList() {
         List<Object> settingsContents = new ArrayList<>();
-        Map<String, List<ResponseCouponListDto>> couponList = new HashMap<>();
-        Map<String, List<ResponseProductCategoryListDto>> categoryList = new HashMap<>();
-        settingsContents.add(
-                couponList.put("couponList", couponRepository.findAll()
-                        .stream()
-                        .map(ResponseCouponListDto::couponList)
-                        .collect(Collectors.toList()))
-        );
-        settingsContents.add(
-                categoryList.put("categoryList", productCategoryRepository.findAll()
-                        .stream()
-                        .map(ResponseProductCategoryListDto::productCategoryList)
-                        .collect(Collectors.toList()))
-        );
+        List<ResponseCouponListDto> couponList = couponRepository.findAll().stream().map(c -> ResponseCouponListDto.couponList(c)).collect(Collectors.toList());
+        List<ResponseProductCategoryListDto> productCategoryList = productCategoryRepository.findAll().stream().map(pc -> ResponseProductCategoryListDto.productCategoryList(pc)).collect(Collectors.toList());
+        settingsContents.add(couponList);
+        settingsContents.add(productCategoryList);
         return settingsContents;
     }
 
@@ -81,5 +75,19 @@ public class SettingsService {
         log.info("serialNum={}", serialNum);
 
         return serialNum;
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseCouponDetailDto findByCoupon(Long couponId) {
+        return couponRepository.findById(couponId).map(coupon -> ResponseCouponDetailDto.getCouponDetail(coupon)).orElseThrow(() -> new CustomException(COUPON_NOT_FOUND));
+    }
+
+    @Transactional
+    public ResponseEntity removeCouponAction(Long[] couponIds) {
+        for (Long couponId : couponIds) {
+            Coupon findCoupon = couponRepository.findById(couponId).orElseThrow(() -> new CustomException(COUPON_NOT_FOUND));
+            couponRepository.delete(findCoupon);
+        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

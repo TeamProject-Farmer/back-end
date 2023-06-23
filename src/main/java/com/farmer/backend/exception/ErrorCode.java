@@ -30,6 +30,7 @@ public enum ErrorCode {
     QNA_NOT_FOUND (BAD_REQUEST, "해당 QNA가 존재하지 않습니다."),
     NOTICE_NOT_FOUND (BAD_REQUEST, "해당 공지사항이 존재하지 않습니다."),
 
+    COUPON_NOT_FOUND(BAD_REQUEST, "해당 쿠폰이 존재하지 않습니다."),
     FAQ_NOT_FOUND(BAD_REQUEST,"해당 자주 묻는 질문이 존재하지 않습니다."),
     FAQCATEGORY_NOT_FOUND(BAD_REQUEST,"해당 카테고리가 존재하지 않습니다."),
     ORDER_NOT_FOUND(BAD_REQUEST,"해당 ORDER가 존재하지 않습니다. " );

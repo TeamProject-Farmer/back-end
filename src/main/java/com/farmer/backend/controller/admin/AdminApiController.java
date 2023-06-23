@@ -19,6 +19,7 @@ import com.farmer.backend.dto.admin.SortOrderCondition;
 import com.farmer.backend.dto.admin.orders.*;
 import com.farmer.backend.dto.admin.product.*;
 import com.farmer.backend.dto.admin.settings.RequestCouponDto;
+import com.farmer.backend.dto.admin.settings.ResponseCouponDetailDto;
 import com.farmer.backend.dto.admin.settings.ResponseCouponListDto;
 import com.farmer.backend.entity.Coupon;
 import com.farmer.backend.paging.PageRequest;
@@ -314,6 +315,9 @@ public class AdminApiController {
         return ResponseEntity.ok(orderId);
     }
 
+    /**
+     * 기타 설정 페이지(쿠폰, 카테고리)
+     */
     @ApiDocumentResponse
     @Operation(summary = "기타 설정 페이지(쿠폰 관리, 카테고리 관리)", description = "쿠폰 리스트, 카테고리 리스트 출력합니다.")
     @GetMapping("/settings")
@@ -321,13 +325,19 @@ public class AdminApiController {
         return settingsService.settingsList();
     }
 
+    /**
+     * 기타 설정 페이지(쿠폰 조회)
+     */
     @ApiDocumentResponse
     @Operation(summary = "쿠폰 조회", description = "쿠폰 한장의 정보를 조회합니다.")
     @GetMapping("/settings/coupon/{couponId}")
-    public ResponseEntity<Object> couponDetail(@PathVariable Long couponId) {
-        return null;
+    public ResponseEntity<ResponseCouponDetailDto> couponDetail(@PathVariable Long couponId) {
+        return ResponseEntity.ok(settingsService.findByCoupon(couponId));
     }
 
+    /**
+     * 기타 설정 페이지(쿠폰 고유 번호 생성)
+     */
     @ApiDocumentResponse
     @Operation(summary = "쿠폰 시리얼번호 생성", description = "쿠폰 고유의 일련번호를 생성합니다.")
     @GetMapping("/settings/create-serial-number")
@@ -335,11 +345,24 @@ public class AdminApiController {
         return settingsService.createSerialNumber();
     }
 
+    /**
+     * 기타 설정 페이지(쿠폰 생성)
+     */
     @ApiDocumentResponse
     @Operation(summary = "쿠폰 생성", description = "쿠폰 한장을 생성합니다.")
     @PostMapping("/settings/coupon")
     public ResponseEntity createCoupon(@ModelAttribute RequestCouponDto requestCouponDto) {
         return ResponseEntity.ok(settingsService.createCouponAction(requestCouponDto));
+    }
+
+    /**
+     * 기타 설정 페이지(쿠폰 삭제)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "쿠폰 삭제", description = "쿠폰 한장 또는 여러장을 삭제합니다.")
+    @PostMapping("/settings/remove-coupon/{couponIds}")
+    public ResponseEntity removeCoupon(@PathVariable Long[] couponIds) {
+        return ResponseEntity.ok(settingsService.removeCouponAction(couponIds));
     }
 
     /**
