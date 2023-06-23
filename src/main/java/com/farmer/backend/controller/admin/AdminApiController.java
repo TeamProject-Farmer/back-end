@@ -18,11 +18,10 @@ import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.admin.SortOrderCondition;
 import com.farmer.backend.dto.admin.orders.*;
 import com.farmer.backend.dto.admin.product.*;
+import com.farmer.backend.dto.admin.product.category.ResponseProductCategoryListDto;
 import com.farmer.backend.dto.admin.settings.RequestCouponDetailDto;
 import com.farmer.backend.dto.admin.settings.RequestCouponDto;
 import com.farmer.backend.dto.admin.settings.ResponseCouponDetailDto;
-import com.farmer.backend.dto.admin.settings.ResponseCouponListDto;
-import com.farmer.backend.entity.Coupon;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
 import com.farmer.backend.service.OrderService;
@@ -42,8 +41,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
 
 
 @RestController
@@ -376,6 +373,16 @@ public class AdminApiController {
     public ResponseEntity updateCoupon(@ModelAttribute RequestCouponDetailDto couponDetailDto, @PathVariable Long couponId) {
         settingsService.updateCouponAction(couponDetailDto, couponId);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    /**
+     * 기타 설정 페이지(상품 카테고리 조회)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "상품 카테고리 조회", description = "상품 카테고리 한 건을 조회합니다.")
+    @GetMapping("/settings/product-category/{productCategoryId}")
+    public ResponseEntity<ResponseProductCategoryListDto> productCategoryDetail(@PathVariable Long productCategoryId) {
+        return ResponseEntity.ok(settingsService.findProductCategory(productCategoryId));
     }
 
     /**

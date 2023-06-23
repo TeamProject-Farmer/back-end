@@ -12,8 +12,6 @@ import com.farmer.backend.repository.admin.coupon.CouponRepository;
 import com.farmer.backend.repository.admin.product.category.ProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.dynamic.DynamicType;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,5 +120,15 @@ public class SettingsService {
     @Transactional
     public void updateCouponAction(RequestCouponDetailDto couponDetailDto, Long couponId) {
         couponRepository.findById(couponId).orElseThrow(() -> new CustomException(COUPON_NOT_FOUND)).modifiedCoupon(couponDetailDto);
+    }
+
+    /**
+     * 상품 카테고리 단건 조회
+     * @param productCategoryId 상품 카테고리 일련번호(PK)
+     * @return ResponseProductCategoryListDto
+     */
+    @Transactional(readOnly = true)
+    public ResponseProductCategoryListDto findProductCategory(Long productCategoryId) {
+        return productCategoryRepository.findById(productCategoryId).map(pc -> ResponseProductCategoryListDto.productCategoryDetail(pc)).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_CATEGORY_NOT_FOUND));
     }
 }
