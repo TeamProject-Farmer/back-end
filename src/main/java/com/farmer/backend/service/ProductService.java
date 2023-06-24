@@ -57,7 +57,7 @@ public class ProductService {
 
     /**
      * 베스트 상품 조회 ( sell quantity 기준 )
-     * @return List<ResponseProductDto>
+     * @return 상품의 판매량을 기준으로 수집 후 Dto로 변환 후 반환하기
      */
     @Transactional(readOnly = true)
     public List<ResponseProductDto> getBestProductList(){

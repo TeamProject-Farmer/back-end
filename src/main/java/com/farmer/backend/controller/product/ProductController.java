@@ -28,12 +28,8 @@ public class ProductController {
     @Operation(summary = "베스트 상품 리스트", description = "베스트 상품 리스트를 반환합니다. (판매량 기준)")
     @RequestMapping(method = RequestMethod.GET, value = "/best")
     public List<ResponseProductDto> getBestProducts(){
-        log.info("getBestProducts 컨트롤러 메서드 동작");
+
         return productService.getBestProductList();
     }
 
-    @GetMapping(value = "/pp")
-    public String test(){
-        return "hi";
-    }
 }

@@ -3,6 +3,7 @@ package com.farmer.backend.repository.admin.product;
 import com.farmer.backend.dto.admin.SortOrderCondition;
 import com.farmer.backend.entity.Product;
 import com.farmer.backend.entity.QProduct;
+import com.farmer.backend.entity.QProductCategory;
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -53,9 +54,13 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
 
     @Override
     public List<Product> findBestProducts(){
+        QProductCategory qProductCategory = QProductCategory.productCategory;
+
         List<Product> productList = query
                 .select(product)
                 .from(product)
+                .leftJoin(product.category, qProductCategory)
+                .fetchJoin()
                 .orderBy(sortOrderCondition("count"))
                 .limit(12)
                 .fetch();
