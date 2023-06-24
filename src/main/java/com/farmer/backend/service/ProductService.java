@@ -56,6 +56,16 @@ public class ProductService {
     }
 
     /**
+     * 베스트 상품 조회 ( sell quantity 기준 )
+     * @return List<ResponseProductDto>
+     */
+    @Transactional(readOnly = true)
+    public List<ResponseProductDto> getBestProductList(){
+
+        return productQueryRepositoryImpl.findBestProducts().stream().map(ResponseProductDto::getAllProductList).collect(Collectors.toList());
+    }
+
+    /**
      * 상품 전체 카테고리 리스트 조회
      * @return categories
      */

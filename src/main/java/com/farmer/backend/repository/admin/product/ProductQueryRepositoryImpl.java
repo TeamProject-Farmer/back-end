@@ -51,6 +51,18 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
 
     }
 
+    @Override
+    public List<Product> findBestProducts(){
+        List<Product> productList = query
+                .select(product)
+                .from(product)
+                .orderBy(sortOrderCondition("count"))
+                .limit(12)
+                .fetch();
+
+        return productList;
+    }
+
     public BooleanExpression likeProductName(String productName) {
         return productName != null ? product.name.contains(productName) : null;
     }
