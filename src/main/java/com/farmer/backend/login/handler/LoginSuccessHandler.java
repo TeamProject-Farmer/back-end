@@ -1,6 +1,6 @@
 package com.farmer.backend.login.handler;
 
-import com.farmer.backend.dto.user.ResponseLoginMemberDto;
+import com.farmer.backend.dto.user.login.ResponseLoginMemberDto;
 import com.farmer.backend.entity.Member;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
@@ -38,6 +38,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(()-> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         member.updateToken(refreshToken,accessToken);
+        memberRepository.saveAndFlush(member);
 
         ResponseLoginMemberDto loginMemberDto = ResponseLoginMemberDto.getLoginMember(member);
 

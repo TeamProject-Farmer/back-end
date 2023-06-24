@@ -1,13 +1,15 @@
 package com.farmer.backend.config;
 
 
-import com.farmer.backend.controller.user.MemberController;
 import com.farmer.backend.jwt.JwtAuthenticationProcessingFilter;
 import com.farmer.backend.jwt.JwtService;
 import com.farmer.backend.login.CustomLoginFilter;
 import com.farmer.backend.login.LoginService;
 import com.farmer.backend.login.handler.LoginFailureHandler;
 import com.farmer.backend.login.handler.LoginSuccessHandler;
+import com.farmer.backend.oauth.CustomOAuth2UserService;
+import com.farmer.backend.oauth.handler.OAuth2LoginFailureHandler;
+import com.farmer.backend.oauth.handler.OAuth2LoginSuccessHandler;
 import com.farmer.backend.repository.admin.member.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,10 @@ public class SecurityConfig  {
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
 
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
+
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring().antMatchers(
@@ -42,7 +48,6 @@ public class SecurityConfig  {
                 "/swagger-ui/**"
         );
     }
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -59,7 +64,17 @@ public class SecurityConfig  {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/v3/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html")
-                .authenticated();
+                .authenticated()
+                .and()
+                .oauth2Login()
+                .authorizationEndpoint().baseUri("/oauth2/authorization")
+                .and()
+                .redirectionEndpoint().baseUri("/oauth/callback/*")
+                .and()
+                .userInfoEndpoint().userService(customOAuth2UserService)
+                .and()
+                .successHandler(oAuth2LoginSuccessHandler)
+                .failureHandler(oAuth2LoginFailureHandler);
 //                .antMatchers("/member").permitAll()
 //                .antMatchers("/member/mail").permitAll()
 //                .antMatchers("/member/join").permitAll()
@@ -68,7 +83,7 @@ public class SecurityConfig  {
 
         http.addFilterAfter(customLoginFilter(), LogoutFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), CustomLoginFilter.class);
-     return http.build();
+        return http.build();
 
     }
 

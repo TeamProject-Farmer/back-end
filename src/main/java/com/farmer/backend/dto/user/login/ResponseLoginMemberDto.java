@@ -1,4 +1,4 @@
-package com.farmer.backend.dto.user;
+package com.farmer.backend.dto.user.login;
 
 import com.farmer.backend.entity.Grade;
 import com.farmer.backend.entity.Member;
@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.Optional;
 
 @NoArgsConstructor
 @AllArgsConstructor

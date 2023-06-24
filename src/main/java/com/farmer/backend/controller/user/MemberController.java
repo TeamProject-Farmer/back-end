@@ -1,8 +1,8 @@
 package com.farmer.backend.controller.user;
 
 import com.farmer.backend.config.ApiDocumentResponse;
-import com.farmer.backend.dto.user.EmailDto;
-import com.farmer.backend.dto.user.RequestJoinDto;
+import com.farmer.backend.dto.user.join.EmailDto;
+import com.farmer.backend.dto.user.join.RequestJoinDto;
 import com.farmer.backend.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,12 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 @RequiredArgsConstructor
@@ -79,15 +75,7 @@ public class MemberController {
         return "SUCCESS";
     }
 
-    /**
-     * 로그인
-     */
-    @ApiDocumentResponse
-    @Operation(summary = "일반 로그인", description = "일반 로그인을 진행합니다.")
-    @GetMapping("/login")
-    public Object getUserInfo(){
-        System.out.println("되나");
-        return SecurityContextHolder.getContext().getAuthentication();
-    }
+
+
 
 }

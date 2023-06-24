@@ -3,8 +3,8 @@ package com.farmer.backend.service;
 import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
-import com.farmer.backend.dto.user.EmailDto;
-import com.farmer.backend.dto.user.RequestJoinDto;
+import com.farmer.backend.dto.user.join.EmailDto;
+import com.farmer.backend.dto.user.join.RequestJoinDto;
 import com.farmer.backend.entity.Member;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 

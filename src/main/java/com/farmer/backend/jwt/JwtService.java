@@ -2,6 +2,9 @@ package com.farmer.backend.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.farmer.backend.entity.SocialType;
+import com.farmer.backend.exception.CustomException;
+import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.repository.admin.member.MemberRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +28,10 @@ public class JwtService {
     private String secretKey;
 
     @Value("${jwt.access.expiration}")
-    private Long accessTokenExpirationPeriod;
+    private Long accessExpiration;
 
     @Value("${jwt.refresh.expiration}")
-    private Long refreshTokenExpirationPeriod;
+    private Long refreshExpiration;
 
     @Value("${jwt.access.header}")
     private String accessHeader;
@@ -36,52 +39,60 @@ public class JwtService {
     @Value("${jwt.refresh.header}")
     private String refreshHeader;
 
-    private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
-    private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
+    private static final String ACCESS_TOKEN = "AccessToken";
+    private static final String REFRESH_TOKEN = "RefreshToken";
     private static final String USERID_CLAIM = "account_email";
     private static final String BEARER = "Bearer ";
 
     private final MemberRepository memberRepository;
 
 
-    //AccessToken 생성
+    /**
+     * AccessToken 생성
+     * @param email 이메일
+     */
     public String createAccessToken(String email) {
         Date now = new Date();
         return JWT.create()
-                .withSubject(ACCESS_TOKEN_SUBJECT)
-                .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod)) //토큰 만료시간 설정
+                .withSubject(ACCESS_TOKEN)
+                .withExpiresAt(new Date(now.getTime() + accessExpiration)) //토큰 만료시간 설정
                 .withClaim(USERID_CLAIM, email)
                 .sign(Algorithm.HMAC512(secretKey));
     }
 
-    //RefreshToken 생성
+    /**
+     * RefreshToken 생성
+     */
     public String createRefreshToken() {
         Date now = new Date();
         return JWT.create()
-                .withSubject(REFRESH_TOKEN_SUBJECT)
-                .withExpiresAt(new Date(now.getTime() + refreshTokenExpirationPeriod))
+                .withSubject(REFRESH_TOKEN)
+                .withExpiresAt(new Date(now.getTime() + refreshExpiration))
                 .sign(Algorithm.HMAC512(secretKey));
     }
 
-
-    //AccessToken 헤더에 실어서 보내기
+    /**
+     * AccessToken 헤더 설정 후 보내기
+     */
     public void sendAccessToken(HttpServletResponse response, String accessToken) {
         response.setStatus(HttpServletResponse.SC_OK);
 
         response.setHeader(accessHeader, accessToken);
-        log.info("재발급된 ACCESS TOKEN : {}", accessToken);
     }
 
-    //AccessToken + RefreshToken 헤더에 실어서 보내기
+    /**
+     * AccessToken , RefreshToken 헤더 설정 후 보내기
+     */
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
         response.setStatus(HttpServletResponse.SC_OK);
 
         setAccessTokenHeader(response, accessToken);
         setRefreshTokenHeader(response, refreshToken);
-        log.info("Access Token, Refresh Token 헤더 설정 완료");
     }
 
-    //헤더에서 RefreshToken 추출
+    /**
+     * 헤더에서 RefreshToken 추출
+     */
     public Optional<String> extractRefreshToken(HttpServletRequest request) {
 
         return Optional.ofNullable(request.getHeader(refreshHeader))
@@ -89,7 +100,9 @@ public class JwtService {
                 .map(refreshToken -> refreshToken.replace(BEARER, ""));
     }
 
-    // 헤더에서 AccessToken 추출
+    /**
+     * 헤더에서 AccessToken 추출
+     */
     public Optional<String> extractAccessToken(HttpServletRequest request) throws IOException {
 
 
@@ -98,17 +111,17 @@ public class JwtService {
                 .map(refreshToken -> refreshToken.replace(BEARER, ""));
     }
 
-    public Optional<String> extractuserid(String accessToken) {
-        log.info("extractuserid진입");
+    /**
+     * AccessToken에서 Email추출
+     */
+    public Optional<String> extractUserEmail(String accessToken) {
         try {
-            // 토큰 유효성 검사하는 데에 사용할 알고리즘이 있는 JWT verifier builder 반환
             return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
-                    .build() // 반환된 빌더로 JWT verifier 생성
-                    .verify(accessToken) // accessToken을 검증하고 유효하지 않다면 예외 발생
-                    .getClaim(USERID_CLAIM) // claim(Emial) 가져오기
+                    .build()
+                    .verify(accessToken)
+                    .getClaim(USERID_CLAIM)
                     .asString());
         } catch (Exception e) {
-            log.error("액세스 토큰이 유효하지 않습니다.");
             return Optional.empty();
         }
     }
@@ -128,24 +141,31 @@ public class JwtService {
     }
 
     /**
-     * RefreshToken DB 저장(업데이트)
+     * RefreshToken, AccessToken DB 저장(업데이트)
      */
-    public void updateRefreshToken(String email, String refreshToken) {
-        memberRepository.findByEmail(email)
-                .ifPresentOrElse(
-                        member -> member.updateRefreshToken(refreshToken),
-                        () -> new Exception("일치하는 회원이 없습니다.")
-                );
+    public void updateToken(String socialId, String accessToken, String refreshToken) {
+
+        memberRepository.findBySocialId(socialId).ifPresentOrElse(
+
+                member -> {
+                    member.updateToken(refreshToken,accessToken);
+                    memberRepository.saveAndFlush(member);
+                },
+                ()-> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
     }
 
+    /**
+     * 토큰 유효성 검사
+     * @param token
+     * @return
+     */
     public boolean isTokenValid(String token) {
-        log.info("isTokenValid진입"+token);
         try {
             JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token);
-            log.info("true");
             return true;
         } catch (Exception e) {
-            log.error("유효하지 않은 토큰입니다. {}", e.getMessage());
             return false;
         }
     }

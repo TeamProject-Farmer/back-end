@@ -2,8 +2,8 @@ package com.farmer.backend.entity;
 
 import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
-import com.farmer.backend.dto.user.EmailDto;
-import com.farmer.backend.dto.user.RequestJoinDto;
+import com.farmer.backend.dto.user.join.EmailDto;
+import com.farmer.backend.dto.user.join.RequestJoinDto;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -77,6 +77,7 @@ public class Member extends BaseTimeEntity{
 
     private String accessToken;
     private String refreshToken;
+
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);
     }
