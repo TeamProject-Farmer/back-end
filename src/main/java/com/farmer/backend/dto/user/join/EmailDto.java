@@ -1,4 +1,4 @@
-package com.farmer.backend.dto.user;
+package com.farmer.backend.dto.user.join;
 
 
 import com.farmer.backend.entity.AccountStatus;
