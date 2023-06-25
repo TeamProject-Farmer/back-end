@@ -6,7 +6,7 @@ spring:
           kakao:
             client-id: a75882f783c2d87ec3f798d330ffb7f2
             client-secret: 0EAIYvVjbeqd7Zy70TWJNf5z3b9hmsNV
-            redirect-uri: http://localhost:3000/login/kakao
+            redirect-uri: http://localhost:8080/login/kakao
             client-authentication-method: POST
             authorization-grant-type: authorization_code
             scope: profile_nickname , account_email
@@ -15,7 +15,7 @@ spring:
           naver:
             client-id: HWQ9BzAAb1xWKWm0U6aV
             client-secret: CDhbwZpz57
-            redirect-uri: http://localhost:3000/login/naver
+            redirect-uri: http://localhost:8080/login/naver
             authorization-grant-type: authorization_code
             scope: name, email, profile_image
             client-name: Naver
@@ -23,7 +23,7 @@ spring:
           google:
             client-id: 555482867273-elvn54mhvn40oe295eotarvtfk3nb42o.apps.googleusercontent.com
             client-secret: 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
-            redirect-uri: http://localhost:3000/login/google
+            redirect-uri: http://localhost:8080/login/google
             scope: profile, email
 
         provider:
