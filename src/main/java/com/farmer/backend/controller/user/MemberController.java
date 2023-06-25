@@ -32,7 +32,6 @@ public class MemberController {
     @PostMapping(value = "/join/mail")
     public ResponseEntity<String> emailSend(@ModelAttribute EmailDto emailDto) {
 
-
         memberService.emailStore(emailDto);
 
         return new ResponseEntity<>("ok", HttpStatus.OK);
