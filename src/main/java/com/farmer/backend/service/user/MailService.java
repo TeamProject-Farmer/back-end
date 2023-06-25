@@ -1,9 +1,5 @@
 package com.farmer.backend.service.user;
 
-
-import com.farmer.backend.exception.CustomException;
-import com.farmer.backend.exception.ErrorCode;
-import com.farmer.backend.repository.admin.member.MemberRepository;
 import com.farmer.backend.util.MailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,7 +14,6 @@ public class MailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    private MemberRepository memberRepository;
     private int size;
 
     //인증키 생성
@@ -55,7 +50,7 @@ public class MailService {
                     .append(email)
                     .append("' target='_blenk'>이메일 인증 확인</a>")
                     .toString());
-            sendMail.setFrom("kce2360@naver.com", "Farmer 관리자");
+            sendMail.setFrom("kce2360@naver.com", "farmer 관리자");
             sendMail.setTo(email);
             sendMail.send();
         } catch (MessagingException e) {
