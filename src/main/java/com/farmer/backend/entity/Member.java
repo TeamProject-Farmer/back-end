@@ -2,8 +2,8 @@ package com.farmer.backend.entity;
 
 import com.farmer.backend.dto.admin.member.RequestMemberDto;
 import com.farmer.backend.dto.admin.member.ResponseMemberDto;
-import com.farmer.backend.dto.user.EmailDto;
-import com.farmer.backend.dto.user.RequestJoinDto;
+import com.farmer.backend.dto.user.join.EmailDto;
+import com.farmer.backend.dto.user.join.RequestJoinDto;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -74,7 +74,10 @@ public class Member extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
     private String socialId;
+
+    private String accessToken;
     private String refreshToken;
+
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);
     }
@@ -83,8 +86,12 @@ public class Member extends BaseTimeEntity{
         this.emailAuth=updateEmailAuth;
     }
 
-    public void updateRefreshToken(String updateRefreshToken) {
+    public void updateRefreshToken(String updateRefreshToken){
         this.refreshToken=updateRefreshToken;
+    }
+    public void updateToken(String updateRefreshToken,String updateAccessToken) {
+        this.refreshToken=updateRefreshToken;
+        this.accessToken=updateAccessToken;
     }
 
     public ResponseMemberDto memberList() {
