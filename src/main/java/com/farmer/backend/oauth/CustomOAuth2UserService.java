@@ -3,10 +3,6 @@ package com.farmer.backend.oauth;
 import com.farmer.backend.entity.Member;
 import com.farmer.backend.entity.SocialType;
 import com.farmer.backend.entity.UserRole;
-import com.farmer.backend.exception.CustomException;
-import com.farmer.backend.exception.ErrorCode;
-import com.farmer.backend.jwt.JwtService;
-import com.farmer.backend.oauth.handler.OAuth2LoginFailureHandler;
 import com.farmer.backend.repository.admin.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,24 +11,18 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2Error;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Optional;
+
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final MemberRepository memberRepository;
-    private final JwtService jwtService;
-    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
 
     private static final String NAVER = "naver";
     private static final String KAKAO = "kakao";
@@ -43,6 +33,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         OAuth2UserService<OAuth2UserRequest, OAuth2User> newOAuth = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = newOAuth.loadUser(userRequest);
+
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         SocialType socialType = getSocialType(registrationId);

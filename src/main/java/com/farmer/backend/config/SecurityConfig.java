@@ -69,7 +69,7 @@ public class SecurityConfig  {
                 .oauth2Login()
                 .authorizationEndpoint().baseUri("/oauth2/authorization")
                 .and()
-                .redirectionEndpoint().baseUri("/oauth/callback/*")
+                .redirectionEndpoint().baseUri("/login/*")
                 .and()
                 .userInfoEndpoint().userService(customOAuth2UserService)
                 .and()
