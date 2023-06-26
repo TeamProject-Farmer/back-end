@@ -18,10 +18,18 @@ import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.admin.SortOrderCondition;
 import com.farmer.backend.dto.admin.orders.*;
 import com.farmer.backend.dto.admin.product.*;
+import com.farmer.backend.dto.admin.product.category.RequestProductCategoryDto;
+import com.farmer.backend.dto.admin.product.category.ResponseProductCategoryListDto;
+import com.farmer.backend.dto.admin.settings.RequestCouponDetailDto;
+import com.farmer.backend.dto.admin.settings.RequestCouponDto;
+import com.farmer.backend.dto.admin.settings.ResponseCouponDetailDto;
+import com.farmer.backend.entity.ProductCategory;
+import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.service.MemberService;
 import com.farmer.backend.service.OrderService;
 import com.farmer.backend.service.ProductService;
+import com.farmer.backend.service.SettingsService;
 import com.farmer.backend.service.admin.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,6 +44,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 @RestController
@@ -49,6 +58,8 @@ public class AdminApiController {
     private final ProductService productService;
     private final BoardService boardService;
     private final OrderService orderService;
+    private final SettingsService settingsService;
+
 
     /**
      * 계정 관리 페이지(관리자 권한 계정 리스트)
@@ -298,13 +309,96 @@ public class AdminApiController {
     /**
      * 주문 관리 페이지(주문 삭제)
      */
+    @ApiDocumentResponse
+    @Operation(summary = "주문 삭제", description = "주문 한건을 삭제합니다")
     @PostMapping("/order/delete/{orderId}")
     public ResponseEntity orderRemove(@PathVariable Long orderId) {
         orderService.orderRemove(orderId);
         return ResponseEntity.ok(orderId);
     }
 
+    /**
+     * 기타 설정 페이지(쿠폰, 카테고리)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "기타 설정 페이지(쿠폰 관리, 카테고리 관리)", description = "쿠폰 리스트, 카테고리 리스트 출력합니다.")
+    @GetMapping("/settings")
+    public List<Object> settings() {
+        return settingsService.settingsList();
+    }
 
+    /**
+     * 기타 설정 페이지(쿠폰 조회)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "쿠폰 조회", description = "쿠폰 한장의 정보를 조회합니다.")
+    @GetMapping("/settings/coupon/{couponId}")
+    public ResponseEntity<ResponseCouponDetailDto> couponDetail(@PathVariable Long couponId) {
+        return ResponseEntity.ok(settingsService.findByCoupon(couponId));
+    }
+
+    /**
+     * 기타 설정 페이지(쿠폰 고유 번호 생성)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "쿠폰 시리얼번호 생성", description = "쿠폰 고유의 일련번호를 생성합니다.")
+    @GetMapping("/settings/create-serial-number")
+    public String createSerialNumber() {
+        return settingsService.createSerialNumber();
+    }
+
+    /**
+     * 기타 설정 페이지(쿠폰 생성)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "쿠폰 생성", description = "쿠폰 한장을 생성합니다.")
+    @PostMapping("/settings/coupon")
+    public ResponseEntity createCoupon(@ModelAttribute RequestCouponDto requestCouponDto) {
+        return ResponseEntity.ok(settingsService.createCouponAction(requestCouponDto));
+    }
+
+    /**
+     * 기타 설정 페이지(쿠폰 삭제)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "쿠폰 삭제", description = "쿠폰 한장 또는 여러장을 삭제합니다.")
+    @PostMapping("/settings/remove-coupon/{couponIds}")
+    public ResponseEntity removeCoupon(@PathVariable Long[] couponIds) {
+        settingsService.removeCouponAction(couponIds);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    /**
+     * 기타 설정 페이지(쿠폰 수정)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "쿠폰 수정", description = "쿠폰 한장의 정보를 수정합니다")
+    @PostMapping("/settings/coupon-update/{couponId}")
+    public ResponseEntity updateCoupon(@ModelAttribute RequestCouponDetailDto couponDetailDto, @PathVariable Long couponId) {
+        settingsService.updateCouponAction(couponDetailDto, couponId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    /**
+     * 기타 설정 페이지(상품 카테고리 조회)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "상품 카테고리 조회", description = "상품 카테고리 한 건을 조회합니다.")
+    @GetMapping("/settings/product-category/{productCategoryId}")
+    public ResponseEntity<ResponseProductCategoryListDto> productCategoryDetail(@PathVariable Long productCategoryId) {
+        return ResponseEntity.ok(settingsService.findProductCategory(productCategoryId));
+    }
+
+    @ApiDocumentResponse
+    @Operation(summary = "상품 카테고리 생성", description = "상품 카테고리를 생성합니다.")
+    @PostMapping("/settings/product-category")
+    public ResponseEntity createProductCategory(@ModelAttribute RequestProductCategoryDto productCategoryDto) {
+        ProductCategory productCategory = settingsService.createProductCategoryAction(productCategoryDto);
+        if (Objects.isNull(productCategory)) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
     /**
      * 관리자 게시판 관리 페이지(Q&A 전체 리스트)
