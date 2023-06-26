@@ -1,4 +1,4 @@
-package com.farmer.backend.login;
+package com.farmer.backend.login.general;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
