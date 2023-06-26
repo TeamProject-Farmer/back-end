@@ -3,13 +3,10 @@ package com.farmer.backend.config;
 
 import com.farmer.backend.jwt.JwtAuthenticationProcessingFilter;
 import com.farmer.backend.jwt.JwtService;
-import com.farmer.backend.login.CustomLoginFilter;
-import com.farmer.backend.login.LoginService;
-import com.farmer.backend.login.handler.LoginFailureHandler;
-import com.farmer.backend.login.handler.LoginSuccessHandler;
-import com.farmer.backend.oauth.CustomOAuth2UserService;
-import com.farmer.backend.oauth.handler.OAuth2LoginFailureHandler;
-import com.farmer.backend.oauth.handler.OAuth2LoginSuccessHandler;
+import com.farmer.backend.login.general.CustomLoginFilter;
+import com.farmer.backend.login.general.LoginService;
+import com.farmer.backend.login.general.handler.LoginFailureHandler;
+import com.farmer.backend.login.general.handler.LoginSuccessHandler;
 import com.farmer.backend.repository.admin.member.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -37,9 +34,6 @@ public class SecurityConfig  {
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
 
-    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
-    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
-    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -64,17 +58,7 @@ public class SecurityConfig  {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/v3/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html")
-                .authenticated()
-                .and()
-                .oauth2Login()
-                .authorizationEndpoint().baseUri("/oauth2/authorization")
-                .and()
-                .redirectionEndpoint().baseUri("/login/*")
-                .and()
-                .userInfoEndpoint().userService(customOAuth2UserService)
-                .and()
-                .successHandler(oAuth2LoginSuccessHandler)
-                .failureHandler(oAuth2LoginFailureHandler);
+                .authenticated();
 //                .antMatchers("/member").permitAll()
 //                .antMatchers("/member/mail").permitAll()
 //                .antMatchers("/member/join").permitAll()

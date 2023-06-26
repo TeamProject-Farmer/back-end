@@ -1,4 +1,4 @@
-package com.farmer.backend.login.handler;
+package com.farmer.backend.login.general.handler;
 
 import com.farmer.backend.dto.user.login.ResponseLoginMemberDto;
 import com.farmer.backend.entity.Member;

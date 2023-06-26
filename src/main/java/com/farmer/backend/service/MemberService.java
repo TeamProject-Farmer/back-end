@@ -5,12 +5,17 @@ import com.farmer.backend.dto.admin.member.ResponseMemberDto;
 import com.farmer.backend.dto.admin.member.SearchMemberCondition;
 import com.farmer.backend.dto.user.join.EmailDto;
 import com.farmer.backend.dto.user.join.RequestJoinDto;
+import com.farmer.backend.dto.user.login.OAuthUserInfoDto;
 import com.farmer.backend.entity.Member;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
+import com.farmer.backend.login.oauth.userInfo.GoogleSocialLogin;
+import com.farmer.backend.login.oauth.userInfo.KakaoSocialLogin;
+import com.farmer.backend.login.oauth.userInfo.NaverSocialLogin;
 import com.farmer.backend.repository.admin.member.MemberQueryRepository;
 import com.farmer.backend.repository.admin.member.MemberRepository;
 import com.farmer.backend.service.user.MailService;
+import com.nimbusds.jose.shaded.json.parser.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,10 +37,12 @@ import java.util.stream.Collectors;
 public class MemberService {
 
     private final MailService mailService;
-
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemberQueryRepository memberQueryRepositoryImpl;
+    private final GoogleSocialLogin googleSocialLogin;
+    private final KakaoSocialLogin kakaoSocialLogin;
+    private final NaverSocialLogin naverSocialLogin;
 
     /**
      * 전체 회원 리스트
@@ -209,6 +216,22 @@ public class MemberService {
     }
 
     /**
-     *
+     * 소셜 로그인
+     * @param socialType (kakao, google, naver) 소셜 로그인 타입
+     * @param code 인가코드
      */
+    public OAuthUserInfoDto socialUserInfo(String socialType, String code) {
+
+        if (socialType.equals("google")) {
+            return googleSocialLogin.getUserInfo(code);
+        }
+        else if (socialType.equals("kakao")){
+            return kakaoSocialLogin.getUserInfo(code);
+        }
+
+        return naverSocialLogin.getUserInfo(code);
+
+    }
+
+
 }

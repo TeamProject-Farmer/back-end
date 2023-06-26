@@ -34,7 +34,12 @@ public enum ErrorCode {
     COUPON_NOT_FOUND(BAD_REQUEST, "해당 쿠폰이 존재하지 않습니다."),
     FAQ_NOT_FOUND(BAD_REQUEST,"해당 자주 묻는 질문이 존재하지 않습니다."),
     FAQCATEGORY_NOT_FOUND(BAD_REQUEST,"해당 카테고리가 존재하지 않습니다."),
-    ORDER_NOT_FOUND(BAD_REQUEST,"해당 ORDER가 존재하지 않습니다. " );
+    ORDER_NOT_FOUND(BAD_REQUEST,"해당 ORDER가 존재하지 않습니다. " ),
+    KAKAO_LOGIN_FAILURE(BAD_REQUEST,"카카오 로그인에 실패하였습니다."),
+
+    NAVER_LOGIN_FAILURE(BAD_REQUEST,"네이버 로그인에 실패하였습니다."),
+
+    GOOGLE_LOGIN_FAILURE(BAD_REQUEST,"구글 로그인에 실패하였습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
