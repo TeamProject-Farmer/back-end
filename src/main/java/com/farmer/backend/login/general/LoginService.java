@@ -1,4 +1,4 @@
-package com.farmer.backend.login;
+package com.farmer.backend.login.general;
 
 import com.farmer.backend.entity.Member;
 import com.farmer.backend.exception.CustomException;

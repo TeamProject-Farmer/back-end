@@ -17,8 +17,6 @@ import javax.persistence.*;
 @Builder
 public class Member extends BaseTimeEntity{
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -136,8 +134,6 @@ public class Member extends BaseTimeEntity{
         this.detailAddress=requestJoinDto.getDetailAddress();
         this.nickname=requestJoinDto.getNickname();
     }
-
-
     public void emailSeveralRequest(EmailDto emailDto,String emailAuth){
         this.emailAuth=emailAuth;
         this.email=emailDto.getEmail();

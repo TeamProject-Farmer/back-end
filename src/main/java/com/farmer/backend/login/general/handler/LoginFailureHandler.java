@@ -1,4 +1,4 @@
-package com.farmer.backend.login.handler;
+package com.farmer.backend.login.general.handler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
