@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class ProductCategory {
+public class ProductCategory extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +22,10 @@ public class ProductCategory {
     @NotNull
     @Column(length = 20)
     private String name;
+
+    @Column(length = 1)
+    @NotNull
+    private char useYn;
+
+    private Integer sortOrder;
 }
