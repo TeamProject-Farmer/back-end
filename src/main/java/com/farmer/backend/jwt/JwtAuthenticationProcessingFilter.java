@@ -1,7 +1,7 @@
 package com.farmer.backend.jwt;
 
-import com.farmer.backend.entity.Member;
-import com.farmer.backend.repository.admin.member.MemberRepository;
+import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

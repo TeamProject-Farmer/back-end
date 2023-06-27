@@ -1,11 +1,11 @@
 package com.farmer.backend.login.general.handler;
 
-import com.farmer.backend.dto.user.login.ResponseLoginMemberDto;
-import com.farmer.backend.entity.Member;
+import com.farmer.backend.api.controller.user.login.ResponseLoginMemberDto;
+import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.jwt.JwtService;
-import com.farmer.backend.repository.admin.member.MemberRepository;
+import com.farmer.backend.domain.member.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
