@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequiredArgsConstructor
 @RestController
 @Slf4j
+@RequestMapping("/api/member")
 @Tag(name = "MemberController", description = "회원 페이지 API")
 public class MemberController {
 
@@ -30,7 +31,7 @@ public class MemberController {
      */
     @ApiDocumentResponse
     @Operation(summary = "인증 이메일 전송", description = "인증 이메일을 전송합니다.")
-    @PostMapping(value = "/api/member/join/mail")
+    @PostMapping(value = "/join/mail")
     public ResponseEntity<String> emailSend(@ModelAttribute EmailDto emailDto) {
 
         memberService.emailStore(emailDto);
@@ -43,7 +44,7 @@ public class MemberController {
      */
     @ApiDocumentResponse
     @Operation(summary = "인증 확인 URL 클릭", description = "사용자가 인증 URL을 클릭합니다.")
-    @GetMapping(value = "/api/member/join/mail/checkDone")
+    @GetMapping(value = "/join/mail/checkDone")
     public ModelAndView emailCheck(@RequestParam String email){
 
         memberService.codeCheck(email);
@@ -57,7 +58,7 @@ public class MemberController {
      */
     @ApiDocumentResponse
     @Operation(summary = "이메일 인증 여부 확인",description = "인증 확인이 된 이메일인지 체크합니다.")
-    @GetMapping(value = "/api/member/join/mail/check")
+    @GetMapping(value = "/join/mail/check")
     public String emailAuthentication(@RequestParam String memberEmail) {
         return memberService.emailAuth(memberEmail);
     }
@@ -67,7 +68,7 @@ public class MemberController {
      */
     @ApiDocumentResponse
     @Operation(summary = "회원가입", description = "회원가입을 진행합니다.")
-    @PostMapping(value = "/api/member/join/membership")
+    @PostMapping(value = "/join/membership")
     public String join (@ModelAttribute RequestJoinDto joinDto) {
         memberService.signUp(joinDto);
 
@@ -78,7 +79,7 @@ public class MemberController {
      * 소셜로그인 (KAKAO, GOOGLE, NAVER)
      */
     @GetMapping(value = "/login/oauth/{socialType}")
-    public OAuthUserInfoDto oauthLogin (@PathVariable(name = "socialType") String socialType, @RequestParam String code) throws ParseException {
+    public OAuthUserInfoDto oauthLogin (@PathVariable(name = "socialType") String socialType, @RequestParam String code) {
 
         return memberService.socialUserInfo(socialType,code);
 
