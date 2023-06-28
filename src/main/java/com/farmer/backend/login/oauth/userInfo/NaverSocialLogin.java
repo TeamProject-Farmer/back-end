@@ -1,12 +1,12 @@
 package com.farmer.backend.login.oauth.userInfo;
 
-import com.farmer.backend.dto.user.login.OAuthUserInfoDto;
-import com.farmer.backend.entity.Member;
-import com.farmer.backend.entity.SocialType;
+import com.farmer.backend.api.controller.user.login.OAuthUserInfoDto;
+import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.domain.member.SocialType;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.jwt.JwtService;
-import com.farmer.backend.repository.admin.member.MemberRepository;
+import com.farmer.backend.domain.member.MemberRepository;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import com.nimbusds.jose.shaded.json.parser.JSONParser;
 import com.nimbusds.jose.shaded.json.parser.ParseException;

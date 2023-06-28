@@ -7,7 +7,7 @@ import com.farmer.backend.login.general.CustomLoginFilter;
 import com.farmer.backend.login.general.LoginService;
 import com.farmer.backend.login.general.handler.LoginFailureHandler;
 import com.farmer.backend.login.general.handler.LoginSuccessHandler;
-import com.farmer.backend.repository.admin.member.MemberRepository;
+import com.farmer.backend.domain.member.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
