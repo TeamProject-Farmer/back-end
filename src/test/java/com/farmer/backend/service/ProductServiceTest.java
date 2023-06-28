@@ -1,9 +1,6 @@
 package com.farmer.backend.service;
 
-import com.farmer.backend.dto.admin.product.RequestProductDto;
-import com.farmer.backend.entity.Product;
-import com.farmer.backend.entity.ProductCategory;
-import com.farmer.backend.entity.ProductSize;
+import com.farmer.backend.api.service.admin.product.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,8 +10,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest

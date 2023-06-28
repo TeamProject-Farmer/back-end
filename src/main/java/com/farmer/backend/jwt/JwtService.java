@@ -2,10 +2,9 @@ package com.farmer.backend.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.farmer.backend.entity.SocialType;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
-import com.farmer.backend.repository.admin.member.MemberRepository;
+import com.farmer.backend.domain.member.MemberRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
