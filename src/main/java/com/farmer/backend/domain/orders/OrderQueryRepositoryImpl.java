@@ -15,9 +15,9 @@ import javax.persistence.EntityManager;
 
 import java.util.List;
 
-import static com.farmer.backend.entity.QMember.member;
-import static com.farmer.backend.entity.QOrders.orders;
-import static com.farmer.backend.entity.QPayment.payment;
+import static com.farmer.backend.domain.member.QMember.member;
+import static com.farmer.backend.domain.orders.QOrders.orders;
+import static com.farmer.backend.domain.payment.QPayment.payment;
 
 @Repository
 public class OrderQueryRepositoryImpl implements OrderQueryRepository {

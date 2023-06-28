@@ -6,7 +6,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.farmer.backend.entity.QPayment.payment;
+import static com.farmer.backend.domain.payment.QPayment.payment;
+
 
 @Repository
 public class PaymentQueryRepositoryImpl implements PaymentQueryRepository {

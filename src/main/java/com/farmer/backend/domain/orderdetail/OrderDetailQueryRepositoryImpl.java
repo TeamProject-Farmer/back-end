@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.farmer.backend.entity.QOrderDetail.orderDetail;
+import static com.farmer.backend.domain.orderdetail.QOrderDetail.orderDetail;
 
 @Repository
 public class OrderDetailQueryRepositoryImpl implements OrderDetailQueryRepository{

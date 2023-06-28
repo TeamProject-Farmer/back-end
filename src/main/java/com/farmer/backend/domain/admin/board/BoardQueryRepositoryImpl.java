@@ -1,14 +1,14 @@
 package com.farmer.backend.domain.admin.board;
 
-import com.farmer.backend.domain.admin.notice.Notice;
-import com.farmer.backend.domain.admin.qna.Qna;
-import com.farmer.backend.domain.admin.faq.Faq;
-import com.farmer.backend.domain.orderdetail.OrderDetail;
-import com.farmer.backend.domain.product.productreview.ProductReviews;
 import com.farmer.backend.api.controller.admin.faq.request.SearchFaqCondition;
 import com.farmer.backend.api.controller.admin.notice.request.SearchNoticeCondition;
 import com.farmer.backend.api.controller.admin.qna.request.SearchQnaCondition;
 import com.farmer.backend.api.controller.admin.review.request.SearchReviewCondition;
+import com.farmer.backend.domain.admin.faq.Faq;
+import com.farmer.backend.domain.admin.notice.Notice;
+import com.farmer.backend.domain.admin.qna.Qna;
+import com.farmer.backend.domain.orderdetail.OrderDetail;
+import com.farmer.backend.domain.product.productreview.ProductReviews;
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -24,12 +24,11 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Objects;
 
-import static com.farmer.backend.entity.QFaq.faq;
-import static com.farmer.backend.entity.QNotice.notice;
-import static com.farmer.backend.entity.QOrderDetail.orderDetail;
-import static com.farmer.backend.entity.QProduct_reviews.product_reviews;
-import static com.farmer.backend.entity.QQna.qna;
-
+import static com.farmer.backend.domain.admin.faq.QFaq.faq;
+import static com.farmer.backend.domain.admin.notice.QNotice.notice;
+import static com.farmer.backend.domain.admin.qna.QQna.qna;
+import static com.farmer.backend.domain.orderdetail.QOrderDetail.orderDetail;
+import static com.farmer.backend.domain.product.productreview.QProductReviews.productReviews;
 
 
 @Repository
@@ -73,8 +72,8 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     public Page<ProductReviews> findAll(Pageable pageable, String sortReviewCond, SearchReviewCondition searchReviewCond) {
 
         List<ProductReviews> reviewList = query
-                .select(product_reviews)
-                .from(product_reviews)
+                .select(productReviews)
+                .from(productReviews)
                 .where(likeReviewUsername(searchReviewCond.getUserName()),likeReviewUserEmail(searchReviewCond.getUserEmail()))
                 .orderBy(sortOrderReview(sortReviewCond))
                 .offset(pageable.getOffset())
@@ -82,8 +81,8 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
                 .fetch();
 
         Long count = query
-                .select(product_reviews.count())
-                .from(product_reviews)
+                .select(productReviews.count())
+                .from(productReviews)
                 .fetchOne();
 
         return new PageImpl<>(reviewList,pageable, count);
@@ -169,8 +168,8 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     @Override
     public void deleteReview(Long reviewId){
         query
-                .delete(product_reviews)
-                .where(product_reviews.id.eq(reviewId))
+                .delete(productReviews)
+                .where(productReviews.id.eq(reviewId))
                 .execute();
     }
 
@@ -235,16 +234,16 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
      */
     @Override
     public Page<ProductReviews> searchReviewList(Pageable pageable, SearchReviewCondition cond){
-        List<ProductReviews> reviewsList = query.selectFrom(product_reviews)
+        List<ProductReviews> reviewsList = query.selectFrom(productReviews)
                 .where(likeReviewUserEmail(cond.getUserEmail()),likeReviewUsername(cond.getUserName()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(product_reviews.id.asc())
+                .orderBy(productReviews.id.asc())
                 .fetch();
 
         Long count=query
-                .select(product_reviews.count())
-                .from(product_reviews)
+                .select(productReviews.count())
+                .from(productReviews)
                 .where(likeReviewUsername(cond.getUserName()),likeReviewUserEmail(cond.getUserEmail()))
                 .fetchOne();
 
@@ -252,11 +251,11 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     }
 
     public BooleanExpression likeReviewUsername(String userName){
-        return userName != null ? product_reviews.member.username.contains(userName) : null ;
+        return userName != null ? productReviews.member.username.contains(userName) : null ;
     }
 
     public BooleanExpression likeReviewUserEmail(String userEmail){
-        return userEmail != null ? product_reviews.member.email.contains(userEmail) : null ;
+        return userEmail != null ? productReviews.member.email.contains(userEmail) : null ;
     }
 
     /**
@@ -350,10 +349,10 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         Order order_A= Order.ASC;
 
         if(Objects.isNull(sortOrderCond) || sortOrderCond.equals("createdDate")){
-            return new OrderSpecifier<>(order,product_reviews.id);
+            return new OrderSpecifier<>(order,productReviews.id);
 
         }else if (sortOrderCond.equals("userName")){
-            return new OrderSpecifier<>(order_A,product_reviews.member.username);
+            return new OrderSpecifier<>(order_A,productReviews.member.username);
         }
 
         return new OrderSpecifier(Order.DESC,NullExpression.DEFAULT,OrderSpecifier.NullHandling.Default);

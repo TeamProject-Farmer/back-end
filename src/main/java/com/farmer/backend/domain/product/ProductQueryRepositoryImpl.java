@@ -15,7 +15,8 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Objects;
 
-import static com.farmer.backend.entity.QProduct.*;
+import static com.farmer.backend.domain.product.QProduct.product;
+
 
 @Repository
 public class ProductQueryRepositoryImpl implements ProductQueryRepository {

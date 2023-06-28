@@ -5,7 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
-import static com.farmer.backend.entity.QProductCategory.productCategory;
+import static com.farmer.backend.domain.product.productcategory.QProductCategory.productCategory;
+
 
 @Repository
 public class ProductCategoryQueryRepositoryImpl implements ProductCategoryQueryRepository{
