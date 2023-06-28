@@ -15,7 +15,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Objects;
 
-import static com.farmer.backend.entity.QMember.member;
+import static com.farmer.backend.domain.member.QMember.member;
 
 
 @Repository
