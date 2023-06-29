@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 public class ResponseLoginMemberDto {
 
     private String email;
-    private String password;
     private String nickname;
     private Long point;
     private Grade grade;
@@ -28,7 +27,6 @@ public class ResponseLoginMemberDto {
     public static ResponseLoginMemberDto getLoginMember(Member member){
         return ResponseLoginMemberDto.builder()
                 .email(member.getEmail())
-                .password(member.getPassword())
                 .nickname(member.getNickname())
                 .point(member.getPoint())
                 .grade(member.getGrade())
