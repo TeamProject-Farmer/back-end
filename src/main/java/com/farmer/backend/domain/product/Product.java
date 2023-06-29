@@ -38,6 +38,13 @@ public class Product extends BaseTimeEntity {
 
     private Integer sellQuantity;
 
+    @Column(columnDefinition = "0")
+    private Double averageStarRating;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private ProductDivision division;
+
     private Integer discountRate;
 
     @Column(length = 255)
