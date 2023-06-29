@@ -17,11 +17,6 @@ public class ResponseLoginMemberDto {
 
     private String email;
     private String password;
-    private String username;
-    private Long zipCode;
-    private String address;
-    private String detailAddress;
-    private String ph;
     private String nickname;
     private Long point;
     private Grade grade;
@@ -34,11 +29,6 @@ public class ResponseLoginMemberDto {
         return ResponseLoginMemberDto.builder()
                 .email(member.getEmail())
                 .password(member.getPassword())
-                .username(member.getUsername())
-                .zipCode(member.getZipCode())
-                .address(member.getAddress())
-                .detailAddress(member.getDetailAddress())
-                .ph(member.getPh())
                 .nickname(member.getNickname())
                 .point(member.getPoint())
                 .grade(member.getGrade())

@@ -16,11 +16,7 @@ public class RequestMemberDto {
     private Long id;
     @NotBlank(message = "비밀번호")
     private String password;
-    @NotNull(message = "이름")
-    private String username;
     private String email;
-    private String address;
-    private String ph;
     @NotBlank(message = "닉네임")
     private String nickname;
     @NotNull(message = "적립금")
@@ -35,13 +31,10 @@ public class RequestMemberDto {
     private Long cumulativeAmount;
 
     @Builder
-    public RequestMemberDto(Long id, String password, String username, String email, String address, String ph, String nickname, Long point, Grade grade, UserRole role, AccountStatus accountStatus, Long cumulativeAmount) {
+    public RequestMemberDto(Long id, String password,String email, String nickname, Long point, Grade grade, UserRole role, AccountStatus accountStatus, Long cumulativeAmount) {
         this.id = id;
         this.password = password;
-        this.username = username;
         this.email = email;
-        this.address = address;
-        this.ph = ph;
         this.nickname =  nickname;
         this.point = point;
         this.grade = grade;
@@ -55,10 +48,7 @@ public class RequestMemberDto {
         return Member.builder()
                 .id(id)
                 .password(password)
-                .username(username)
                 .email(email)
-                .address(address)
-                .ph(ph)
                 .nickname(nickname)
                 .point(point)
                 .grade(grade)
