@@ -52,7 +52,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         List<Qna> qnaList = query
                 .select(qna)
                 .from(qna)
-                .where(likeQnAUserEmail(searchCond.getUserEmail()),likeQnAUsername(searchCond.getUserName()),likeQnAProductName(searchCond.getProductName()))
+                .where(likeQnAUserEmail(searchCond.getUserEmail()),likeQnAProductName(searchCond.getProductName()))
                 .orderBy(sortOrderQna(sortQnaCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -76,7 +76,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         List<ProductReviews> reviewList = query
                 .select(productReviews)
                 .from(productReviews)
-                .where(likeReviewUsername(searchReviewCond.getUserName()),likeReviewUserEmail(searchReviewCond.getUserEmail()))
+                .where(likeReviewUserEmail(searchReviewCond.getUserEmail()))
                 .orderBy(sortOrderReview(sortReviewCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -112,8 +112,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         List<Notice> noticeList = query
                 .select(notice)
                 .from(notice)
-                .where(likeNoticeTitle(searchNoticeCond.getTitle()),likeNoticeUserEmail(searchNoticeCond.getUserEmail()),
-                        likeNoticeUserName(searchNoticeCond.getUserName()))
+                .where(likeNoticeTitle(searchNoticeCond.getTitle()),likeNoticeUserEmail(searchNoticeCond.getUserEmail()))
                 .orderBy(sortOrderNotice(sortNoticeCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -135,7 +134,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         List<Faq> faqList = query
                 .select(faq)
                 .from(faq)
-                .where(likeFaqCategoryName(searchFaqCond.getCategoryName()),likeFaqUserName(searchFaqCond.getUserName()),
+                .where(likeFaqCategoryName(searchFaqCond.getCategoryName()),
                         likeFaqUserEmail(searchFaqCond.getUserEmail()))
                 .orderBy(sortOrderFaq(sortFaqCond))
                 .offset(pageable.getOffset())
@@ -205,7 +204,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     @Override
     public Page<Qna> searchQnAList(Pageable pageable,SearchQnaCondition cond) {
         List<Qna> qnaList = query.selectFrom(qna)
-                .where(likeQnAUserEmail(cond.getUserEmail()),likeQnAUsername(cond.getUserName()),likeQnAProductName(cond.getProductName()))
+                .where(likeQnAUserEmail(cond.getUserEmail()),likeQnAProductName(cond.getProductName()))
                 .orderBy(qna.id.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -214,15 +213,12 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         Long count = query
                 .select(qna.count())
                 .from(qna)
-                .where(likeQnAUserEmail(cond.getUserEmail()),likeQnAUsername(cond.getUserName()),likeQnAProductName(cond.getProductName()))
+                .where(likeQnAUserEmail(cond.getUserEmail()),likeQnAProductName(cond.getProductName()))
                 .fetchOne();
 
         return new PageImpl<>(qnaList, pageable, count);
     }
 
-    public BooleanExpression likeQnAUsername(String userName){
-        return userName != null ? qna.member.username.contains(userName) : null ;
-    }
 
     public BooleanExpression likeQnAUserEmail(String userEmail){
         return userEmail != null ? qna.member.email.contains(userEmail) : null ;
@@ -238,7 +234,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     @Override
     public Page<ProductReviews> searchReviewList(Pageable pageable, SearchReviewCondition cond){
         List<ProductReviews> reviewsList = query.selectFrom(productReviews)
-                .where(likeReviewUserEmail(cond.getUserEmail()),likeReviewUsername(cond.getUserName()))
+                .where(likeReviewUserEmail(cond.getUserEmail()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(productReviews.id.asc())
@@ -247,15 +243,12 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         Long count=query
                 .select(productReviews.count())
                 .from(productReviews)
-                .where(likeReviewUsername(cond.getUserName()),likeReviewUserEmail(cond.getUserEmail()))
+                .where(likeReviewUserEmail(cond.getUserEmail()))
                 .fetchOne();
 
         return new PageImpl<>(reviewsList,pageable,count);
     }
 
-    public BooleanExpression likeReviewUsername(String userName){
-        return userName != null ? productReviews.member.username.contains(userName) : null ;
-    }
 
     public BooleanExpression likeReviewUserEmail(String userEmail){
         return userEmail != null ? productReviews.member.email.contains(userEmail) : null ;
@@ -267,7 +260,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     @Override
     public Page<Notice> searchNoticeList(Pageable pageable,SearchNoticeCondition cond){
         List<Notice> noticeList = query.selectFrom(notice)
-                .where(likeNoticeUserEmail(cond.getUserEmail()),likeNoticeUserName(cond.getUserName()),likeNoticeTitle(cond.getTitle()))
+                .where(likeNoticeUserEmail(cond.getUserEmail()),likeNoticeTitle(cond.getTitle()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(notice.id.asc())
@@ -276,7 +269,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         Long count=query
                 .select(notice.count())
                 .from(notice)
-                .where(likeNoticeUserName(cond.getUserName()),likeNoticeUserEmail(cond.getUserEmail()))
+                .where(likeNoticeUserEmail(cond.getUserEmail()))
                 .fetchOne();
 
         return new PageImpl<>(noticeList,pageable,count);
@@ -284,9 +277,6 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
 
     private BooleanExpression likeNoticeUserEmail(String userEmail) {
         return userEmail != null?notice.member.email.contains(userEmail):null;
-    }
-    private BooleanExpression likeNoticeUserName(String userName) {
-        return userName != null?notice.member.username.contains(userName):null;
     }
     private BooleanExpression likeNoticeTitle(String title){
         return title != null ?notice.title.contains(title):null;
@@ -298,7 +288,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     @Override
     public Page<Faq> searchFaqList(Pageable pageable, SearchFaqCondition cond){
         List<Faq> faqList = query.selectFrom(faq)
-                .where(likeFaqUserEmail(cond.getUserEmail()),likeFaqUserName(cond.getUserName()),likeFaqCategoryName(cond.getCategoryName()))
+                .where(likeFaqUserEmail(cond.getUserEmail()),likeFaqCategoryName(cond.getCategoryName()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(faq.id.asc())
@@ -307,15 +297,11 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
         Long count=query
                 .select(faq.count())
                 .from(faq)
-                .where(likeFaqUserName(cond.getUserName()),likeFaqUserEmail(cond.getUserEmail()),likeFaqCategoryName(cond.getCategoryName()))
+                .where(likeFaqUserEmail(cond.getUserEmail()),likeFaqCategoryName(cond.getCategoryName()))
                 .fetchOne();
 
         return new PageImpl<>(faqList,pageable,count);
     }
-    private BooleanExpression likeFaqUserName(String userName) {
-        return userName != null?faq.member.username.contains(userName):null;
-    }
-
     private BooleanExpression likeFaqUserEmail(String userEmail) {
         return userEmail != null?faq.member.email.contains(userEmail):null;
     }
@@ -335,9 +321,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
             return new OrderSpecifier<>(order,qna.id);
         } else if (sortOrderCond.equals("aCreatedDate")){
             return new OrderSpecifier<>(order,qna.aCreatedDate);
-        }else if(sortOrderCond.equals("userName")){
-            return new OrderSpecifier<>(order_A,qna.member.username);
-        }else if(sortOrderCond.equals("productName")){
+        } else if(sortOrderCond.equals("productName")){
             return new OrderSpecifier<>(order_A,qna.product.name);
         }
         return new OrderSpecifier(Order.DESC,NullExpression.DEFAULT,OrderSpecifier.NullHandling.Default);
@@ -349,15 +333,11 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     public OrderSpecifier<?> sortOrderReview(String sortOrderCond){
 
         Order order=Order.DESC;
-        Order order_A= Order.ASC;
 
         if(Objects.isNull(sortOrderCond) || sortOrderCond.equals("createdDate")){
             return new OrderSpecifier<>(order,productReviews.id);
 
-        }else if (sortOrderCond.equals("userName")){
-            return new OrderSpecifier<>(order_A,productReviews.member.username);
         }
-
         return new OrderSpecifier(Order.DESC,NullExpression.DEFAULT,OrderSpecifier.NullHandling.Default);
     }
 
@@ -370,9 +350,6 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
 
         if(Objects.isNull(sortOrderCond) || sortOrderCond.equals("noticeId") || sortOrderCond.equals("createdDate")){
             return new OrderSpecifier<>(order,notice.id);
-        }
-        else if (sortOrderCond.equals("userName")){
-            return new OrderSpecifier<>(order_A,notice.member.username);
         }
         else if(sortOrderCond.equals("userEmail")){
             return new OrderSpecifier<>(order_A,notice.member.email);
@@ -391,9 +368,6 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
 
         if(Objects.isNull(sortOrderCond) || sortOrderCond.equals("faqId") || sortOrderCond.equals("createdDate")){
             return new OrderSpecifier<>(order,faq.id);
-        }
-        else if (sortOrderCond.equals("userName")){
-            return new OrderSpecifier<>(order_A,faq.member.username);
         }
         else if(sortOrderCond.equals("userEmail")){
             return new OrderSpecifier<>(order_A,faq.member.email);

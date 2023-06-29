@@ -26,7 +26,6 @@ public class ResponseFaqDto {
         return ResponseFaqDto.builder()
                 .id(faq.getId())
                 .memberId(faq.getMember().getId())
-                .memberName(faq.getMember().getUsername())
                 .memberEmail(faq.getMember().getEmail())
                 .categoryName(faq.getFaqCategory().getName())
                 .question(faq.getQuestion())

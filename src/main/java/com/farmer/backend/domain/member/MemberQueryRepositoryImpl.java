@@ -39,7 +39,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
         List<Member> memberList = query
                 .select(member)
                 .from(member)
-                .where(likeUserId(searchMemberCond.getUserId()), likeUsername(searchMemberCond.getUsername()))
+                .where(likeUserId(searchMemberCond.getUserId()))
                 .orderBy(sortOrderCondition(sortOrderCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -70,7 +70,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
     @Override
     public Page<Member> searchMemberList(Pageable pageable, SearchMemberCondition cond) {
         List<Member> memberList = query.selectFrom(member)
-                .where(likeUserId(cond.getUserId()), likeUsername(cond.getUsername()))
+                .where(likeUserId(cond.getUserId()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.id.desc())
@@ -79,7 +79,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
         Long count = query
                 .select(member.count())
                 .from(member)
-                .where(likeUserId(cond.getUserId()), likeUsername(cond.getUsername()))
+                .where(likeUserId(cond.getUserId()))
                 .fetchOne();
 
         return new PageImpl<>(memberList, pageable, count);
@@ -96,7 +96,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
         List<Member> managerList = query
                 .select(member)
                 .from(member)
-                .where(likeUserId(searchMemberCond.getUserId()), likeUsername(searchMemberCond.getUsername()), member.role.ne(UserRole.USER))
+                .where(likeUserId(searchMemberCond.getUserId()), member.role.ne(UserRole.USER))
                 .orderBy(sortOrderCondition(sortOrderCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -105,7 +105,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
         Long count = query
                 .select(member.count())
                 .from(member)
-                .where(likeUserId(searchMemberCond.getUserId()), likeUsername(searchMemberCond.getUsername()), member.role.ne(UserRole.USER))
+                .where(likeUserId(searchMemberCond.getUserId()), member.role.ne(UserRole.USER))
                 .fetchOne();
 
         return new PageImpl<>(managerList, pageable, count);
@@ -121,7 +121,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
         List<Member> resultList = query
                 .select(member)
                 .from(member)
-                .where(likeUserId(cond.getUserId()), likeUsername(cond.getUsername()), member.role.ne(UserRole.USER))
+                .where(likeUserId(cond.getUserId()), member.role.ne(UserRole.USER))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.id.desc())
@@ -130,7 +130,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
         Long count = query
                 .select(member.count())
                 .from(member)
-                .where(likeUserId(cond.getUserId()), likeUsername(cond.getUsername()))
+                .where(likeUserId(cond.getUserId()))
                 .fetchOne();
 
         return new PageImpl<>(resultList, pageable, count);
@@ -143,8 +143,6 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
         log.info(sortOrderCond);
         if (Objects.isNull(sortOrderCond) || sortOrderCond.equals("createdDate")) {
             return new OrderSpecifier<>(order, member.id);
-        } else if (sortOrderCond.equals("username")) {
-            return new OrderSpecifier<>(order, member.username);
         } else if (sortOrderCond.equals("grade")) {
             return new OrderSpecifier<>(order, member.grade);
         }
@@ -156,9 +154,7 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
         return userId != null ? member.email.contains(userId) : null;
     }
 
-    public BooleanExpression likeUsername(String username) {
-        return username != null ? member.username.contains(username) : null;
-    }
+
 
 
 }

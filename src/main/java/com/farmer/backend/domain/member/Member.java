@@ -28,25 +28,8 @@ public class Member extends BaseTimeEntity {
     private String email;
 
     private String emailAuth;
-
     @NotNull
     private String password;
-
-    @NotNull
-    @Column(length = 50)
-    private String username;
-
-    @Column(length = 20)
-    private String ph;
-
-    @Column(length = 10)
-    private Long zipCode;
-
-    @Column(length = 50)
-    private String address;
-
-    @Column(length = 50)
-    private String detailAddress;
 
     @NotNull
     @Column(length = 50)
@@ -98,9 +81,6 @@ public class Member extends BaseTimeEntity {
                 .id(id)
                 .email(email)
                 .password(password)
-                .username(username)
-                .address(address)
-                .ph(ph)
                 .nickname(nickname)
                 .point(point)
                 .grade(grade)
@@ -113,10 +93,7 @@ public class Member extends BaseTimeEntity {
     public void updateMember(RequestMemberDto memberDto) {
         this.id = memberDto.getId();
         this.password = memberDto.getPassword();
-        this.username = memberDto.getUsername();
         this.email = memberDto.getEmail();
-        this.address = memberDto.getAddress();
-        this.ph = memberDto.getPh();
         this.nickname = memberList().getNickname();
         this.point = memberDto.getPoint();
         this.grade = memberDto.getGrade();
@@ -128,11 +105,6 @@ public class Member extends BaseTimeEntity {
     public void joinMember(RequestJoinDto requestJoinDto){
         this.emailAuth="JoinDone";
         this.password=requestJoinDto.getPassword();
-        this.username=requestJoinDto.getUsername();
-        this.ph=requestJoinDto.getPh();
-        this.address=requestJoinDto.getAddress();
-        this.zipCode=requestJoinDto.getZipcode();
-        this.detailAddress=requestJoinDto.getDetailAddress();
         this.nickname=requestJoinDto.getNickname();
     }
     public void emailSeveralRequest(EmailDto emailDto,String emailAuth){
