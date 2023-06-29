@@ -10,7 +10,7 @@ import com.farmer.backend.domain.admin.faq.Faq;
 import com.farmer.backend.domain.admin.faq.faqcategory.FaqCategoryRepository;
 import com.farmer.backend.domain.admin.faq.FaqRepository;
 import com.farmer.backend.domain.member.Member;
-import com.farmer.backend.domain.orderdetail.OrderDetail;
+import com.farmer.backend.domain.orderproduct.OrderProduct;
 import com.farmer.backend.domain.product.productreview.ProductReviews;
 import com.farmer.backend.api.controller.admin.faq.request.RequestFaqDto;
 import com.farmer.backend.api.controller.admin.faq.response.ResponseFaqDto;
@@ -132,7 +132,7 @@ public class BoardService {
     public Page<ResponseBoardReviewDto> reviewList(Pageable pageable, String sortReviewCond, SearchReviewCondition searchReviewCondition) {
 
         Page<ProductReviews> reviewList = boardQueryRepositoryImpl.findAll(pageable,sortReviewCond,searchReviewCondition);
-        List<OrderDetail> orderDetails = boardQueryRepositoryImpl.orderProductFindAll();
+        List<OrderProduct> orderProducts = boardQueryRepositoryImpl.orderProductFindAll();
 
         HashMap<Long,ArrayList<String>> products= new HashMap<>();
 
@@ -141,7 +141,7 @@ public class BoardService {
             ArrayList<String> orderProductName = new ArrayList<>();
             Long orderId = review.getOrders().getId();
 
-            for (OrderDetail orderProduct : orderDetails){
+            for (OrderProduct orderProduct : orderProducts){
                 if (orderProduct.getOrders().getId().equals(orderId)){
                     orderProductName.add(orderProduct.getProduct().getName());
                 }
@@ -163,12 +163,12 @@ public class BoardService {
     @Transactional(readOnly = true)
     public ResponseBoardReviewDto findOneReview(Long reviewId) {
 
-        List<OrderDetail> oneReviewDetail = boardQueryRepositoryImpl.orderProductFindAll();
+        List<OrderProduct> oneReviewDetail = boardQueryRepositoryImpl.orderProductFindAll();
         ProductReviews findReview= reviewRepository.findById(reviewId).orElseThrow(()-> new CustomException(ErrorCode.REVIEW_NOT_FOUND));
 
         ArrayList<String> orderProductName = new ArrayList<>();
 
-        for(OrderDetail orders : oneReviewDetail){
+        for(OrderProduct orders : oneReviewDetail){
 
             if(orders.getOrders().getId().equals(findReview.getOrders().getId())){
 
@@ -189,7 +189,7 @@ public class BoardService {
     public Page<ResponseBoardReviewDto> searchReviewList(Pageable pageable, SearchReviewCondition searchReviewCondition) {
 
         Page<ProductReviews> searchReviewList=boardQueryRepositoryImpl.searchReviewList(pageable,searchReviewCondition);
-        List<OrderDetail> searchOrder = boardQueryRepositoryImpl.orderProductFindAll();
+        List<OrderProduct> searchOrder = boardQueryRepositoryImpl.orderProductFindAll();
 
 
         HashMap<Long,ArrayList<String>> products= new HashMap<>();
@@ -200,7 +200,7 @@ public class BoardService {
 
             Long orderId = review.getOrders().getId();
 
-            for (OrderDetail orderProduct : searchOrder){
+            for (OrderProduct orderProduct : searchOrder){
                 if (orderProduct.getOrders().getId().equals(orderId)){
                     orderProductName.add(orderProduct.getProduct().getName());
                 }

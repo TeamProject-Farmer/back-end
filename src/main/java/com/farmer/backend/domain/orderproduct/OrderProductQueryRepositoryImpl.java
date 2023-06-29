@@ -1,4 +1,4 @@
-package com.farmer.backend.domain.orderdetail;
+package com.farmer.backend.domain.orderproduct;
 
 import com.farmer.backend.api.controller.admin.order.response.ResponseOrderDetailDto;
 import com.querydsl.core.types.Projections;
@@ -8,14 +8,15 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.farmer.backend.domain.orderdetail.QOrderDetail.orderDetail;
+import static com.farmer.backend.domain.orderproduct.QOrderProduct.orderProduct;
+
 
 @Repository
-public class OrderDetailQueryRepositoryImpl implements OrderDetailQueryRepository{
+public class OrderProductQueryRepositoryImpl implements OrderProductQueryRepository {
 
     private final JPAQueryFactory query;
 
-    public OrderDetailQueryRepositoryImpl(EntityManager em) {
+    public OrderProductQueryRepositoryImpl(EntityManager em) {
         this.query = new JPAQueryFactory(em);
     }
 
@@ -24,15 +25,15 @@ public class OrderDetailQueryRepositoryImpl implements OrderDetailQueryRepositor
         List<ResponseOrderDetailDto> orderDetailDto = query
                 .select(Projections.constructor(
                                 ResponseOrderDetailDto.class,
-                                orderDetail.product,
-                                orderDetail.count,
-                                orderDetail.options.id,
-                                orderDetail.options.optionName,
-                                orderDetail.options.optionPrice
+                                orderProduct.product,
+                                orderProduct.count,
+                                orderProduct.options.id,
+                                orderProduct.options.optionName,
+                                orderProduct.options.optionPrice
                         )
                 )
-                .from(orderDetail)
-                .where(orderDetail.orders.id.eq(orderId))
+                .from(orderProduct)
+                .where(orderProduct.orders.id.eq(orderId))
                 .fetch();
 
         return orderDetailDto;

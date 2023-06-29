@@ -7,8 +7,8 @@ import com.farmer.backend.api.controller.admin.order.response.ResponseOrdersDto;
 import com.farmer.backend.domain.orders.Orders;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
-import com.farmer.backend.domain.orderdetail.OrderDetailQueryRepository;
-import com.farmer.backend.domain.orderdetail.OrderDetailRepository;
+import com.farmer.backend.domain.orderproduct.OrderProductQueryRepository;
+import com.farmer.backend.domain.orderproduct.OrderProductRepository;
 import com.farmer.backend.domain.orders.OrderQueryRepository;
 import com.farmer.backend.domain.orders.OrderRepository;
 import com.farmer.backend.domain.payment.PaymentQueryRepository;
@@ -29,8 +29,8 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderQueryRepository orderQueryRepositoryImpl;
-    private final OrderDetailRepository orderDetailRepository;
-    private final OrderDetailQueryRepository orderDetailQueryRepositoryImpl;
+    private final OrderProductRepository orderProductRepository;
+    private final OrderProductQueryRepository orderProductQueryRepositoryImpl;
     private final PaymentRepository paymentRepository;
     private final PaymentQueryRepository paymentQueryRepositoryImpl;
 
@@ -62,7 +62,7 @@ public class OrderService {
         Map<String, List<ResponseOrdersAndPaymentDto>> ordersAndPaymentMap = new HashMap<>();
         Map<String, List<ResponseOrderDetailDto>> orderDetailMap = new HashMap<>();
         List<ResponseOrdersAndPaymentDto> ordersAndPayment = orderQueryRepositoryImpl.findOrdersAndPayment(orderId);
-        List<ResponseOrderDetailDto> orderDetail = orderDetailQueryRepositoryImpl.findOrderDetail(orderId);
+        List<ResponseOrderDetailDto> orderDetail = orderProductQueryRepositoryImpl.findOrderDetail(orderId);
 
         ordersAndPaymentMap.put("주문 결제정보", ordersAndPayment);
         orderDetailMap.put("주문상품 상세정보", orderDetail);
