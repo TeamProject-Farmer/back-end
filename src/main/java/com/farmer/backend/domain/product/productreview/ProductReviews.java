@@ -1,6 +1,7 @@
 package com.farmer.backend.domain.product.productreview;
 
 import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.domain.orderproduct.OrderProduct;
 import com.farmer.backend.domain.orders.Orders;
 import com.sun.istack.NotNull;
 import lombok.*;
@@ -31,8 +32,11 @@ public class ProductReviews {
     private Member member;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "orders_id")
-    private Orders orders;
+    @JoinColumn(name = "order_product_id")
+    private OrderProduct orderProduct;
+
+    @NotNull
+    private Integer fiveStarRating;
 
     @NotNull
     @Column(columnDefinition = "text")
