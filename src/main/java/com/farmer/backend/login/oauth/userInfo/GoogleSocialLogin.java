@@ -23,8 +23,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -113,7 +111,6 @@ public class GoogleSocialLogin implements OAuthLogin {
 
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObj = (JSONObject) jsonParser.parse(response.getBody());
-            System.out.println(jsonObj);
 
             socialId = String.valueOf(jsonObj.get("id"));
             email = String.valueOf(jsonObj.get("email"));

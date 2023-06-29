@@ -25,7 +25,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Getter
 @Component
