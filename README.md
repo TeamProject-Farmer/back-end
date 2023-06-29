@@ -9,6 +9,7 @@
 - MySql
 - AWS EC2
 - AWS S3
+- AWS RDS
 - 그 외 github action CI/CD pipeline
 
 <!-- # 코딩 컨벤션 -->
