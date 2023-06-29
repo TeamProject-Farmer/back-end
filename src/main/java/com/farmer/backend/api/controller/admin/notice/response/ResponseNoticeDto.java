@@ -27,7 +27,6 @@ public class ResponseNoticeDto {
         return ResponseNoticeDto.builder()
                 .id(notice.getId())
                 .memberId(notice.getMember().getId())
-                .memberName(notice.getMember().getUsername())
                 .memberEmail(notice.getMember().getEmail())
                 .title(notice.getTitle())
                 .content(notice.getContent())

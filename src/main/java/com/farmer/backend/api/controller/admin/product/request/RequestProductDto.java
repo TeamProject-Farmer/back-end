@@ -29,7 +29,6 @@ public class RequestProductDto {
     private Integer discountRate;
     @NotNull
     private String thumbnailImg;
-    private String brandName;
     @NotNull
     private ProductSize size;
     private String description;
@@ -48,7 +47,6 @@ public class RequestProductDto {
                 .price(price)
                 .discountRate(discountRate)
                 .thumbnailImg(thumbnailImg)
-                .brandName(brandName)
                 .size(size)
                 .description(description)
                 .detailImg1(detailImg1)

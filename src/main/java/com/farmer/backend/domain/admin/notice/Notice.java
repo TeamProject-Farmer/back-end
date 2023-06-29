@@ -45,7 +45,6 @@ public class Notice extends BaseTimeEntity {
         return ResponseNoticeDto.builder()
                 .id(id)
                 .memberId(member.getId())
-                .memberName(member.getUsername())
                 .memberEmail(member.getEmail())
                 .title(title)
                 .content(content)
