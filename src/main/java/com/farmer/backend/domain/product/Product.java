@@ -36,9 +36,6 @@ public class Product extends BaseTimeEntity {
     @NotNull
     private Integer price;
 
-    @NotNull
-    private int averageStarRating;
-
     private Integer sellQuantity;
 
     @Column(columnDefinition = "0")
