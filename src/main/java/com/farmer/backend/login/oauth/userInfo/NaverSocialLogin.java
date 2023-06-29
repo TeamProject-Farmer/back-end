@@ -1,6 +1,7 @@
 package com.farmer.backend.login.oauth.userInfo;
 
 import com.farmer.backend.api.controller.user.login.OAuthUserInfoDto;
+import com.farmer.backend.api.service.admin.mail.MailService;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.SocialType;
 import com.farmer.backend.exception.CustomException;
@@ -17,10 +18,14 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSender;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Getter
 @Component
@@ -29,6 +34,7 @@ public class NaverSocialLogin implements OAuthLogin{
 
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
+    private final MailService mailService;
 
     @Value("${spring.security.oauth2.client.registration.naver.client-id}")
     private String clientId;
@@ -37,12 +43,14 @@ public class NaverSocialLogin implements OAuthLogin{
     private String redirectUri;
     @Value("${spring.security.oauth2.client.registration.naver.client-secret}")
     private String clientSecret;
-    Member naverUser;
+    Optional<Member> naverUser;
     String accessToken = "";
     String refreshToken = "";
     SocialType socialType = SocialType.NAVER;
     String socialId = "";
     String email = "";
+
+    String nickname="";
 
     /**
      * 인가 코드를 통해 AccessToken 얻기
@@ -108,15 +116,21 @@ public class NaverSocialLogin implements OAuthLogin{
 
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObj = (JSONObject) jsonParser.parse(response.getBody());
-            JSONObject account = (JSONObject) jsonObj.get("response");
+            JSONObject naverResponse = (JSONObject) jsonObj.get("response");
 
-            socialId = String.valueOf(account.get("id"));
-            email = String.valueOf(account.get("email"));
+            socialId = String.valueOf(naverResponse.get("id"));
+            email = String.valueOf(naverResponse.get("email"));
+            nickname=String.valueOf(naverResponse.get("nickname"))+ (int)((Math.random() * 8999) + 1000);
             accessToken = jwtService.createAccessToken(email);
             refreshToken = jwtService.createRefreshToken();
 
-            OAuthUserInfoDto userInfo = new OAuthUserInfoDto(socialId, socialType, email, accessToken, refreshToken);
-            naverUser = userSave(userInfo);
+            if(memberRepository.findBySocialId(socialId).isPresent()){
+                naverUser=memberRepository.findBySocialId(socialId);
+            }
+            else{
+                OAuthUserInfoDto userInfo = new OAuthUserInfoDto(socialId,socialType,email,nickname,accessToken,refreshToken);
+                naverUser = Optional.ofNullable(userSave(userInfo));
+            }
 
         } catch (ParseException e) {
             throw new CustomException(ErrorCode.NAVER_LOGIN_FAILURE);

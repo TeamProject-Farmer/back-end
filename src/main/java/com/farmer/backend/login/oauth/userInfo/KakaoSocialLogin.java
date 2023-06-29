@@ -22,6 +22,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
+import java.util.UUID;
+
 
 @Getter
 @Component
@@ -37,12 +40,13 @@ public class KakaoSocialLogin implements OAuthLogin {
     @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
     private String redirectUri;
 
-    Member kakaoUser;
+    Optional<Member> kakaoUser;
     String accessToken = "";
     String refreshToken = "";
     SocialType socialType = SocialType.KAKAO;
     String socialId = "";
     String email = "";
+    String nickname="";
 
     /**
      * 인가 코드를 통해 AccessToken 얻기
@@ -110,14 +114,21 @@ public class KakaoSocialLogin implements OAuthLogin {
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObj = (JSONObject) jsonParser.parse(response.getBody());
             JSONObject account = (JSONObject) jsonObj.get("kakao_account");
+            JSONObject profile = (JSONObject) account.get("profile");
 
             socialId = String.valueOf(jsonObj.get("id"));
             email = String.valueOf(account.get("email"));
+            nickname=String.valueOf(profile.get("nickname"))+ (int)((Math.random() * 8999) + 1000);
             accessToken = jwtService.createAccessToken(email);
             refreshToken = jwtService.createRefreshToken();
 
-            OAuthUserInfoDto userInfo = new OAuthUserInfoDto(socialId, socialType, email, accessToken, refreshToken);
-            kakaoUser = userSave(userInfo);
+            if(memberRepository.findBySocialId(socialId).isPresent()){
+                kakaoUser=memberRepository.findBySocialId(socialId);
+            }
+            else{
+                OAuthUserInfoDto userInfo = new OAuthUserInfoDto(socialId,socialType,email,nickname,accessToken,refreshToken);
+                kakaoUser = Optional.ofNullable(userSave(userInfo));
+            }
 
 
         } catch (ParseException e) {
@@ -125,6 +136,8 @@ public class KakaoSocialLogin implements OAuthLogin {
         }catch (Exception e) {
             throw new CustomException(ErrorCode.KAKAO_LOGIN_FAILURE);
         }
+
+
 
         return OAuthUserInfoDto.getUserInfo(kakaoUser);
     }

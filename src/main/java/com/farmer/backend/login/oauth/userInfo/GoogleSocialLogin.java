@@ -22,6 +22,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class GoogleSocialLogin implements OAuthLogin {
@@ -35,12 +39,14 @@ public class GoogleSocialLogin implements OAuthLogin {
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String clientSecret;
 
-    Member googleUser;
+    Optional<Member> googleUser;
     String accessToken = "";
     String refreshToken = "";
     SocialType socialType = SocialType.GOOGLE;
     String socialId = "";
     String email = "";
+
+    String nickname="";
 
     /**
      * 인가 코드를 통해 AccessToken 얻기
@@ -107,14 +113,22 @@ public class GoogleSocialLogin implements OAuthLogin {
 
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObj = (JSONObject) jsonParser.parse(response.getBody());
+            System.out.println(jsonObj);
 
             socialId = String.valueOf(jsonObj.get("id"));
             email = String.valueOf(jsonObj.get("email"));
+            nickname=String.valueOf(jsonObj.get("name")) + (int)((Math.random() * 8999) + 1000);
             accessToken=jwtService.createAccessToken(email);
             refreshToken=jwtService.createRefreshToken();
 
-            OAuthUserInfoDto userInfo = new OAuthUserInfoDto(socialId,socialType,email,accessToken,refreshToken);
-            googleUser = userSave(userInfo);
+            if(memberRepository.findBySocialId(socialId).isPresent()){
+                googleUser=memberRepository.findBySocialId(socialId);
+            }
+            else{
+                OAuthUserInfoDto userInfo = new OAuthUserInfoDto(socialId,socialType,email,nickname,accessToken,refreshToken);
+                googleUser = Optional.ofNullable(userSave(userInfo));
+            }
+
 
         } catch (ParseException e) {
             throw new CustomException(ErrorCode.GOOGLE_LOGIN_FAILURE);

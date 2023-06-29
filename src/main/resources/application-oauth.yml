@@ -9,7 +9,7 @@ spring:
             redirect-uri: http://localhost:3000/login/kakao
             client-authentication-method: POST
             authorization-grant-type: authorization_code
-            scope: account_email
+            scope: account_email, profile_nickname
             client-name: Kakao
 
           naver:
@@ -17,14 +17,14 @@ spring:
             client-secret: CDhbwZpz57
             redirect-uri: http://localhost:3000/login/naver
             authorization-grant-type: authorization_code
-            scope: email
+            scope: email, name
             client-name: Naver
 
           google:
             client-id: 555482867273-rf3vnh1tqf9omcab07dfamq48elo5qho.apps.googleusercontent.com
             client-secret: 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
             redirect-uri: http://localhost:3000/login/google
-            scope: email
+            scope: profile,email
 
         provider:
           kakao:

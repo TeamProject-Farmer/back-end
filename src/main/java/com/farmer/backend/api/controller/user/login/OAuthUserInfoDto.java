@@ -2,6 +2,10 @@ package com.farmer.backend.api.controller.user.login;
 
 import com.farmer.backend.domain.member.*;
 import lombok.*;
+
+import java.util.Optional;
+import java.util.UUID;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -11,23 +15,26 @@ public class OAuthUserInfoDto {
     private SocialType socialType;
     private String socialId;
     private String email;
+    private String nickname;
 
     private String accessToken;
     private String refreshToken;
 
-    public static OAuthUserInfoDto getUserInfo(Member member){
+    public static OAuthUserInfoDto getUserInfo(Optional<Member> member){
         return OAuthUserInfoDto.builder()
-                .email(member.getEmail())
-                .accessToken(member.getAccessToken())
-                .refreshToken(member.getRefreshToken())
-                .socialType(SocialType.valueOf(member.getSocialType().name()))
-                .socialId(member.getSocialId())
+                .email(member.get().getEmail())
+                .nickname(member.get().getNickname())
+                .accessToken(member.get().getAccessToken())
+                .refreshToken(member.get().getRefreshToken())
+                .socialType(SocialType.valueOf(member.get().getSocialType().name()))
+                .socialId(member.get().getSocialId())
                 .build();
     }
-    public OAuthUserInfoDto(String socialId, SocialType socialType, String email, String accessToken, String refreshToken){
+    public OAuthUserInfoDto(String socialId, SocialType socialType, String email, String nickname, String accessToken, String refreshToken){
         this.socialId=socialId;
         this.socialType=socialType;
         this.email=email;
+        this.nickname=nickname;
         this.accessToken=accessToken;
         this.refreshToken=refreshToken;
     }
@@ -35,8 +42,8 @@ public class OAuthUserInfoDto {
     public Member toEntity(OAuthUserInfoDto userInfo){
         return Member.builder()
                 .email(userInfo.email)
-                .password("password")
-                .nickname("nickname")
+                .password(String.valueOf(UUID.randomUUID()))
+                .nickname(userInfo.nickname)
                 .point(0L)
                 .grade(Grade.NORMAL)
                 .role(UserRole.USER)
