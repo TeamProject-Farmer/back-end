@@ -130,29 +130,7 @@ public class BoardService {
      */
     @Transactional(readOnly = true)
     public Page<ResponseBoardReviewDto> reviewList(Pageable pageable, String sortReviewCond, SearchReviewCondition searchReviewCondition) {
-
-        Page<ProductReviews> reviewList = boardQueryRepositoryImpl.findAll(pageable,sortReviewCond,searchReviewCondition);
-        List<OrderProduct> orderProducts = boardQueryRepositoryImpl.orderProductFindAll();
-
-        HashMap<Long,ArrayList<String>> products= new HashMap<>();
-
-        for (ProductReviews review : reviewList) {
-
-            ArrayList<String> orderProductName = new ArrayList<>();
-            Long orderId = review.getOrders().getId();
-
-            for (OrderProduct orderProduct : orderProducts){
-                if (orderProduct.getOrders().getId().equals(orderId)){
-                    orderProductName.add(orderProduct.getProduct().getName());
-                }
-            }
-
-            products.put(orderId, orderProductName);
-
-        }
-
-        return new PageImpl<>(reviewList.stream().map(product_reviews -> ResponseBoardReviewDto.getReview(product_reviews,products.get(product_reviews.getOrders().getId()))).collect(Collectors.toList()));
-
+        return null;
     }
 
     /**
@@ -162,21 +140,7 @@ public class BoardService {
      */
     @Transactional(readOnly = true)
     public ResponseBoardReviewDto findOneReview(Long reviewId) {
-
-        List<OrderProduct> oneReviewDetail = boardQueryRepositoryImpl.orderProductFindAll();
-        ProductReviews findReview= reviewRepository.findById(reviewId).orElseThrow(()-> new CustomException(ErrorCode.REVIEW_NOT_FOUND));
-
-        ArrayList<String> orderProductName = new ArrayList<>();
-
-        for(OrderProduct orders : oneReviewDetail){
-
-            if(orders.getOrders().getId().equals(findReview.getOrders().getId())){
-
-                orderProductName.add(orders.getProduct().getName());
-            }
-        }
-
-        return ResponseBoardReviewDto.getReview(findReview,orderProductName);
+        return null;
     }
 
     /**
@@ -187,30 +151,7 @@ public class BoardService {
      */
     @Transactional(readOnly = true)
     public Page<ResponseBoardReviewDto> searchReviewList(Pageable pageable, SearchReviewCondition searchReviewCondition) {
-
-        Page<ProductReviews> searchReviewList=boardQueryRepositoryImpl.searchReviewList(pageable,searchReviewCondition);
-        List<OrderProduct> searchOrder = boardQueryRepositoryImpl.orderProductFindAll();
-
-
-        HashMap<Long,ArrayList<String>> products= new HashMap<>();
-
-        for (ProductReviews review : searchReviewList) {
-
-            ArrayList<String> orderProductName = new ArrayList<>();
-
-            Long orderId = review.getOrders().getId();
-
-            for (OrderProduct orderProduct : searchOrder){
-                if (orderProduct.getOrders().getId().equals(orderId)){
-                    orderProductName.add(orderProduct.getProduct().getName());
-                }
-            }
-
-            products.put(orderId, orderProductName);
-
-        }
-
-        return new PageImpl<>(searchReviewList.stream().map(product_reviews -> ResponseBoardReviewDto.getReview(product_reviews,products.get(product_reviews.getOrders().getId()))).collect(Collectors.toList()));
+        return null;
     }
 
     /**
