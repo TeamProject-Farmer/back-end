@@ -7,7 +7,8 @@ import com.farmer.backend.api.controller.admin.review.request.SearchReviewCondit
 import com.farmer.backend.domain.admin.faq.Faq;
 import com.farmer.backend.domain.admin.notice.Notice;
 import com.farmer.backend.domain.admin.qna.Qna;
-import com.farmer.backend.domain.orderdetail.OrderDetail;
+import com.farmer.backend.domain.orderproduct.OrderProduct;
+import com.farmer.backend.domain.orderproduct.QOrderProduct;
 import com.farmer.backend.domain.product.productreview.ProductReviews;
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
@@ -27,7 +28,8 @@ import java.util.Objects;
 import static com.farmer.backend.domain.admin.faq.QFaq.faq;
 import static com.farmer.backend.domain.admin.notice.QNotice.notice;
 import static com.farmer.backend.domain.admin.qna.QQna.qna;
-import static com.farmer.backend.domain.orderdetail.QOrderDetail.orderDetail;
+import static com.farmer.backend.domain.orderproduct.QOrderProduct.*;
+import static com.farmer.backend.domain.orderproduct.QOrderProduct.orderProduct;
 import static com.farmer.backend.domain.product.productreview.QProductReviews.productReviews;
 
 
@@ -92,10 +94,11 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
      * orderDetail 전체 리스트
      */
     @Override
-    public List<OrderDetail> orderProductFindAll(){
-        List<OrderDetail> orderProduct = query
-                .select(orderDetail)
-                .from(orderDetail)
+    public List<OrderProduct> orderProductFindAll(){
+
+        List<OrderProduct> orderProduct = query
+                .select(QOrderProduct.orderProduct)
+                .from(QOrderProduct.orderProduct)
                 .fetch();
 
         return orderProduct;

@@ -1,4 +1,4 @@
-package com.farmer.backend.domain.orderdetail;
+package com.farmer.backend.domain.orderproduct;
 
 import com.farmer.backend.domain.orders.Orders;
 import com.farmer.backend.domain.options.Options;
@@ -16,11 +16,11 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class OrderDetail {
+public class OrderProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "od_id")
+    @Column(name = "order_product_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
