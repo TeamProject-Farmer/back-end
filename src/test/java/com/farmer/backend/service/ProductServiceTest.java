@@ -59,4 +59,13 @@ class ProductServiceTest {
         }
     }
 
+    @Test
+    @DisplayName("베스트 상품 리스트")
+    void bestProductList() {
+        List<ResponseProductDtoList> bestProductList = productQueryRepositoryImpl.bestProductList();
+        for (ResponseProductDtoList bestProduct : bestProductList) {
+            log.info("bestProduct={}", bestProduct.getProductName());
+        }
+    }
+
 }
