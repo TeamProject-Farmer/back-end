@@ -1,10 +1,12 @@
 package com.farmer.backend.service;
 
 import com.farmer.backend.api.controller.product.response.ResponseProductDtoList;
+import com.farmer.backend.api.controller.product.response.ResponseShopBySizeProduct;
 import com.farmer.backend.api.controller.productcategory.response.ResponseCategoryDto;
 import com.farmer.backend.api.service.product.ProductService;
 import com.farmer.backend.domain.product.ProductOrderCondition;
 import com.farmer.backend.domain.product.ProductQueryRepository;
+import com.farmer.backend.domain.product.ProductSize;
 import com.farmer.backend.domain.product.productcategory.ProductCategoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -66,6 +68,13 @@ class ProductServiceTest {
         for (ResponseProductDtoList bestProduct : bestProductList) {
             log.info("bestProduct={}", bestProduct.getProductName());
         }
+    }
+
+    @Test
+    @DisplayName("사이즈별 대표 상품 조회")
+    void shopBySizeProductOne() {
+        ResponseShopBySizeProduct shopBySizeProductOne = productQueryRepositoryImpl.findByShopBySizeProductOne(ProductSize.M);
+        log.info("productOne={}", shopBySizeProductOne.getProductCategoryId());
     }
 
 }
