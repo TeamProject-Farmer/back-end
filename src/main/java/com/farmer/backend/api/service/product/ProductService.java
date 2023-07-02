@@ -4,8 +4,10 @@ import com.farmer.backend.api.controller.options.request.RequestOptionDto;
 import com.farmer.backend.api.controller.options.response.ResponseOptionDto;
 import com.farmer.backend.api.controller.product.request.RequestProductDto;
 import com.farmer.backend.api.controller.product.response.ResponseProductDto;
+import com.farmer.backend.api.controller.product.response.ResponseProductDtoList;
 import com.farmer.backend.domain.options.Options;
 import com.farmer.backend.domain.product.Product;
+import com.farmer.backend.domain.product.ProductOrderCondition;
 import com.farmer.backend.domain.product.productcategory.ProductCategory;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
@@ -18,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +39,14 @@ public class ProductService {
     private final OptionRepository optionRepository;
 
 
+    @Transactional(readOnly = true)
+    public List<ResponseProductDtoList> productList(ProductOrderCondition orderCondition) {
+        List<ResponseProductDtoList> productList = productQueryRepositoryImpl.productList(orderCondition);
+        return productList;
+    }
+
     /**
-     * 상품 전체 리스트
+     * 상품 전체 리스트(어드민)
      * @param pageable 페이징
      * @param productName 상품명 검색
      * @param orderCondition 정렬 순서
