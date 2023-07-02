@@ -1,9 +1,9 @@
 package com.farmer.backend.domain.admin.board;
 
-import com.farmer.backend.api.controller.admin.faq.request.SearchFaqCondition;
-import com.farmer.backend.api.controller.admin.notice.request.SearchNoticeCondition;
-import com.farmer.backend.api.controller.admin.qna.request.SearchQnaCondition;
-import com.farmer.backend.api.controller.admin.review.request.SearchReviewCondition;
+import com.farmer.backend.api.controller.faq.request.SearchFaqCondition;
+import com.farmer.backend.api.controller.notice.request.SearchNoticeCondition;
+import com.farmer.backend.api.controller.qna.request.SearchQnaCondition;
+import com.farmer.backend.api.controller.review.request.SearchReviewCondition;
 import com.farmer.backend.domain.admin.faq.Faq;
 import com.farmer.backend.domain.admin.notice.Notice;
 import com.farmer.backend.domain.admin.qna.Qna;
@@ -28,8 +28,6 @@ import java.util.Objects;
 import static com.farmer.backend.domain.admin.faq.QFaq.faq;
 import static com.farmer.backend.domain.admin.notice.QNotice.notice;
 import static com.farmer.backend.domain.admin.qna.QQna.qna;
-import static com.farmer.backend.domain.orderproduct.QOrderProduct.*;
-import static com.farmer.backend.domain.orderproduct.QOrderProduct.orderProduct;
 import static com.farmer.backend.domain.product.productreview.QProductReviews.productReviews;
 
 

@@ -1,6 +1,6 @@
 package com.farmer.backend.service;
 
-import com.farmer.backend.api.service.admin.product.ProductService;
+import com.farmer.backend.api.service.product.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

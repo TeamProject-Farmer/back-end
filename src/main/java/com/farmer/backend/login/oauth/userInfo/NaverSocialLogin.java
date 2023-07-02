@@ -1,7 +1,7 @@
 package com.farmer.backend.login.oauth.userInfo;
 
-import com.farmer.backend.api.controller.user.login.OAuthUserInfoDto;
-import com.farmer.backend.api.service.admin.mail.MailService;
+import com.farmer.backend.api.controller.login.OAuthUserInfoDto;
+import com.farmer.backend.api.service.mail.MailService;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.SocialType;
 import com.farmer.backend.exception.CustomException;
@@ -18,7 +18,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailSender;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;

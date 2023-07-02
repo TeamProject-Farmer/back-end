@@ -1,6 +1,6 @@
 package com.farmer.backend.domain.member;
 
-import com.farmer.backend.api.controller.admin.member.request.SearchMemberCondition;
+import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

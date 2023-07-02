@@ -1,6 +1,6 @@
 package com.farmer.backend.login.general.handler;
 
-import com.farmer.backend.api.controller.user.login.ResponseLoginMemberDto;
+import com.farmer.backend.api.controller.login.ResponseLoginMemberDto;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;

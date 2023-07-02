@@ -1,6 +1,6 @@
 package com.farmer.backend.domain.orderproduct;
 
-import com.farmer.backend.api.controller.admin.order.response.ResponseOrderDetailDto;
+import com.farmer.backend.api.controller.order.response.ResponseOrderDetailDto;
 
 import java.util.List;
 

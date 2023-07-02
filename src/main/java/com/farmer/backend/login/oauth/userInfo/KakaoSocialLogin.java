@@ -1,6 +1,6 @@
 package com.farmer.backend.login.oauth.userInfo;
 
-import com.farmer.backend.api.controller.user.login.OAuthUserInfoDto;
+import com.farmer.backend.api.controller.login.OAuthUserInfoDto;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.SocialType;
 import com.farmer.backend.exception.CustomException;
