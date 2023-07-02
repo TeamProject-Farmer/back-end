@@ -1,9 +1,11 @@
 package com.farmer.backend.service;
 
 import com.farmer.backend.api.controller.product.response.ResponseProductDtoList;
+import com.farmer.backend.api.controller.productcategory.response.ResponseCategoryDto;
 import com.farmer.backend.api.service.product.ProductService;
 import com.farmer.backend.domain.product.ProductOrderCondition;
 import com.farmer.backend.domain.product.ProductQueryRepository;
+import com.farmer.backend.domain.product.productcategory.ProductCategoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,6 +29,8 @@ class ProductServiceTest {
 
     @Autowired
     ProductQueryRepository productQueryRepositoryImpl;
+    @Autowired
+    ProductCategoryRepository productCategoryRepository;
 
     @Test
     @DisplayName("상품 전체 리스트")
@@ -42,6 +47,15 @@ class ProductServiceTest {
         List<ResponseProductDtoList> mdPickList = productQueryRepositoryImpl.mdPickList();
         for (ResponseProductDtoList product : mdPickList) {
             log.info("product={}", product.getProductName());
+        }
+    }
+
+    @Test
+    @DisplayName("상품 카테고리 리스트")
+    void productCategoryList() {
+        List<ResponseCategoryDto> categoryList = productCategoryRepository.findAll().stream().map(ResponseCategoryDto::categoryList).collect(Collectors.toList());
+        for (ResponseCategoryDto category : categoryList) {
+            log.info("category={}", category.getCategoryName());
         }
     }
 
