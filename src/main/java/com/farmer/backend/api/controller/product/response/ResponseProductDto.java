@@ -25,7 +25,6 @@ public class ResponseProductDto {
     private Integer discountRate;
     private List<ResponseOptionDto> options;
     private String thumbnailImg;
-    private String brandName;
     private ProductSize size;
     private String description;
     private String detailImg1;

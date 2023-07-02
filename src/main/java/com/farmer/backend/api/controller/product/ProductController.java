@@ -70,5 +70,15 @@ public class ProductController {
         return ResponseEntity.ok(shopBySizeProduct);
     }
 
+    /**
+     * 상품 상세 페이지
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "상품 상세 페이지", description = "상품 한건의 상세 정보를 확인합니다.")
+    @GetMapping("/detail/{productId}")
+    public ResponseEntity productDetail(@PathVariable Long productId) {
+        ResponseProductDto productDto = productService.productDetail(productId);
+        return ResponseEntity.ok(productDto);
+    }
 
 }

@@ -81,6 +81,18 @@ public class ProductService {
     }
 
     /**
+     * 쇼핑몰 상품 상세 페이지
+     * @param productId 상품 일련번호
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public ResponseProductDto productDetail(Long productId) {
+        List<ResponseOptionDto> options = optionRepository.findByProductId(productId).stream().map(ResponseOptionDto::optionList).collect(Collectors.toList());
+        ResponseProductDto productDto = productRepository.findById(productId).map(product -> ResponseProductDto.getOneProduct(product, options)).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        return productDto;
+    }
+
+    /**
      * 상품 전체 리스트(어드민)
      * @param pageable 페이징
      * @param productName 상품명 검색
