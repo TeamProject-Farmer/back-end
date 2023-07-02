@@ -11,11 +11,13 @@ public class ResponseCategoryDto {
 
     private Long categoryId;
     private String categoryName;
+    private String imgUrl;
 
     public static ResponseCategoryDto categoryList(ProductCategory category) {
         return ResponseCategoryDto.builder()
                 .categoryId(category.getId())
                 .categoryName(category.getName())
+                .imgUrl(category.getImgUrl())
                 .build();
     }
 }
