@@ -1,7 +1,7 @@
 package com.farmer.backend.domain.options;
 
 import com.farmer.backend.domain.product.Product;
-import com.farmer.backend.api.controller.admin.options.request.RequestOptionDto;
+import com.farmer.backend.api.controller.options.request.RequestOptionDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.farmer.backend.service.admin;
 
-import com.farmer.backend.api.service.admin.BoardService;
-import com.farmer.backend.api.service.admin.member.MemberService;
+import com.farmer.backend.api.service.BoardService;
+import com.farmer.backend.api.service.member.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

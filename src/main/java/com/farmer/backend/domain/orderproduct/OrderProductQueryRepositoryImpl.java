@@ -1,6 +1,6 @@
 package com.farmer.backend.domain.orderproduct;
 
-import com.farmer.backend.api.controller.admin.order.response.ResponseOrderDetailDto;
+import com.farmer.backend.api.controller.order.response.ResponseOrderDetailDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
