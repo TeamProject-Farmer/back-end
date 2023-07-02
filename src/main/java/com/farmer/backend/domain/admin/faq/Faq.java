@@ -49,7 +49,6 @@ public class Faq extends BaseTimeEntity {
                 .id(id)
                 .memberId(member.getId())
                 .memberEmail(member.getEmail())
-                .memberName(member.getUsername())
                 .categoryName(faqCategory.getName())
                 .question(question)
                 .answer(answer)

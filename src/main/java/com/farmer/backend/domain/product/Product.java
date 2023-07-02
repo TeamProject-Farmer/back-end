@@ -36,15 +36,15 @@ public class Product extends BaseTimeEntity {
     @NotNull
     private Integer price;
 
+    @NotNull
+    private int averageStarRating;
+
     private Integer sellQuantity;
 
     private Integer discountRate;
 
     @Column(length = 255)
     private String thumbnailImg;
-
-    @Column(length = 40)
-    private String brandName;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 50)
@@ -72,7 +72,6 @@ public class Product extends BaseTimeEntity {
         this.sellQuantity = productDto.getSellQuantity();
         this.discountRate = productDto.getDiscountRate();
         this.thumbnailImg = productDto.getThumbnailImg();
-        this.brandName = productDto.getBrandName();
         this.size = productDto.getSize();
         this.description = productDto.getDescription();
         this.detailImg1 = productDto.getDetailImg1();

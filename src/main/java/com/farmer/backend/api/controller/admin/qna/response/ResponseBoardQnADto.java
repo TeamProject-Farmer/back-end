@@ -35,7 +35,6 @@ public class ResponseBoardQnADto {
         return ResponseBoardQnADto.builder()
                 .id(qna.getId())
                 .memberEmail(qna.getMember().getEmail())
-                .memberName(qna.getMember().getUsername())
                 .productName(qna.getProduct().getName())
                 .subject(qna.getSubject())
                 .content(qna.getContent())

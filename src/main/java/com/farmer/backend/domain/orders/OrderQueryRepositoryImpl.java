@@ -33,9 +33,7 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
         List<ResponseOrdersDto> orderList = query
                 .select(Projections.constructor(ResponseOrdersDto.class,
                         orders.id,
-                        orders.member.username,
                         orders.member.email,
-                        orders.member.ph,
                         orders.orderStatus,
                         orders.orderPrice,
                         orders.payMethod,
@@ -44,7 +42,6 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                         orders.createdDate))
                 .from(orders)
                 .where(likeOrderNumber(searchCond.getOrderNumber()),
-                        likeMemberName(searchCond.getMemberName()),
                         likeEmail(searchCond.getEmail()),
                         eqOrderStatus(sortOrderCond))
                 .join(orders.member, member)
@@ -57,7 +54,6 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                 .select(orders.count())
                 .from(orders)
                 .where(likeOrderNumber(searchCond.getOrderNumber()),
-                        likeMemberName(searchCond.getMemberName()),
                         likeEmail(searchCond.getEmail()),
                         eqOrderStatus(sortOrderCond)
                 )
@@ -70,9 +66,7 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
         List<ResponseOrdersDto> orderList = query
                 .select(Projections.constructor(ResponseOrdersDto.class,
                         orders.id,
-                        orders.member.username,
                         orders.member.email,
-                        orders.member.ph,
                         orders.orderStatus,
                         orders.orderPrice,
                         orders.payMethod,
@@ -81,7 +75,6 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                         orders.createdDate))
                 .from(orders)
                 .where(likeOrderNumber(searchCond.getOrderNumber()),
-                        likeMemberName(searchCond.getMemberName()),
                         likeEmail(searchCond.getEmail()),
                         orders.orderStatus.ne(OrderStatus.WAIT),
                         orders.orderStatus.ne(OrderStatus.REFUND))
@@ -95,7 +88,6 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                 .select(orders.count())
                 .from(orders)
                 .where(likeOrderNumber(searchCond.getOrderNumber()),
-                        likeMemberName(searchCond.getMemberName()),
                         likeEmail(searchCond.getEmail())
                 )
                 .fetchOne();
@@ -109,8 +101,6 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                 .select(Projections.constructor(ResponseOrdersAndPaymentDto.class,
                         orders.id,
                         orders.orderNumber,
-                        orders.member.username,
-                        orders.member.ph,
                         orders.member.email,
                         orders.delivery.address,
                         orders.delivery.deliveryStatus,
@@ -136,9 +126,7 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
         List<ResponseOrdersDto> orderList = query
                 .select(Projections.constructor(ResponseOrdersDto.class,
                         orders.id,
-                        orders.member.username,
                         orders.member.email,
-                        orders.member.ph,
                         orders.orderStatus,
                         orders.orderPrice,
                         orders.payMethod,
@@ -147,7 +135,6 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                         orders.createdDate))
                 .from(orders)
                 .where(likeOrderNumber(searchCond.getOrderNumber()),
-                        likeMemberName(searchCond.getMemberName()),
                         likeEmail(searchCond.getEmail())
                 )
                 .join(orders.member, member)
@@ -160,7 +147,6 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                 .select(orders.count())
                 .from(orders)
                 .where(likeOrderNumber(searchCond.getOrderNumber()),
-                        likeMemberName(searchCond.getMemberName()),
                         likeEmail(searchCond.getEmail())
                 )
                 .fetchOne();
@@ -172,9 +158,6 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
         return orderNumber != null ? orders.orderNumber.contains(orderNumber) : null;
     }
 
-    private BooleanExpression likeMemberName(String memberName) {
-        return memberName != null ? orders.member.username.contains(memberName) : null;
-    }
 
     private BooleanExpression likeEmail(String email) {
         return email != null ? orders.member.email.contains(email) : null;

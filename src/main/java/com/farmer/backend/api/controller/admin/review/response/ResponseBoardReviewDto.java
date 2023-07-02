@@ -27,7 +27,6 @@ public class ResponseBoardReviewDto {
     public static ResponseBoardReviewDto getReview(ProductReviews reviews, List<String> productList){
         return ResponseBoardReviewDto.builder()
                 .id(reviews.getId())
-                .memberName(reviews.getMember().getUsername())
                 .memberEmail(reviews.getMember().getEmail())
                 .productName(productList)
                 .content(reviews.getContent())
