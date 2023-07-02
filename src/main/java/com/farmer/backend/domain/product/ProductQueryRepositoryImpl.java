@@ -1,6 +1,7 @@
 package com.farmer.backend.domain.product;
 
 import com.farmer.backend.api.controller.product.response.ResponseProductDtoList;
+import com.farmer.backend.api.controller.product.response.ResponseShopBySizeProduct;
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.farmer.backend.domain.product.QProduct.product;
+import static com.farmer.backend.domain.product.productcategory.QProductCategory.productCategory;
 
 
 @Repository
@@ -97,6 +99,20 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                 .orderBy(product.averageStarRating.desc())
                 .fetch();
         return productList;
+    }
+
+    @Override
+    public ResponseShopBySizeProduct findByShopBySizeProductOne(ProductSize size) {
+        ResponseShopBySizeProduct shopBySizeProduct = query
+                .select(Projections.constructor(ResponseShopBySizeProduct.class,
+                        product.thumbnailImg,
+                        product.size,
+                        productCategory.id))
+                .from(product)
+                .join(product.category, productCategory)
+                .where(product.size.eq(size))
+                .fetchFirst();
+        return shopBySizeProduct;
     }
 
     private OrderSpecifier<?> productOrderCondition(ProductOrderCondition orderCondition) {

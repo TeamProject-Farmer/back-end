@@ -5,15 +5,13 @@ import com.farmer.backend.api.controller.options.response.ResponseOptionDto;
 import com.farmer.backend.api.controller.product.request.RequestProductDto;
 import com.farmer.backend.api.controller.product.response.ResponseProductDto;
 import com.farmer.backend.api.controller.product.response.ResponseProductDtoList;
+import com.farmer.backend.api.controller.product.response.ResponseShopBySizeProduct;
 import com.farmer.backend.domain.options.Options;
-import com.farmer.backend.domain.product.Product;
-import com.farmer.backend.domain.product.ProductOrderCondition;
+import com.farmer.backend.domain.product.*;
 import com.farmer.backend.domain.product.productcategory.ProductCategory;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.domain.options.OptionRepository;
-import com.farmer.backend.domain.product.ProductQueryRepository;
-import com.farmer.backend.domain.product.ProductRepository;
 import com.farmer.backend.domain.product.productcategory.ProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,6 +67,17 @@ public class ProductService {
     public List<ResponseProductDtoList> bestProductList() {
         List<ResponseProductDtoList> bestProductList = productQueryRepositoryImpl.bestProductList();
         return bestProductList;
+    }
+
+    /**
+     * 쇼핑몰 크기별 대표 상품 조회
+     * @param size
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public ResponseShopBySizeProduct shopBySizeOne(ProductSize size) {
+        ResponseShopBySizeProduct productBySize = productQueryRepositoryImpl.findByShopBySizeProductOne(size);
+        return productBySize;
     }
 
     /**
