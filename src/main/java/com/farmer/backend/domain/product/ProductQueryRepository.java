@@ -11,4 +11,6 @@ public interface ProductQueryRepository {
 
     List<ResponseProductDtoList> productList(ProductOrderCondition orderCondition);
 
+    List<ResponseProductDtoList> mdPickList();
+
 }

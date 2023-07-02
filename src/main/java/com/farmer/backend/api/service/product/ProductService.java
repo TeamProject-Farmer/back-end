@@ -39,10 +39,25 @@ public class ProductService {
     private final OptionRepository optionRepository;
 
 
+    /**
+     * 쇼핑몰 상품 리스트
+     * @param orderCondition 정렬조건
+     * @return
+     */
     @Transactional(readOnly = true)
     public List<ResponseProductDtoList> productList(ProductOrderCondition orderCondition) {
         List<ResponseProductDtoList> productList = productQueryRepositoryImpl.productList(orderCondition);
         return productList;
+    }
+
+    /**
+     * 쇼핑몰 MD PICK 상품 리스트
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<ResponseProductDtoList> mdPickList() {
+        List<ResponseProductDtoList> mdpickList = productQueryRepositoryImpl.mdPickList();
+        return mdpickList;
     }
 
     /**

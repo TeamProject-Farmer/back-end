@@ -25,6 +25,9 @@ public class ProductController {
 
     private final ProductService productService;
 
+    /**
+     * 상품 전체 리스트
+     */
     @ApiDocumentResponse
     @Operation(summary = "상품 전체 리스트", description = "상품 전체 리스트를 출력합니다.")
     @GetMapping
@@ -32,5 +35,13 @@ public class ProductController {
         return productService.productList(orderCondition);
     }
 
-
+    /**
+     * MD PICK 상품 리스트
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "MD PICK 리스트", description = "MD PICK 전체 리스트를 출력합니다.")
+    @GetMapping("/md-pick")
+    public List<ResponseProductDtoList> mdPickList() {
+        return productService.mdPickList();
+    }
 }
