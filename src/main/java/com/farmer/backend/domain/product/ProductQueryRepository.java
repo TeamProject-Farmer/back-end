@@ -13,4 +13,5 @@ public interface ProductQueryRepository {
 
     List<ResponseProductDtoList> mdPickList();
 
+    List<ResponseProductDtoList> bestProductList();
 }

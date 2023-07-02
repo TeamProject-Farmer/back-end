@@ -61,6 +61,16 @@ public class ProductService {
     }
 
     /**
+     * 쇼핑몰 베스트 식물 리스트
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<ResponseProductDtoList> bestProductList() {
+        List<ResponseProductDtoList> bestProductList = productQueryRepositoryImpl.bestProductList();
+        return bestProductList;
+    }
+
+    /**
      * 상품 전체 리스트(어드민)
      * @param pageable 페이징
      * @param productName 상품명 검색
@@ -169,5 +179,4 @@ public class ProductService {
     public Page<ResponseProductDto> searchActionProductList(PageRequest pageable, String productName) {
         return productQueryRepositoryImpl.findAll(pageable, productName, null).map(ResponseProductDto::getAllProductList);
     }
-
 }

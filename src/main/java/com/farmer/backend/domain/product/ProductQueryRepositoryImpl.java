@@ -83,6 +83,22 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
         return productList;
     }
 
+    @Override
+    public List<ResponseProductDtoList> bestProductList() {
+        List<ResponseProductDtoList> productList = query
+                .select(Projections.constructor(ResponseProductDtoList.class,
+                        product.id,
+                        product.name,
+                        product.discountRate,
+                        product.price,
+                        product.averageStarRating,
+                        product.reviewCount))
+                .from(product)
+                .orderBy(product.averageStarRating.desc())
+                .fetch();
+        return productList;
+    }
+
     private OrderSpecifier<?> productOrderCondition(ProductOrderCondition orderCondition) {
         Order order = Order.DESC;
 

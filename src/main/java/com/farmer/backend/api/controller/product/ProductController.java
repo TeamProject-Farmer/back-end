@@ -44,4 +44,14 @@ public class ProductController {
     public List<ResponseProductDtoList> mdPickList() {
         return productService.mdPickList();
     }
+
+    /**
+     * 베스트 식물 리스트
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "베스트 식물 리스트", description = "베스트 식물 리스트를 10위까지 조회합니다.")
+    @GetMapping("/best-product")
+    public List<ResponseProductDtoList> bestProductList() {
+        return productService.bestProductList();
+    }
 }
