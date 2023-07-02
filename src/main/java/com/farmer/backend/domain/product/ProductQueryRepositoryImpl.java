@@ -96,6 +96,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                         product.averageStarRating,
                         product.reviewCount))
                 .from(product)
+                .limit(10)
                 .orderBy(product.averageStarRating.desc())
                 .fetch();
         return productList;
