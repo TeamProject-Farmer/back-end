@@ -79,6 +79,8 @@ public class MemberController {
     /**
      * 소셜로그인 (KAKAO, GOOGLE, NAVER)
      */
+    @ApiDocumentResponse
+    @Operation(summary = "소셜 로그인",description = "소셜 로그인을 진행합니다.")
     @GetMapping(value = "/login/oauth/{socialType}")
     public OAuthUserInfoDto oauthLogin (@PathVariable(name = "socialType") String socialType, @RequestParam String code) {
 

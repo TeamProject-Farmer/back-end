@@ -16,14 +16,25 @@ public class OAuthUserInfoDto {
     private String socialId;
     private String email;
     private String nickname;
-
+    private Long point;
+    private Grade grade;
+    private UserRole userRole;
+    private AccountStatus accountStatus;
+    private Long memberCoupon;
+    private Long cumulativeAmount;
     private String accessToken;
     private String refreshToken;
 
-    public static OAuthUserInfoDto getUserInfo(Optional<Member> member){
+    public static OAuthUserInfoDto getUserInfo(Optional<Member> member,Long memberCoupon){
         return OAuthUserInfoDto.builder()
                 .email(member.get().getEmail())
                 .nickname(member.get().getNickname())
+                .grade(member.get().getGrade())
+                .point(member.get().getPoint())
+                .userRole(member.get().getRole())
+                .memberCoupon(memberCoupon)
+                .accountStatus(member.get().getAccountStatus())
+                .cumulativeAmount(member.get().getCumulativeAmount())
                 .accessToken(member.get().getAccessToken())
                 .refreshToken(member.get().getRefreshToken())
                 .socialType(SocialType.valueOf(member.get().getSocialType().name()))

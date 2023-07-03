@@ -4,6 +4,7 @@ import com.farmer.backend.api.controller.login.OAuthUserInfoDto;
 import com.farmer.backend.api.service.mail.MailService;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.SocialType;
+import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.jwt.JwtService;
@@ -32,7 +33,7 @@ public class NaverSocialLogin implements OAuthLogin{
 
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
-    private final MailService mailService;
+    private final MemberCouponRepository memberCouponRepository;
 
     @Value("${spring.security.oauth2.client.registration.naver.client-id}")
     private String clientId;
@@ -49,6 +50,7 @@ public class NaverSocialLogin implements OAuthLogin{
     String email = "";
 
     String nickname="";
+    Long couponCount;
 
     /**
      * 인가 코드를 통해 AccessToken 얻기
@@ -130,13 +132,15 @@ public class NaverSocialLogin implements OAuthLogin{
                 naverUser = Optional.ofNullable(userSave(userInfo));
             }
 
+            couponCount = memberCouponRepository.countByMemberId(naverUser.get().getId());
+
         } catch (ParseException e) {
             throw new CustomException(ErrorCode.NAVER_LOGIN_FAILURE);
         }catch (Exception e) {
             throw new CustomException(ErrorCode.NAVER_LOGIN_FAILURE);
         }
 
-        return OAuthUserInfoDto.getUserInfo(naverUser);
+        return OAuthUserInfoDto.getUserInfo(naverUser,couponCount);
     }
 
     /**
