@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-
 public class ResponseLoginMemberDto {
 
     private String email;

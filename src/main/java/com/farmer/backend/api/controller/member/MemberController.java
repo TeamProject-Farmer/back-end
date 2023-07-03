@@ -3,12 +3,10 @@ package com.farmer.backend.api.controller.member;
 import com.farmer.backend.config.ApiDocumentResponse;
 import com.farmer.backend.api.controller.join.EmailDto;
 import com.farmer.backend.api.controller.join.RequestJoinDto;
-import com.farmer.backend.api.controller.login.OAuthUserInfoDto;
+import com.farmer.backend.api.controller.login.ResponseOAuthUserInfoDto;
 import com.farmer.backend.api.service.member.MemberService;
-import com.farmer.backend.domain.memberscoupon.QMembersCoupon;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -82,7 +80,7 @@ public class MemberController {
     @ApiDocumentResponse
     @Operation(summary = "소셜 로그인",description = "소셜 로그인을 진행합니다.")
     @GetMapping(value = "/login/oauth/{socialType}")
-    public OAuthUserInfoDto oauthLogin (@PathVariable(name = "socialType") String socialType, @RequestParam String code) {
+    public ResponseOAuthUserInfoDto oauthLogin (@PathVariable(name = "socialType") String socialType, @RequestParam String code) {
 
         return memberService.socialUserInfo(socialType,code);
 

@@ -5,7 +5,7 @@ import com.farmer.backend.api.controller.member.response.ResponseMemberDto;
 import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
 import com.farmer.backend.api.controller.join.EmailDto;
 import com.farmer.backend.api.controller.join.RequestJoinDto;
-import com.farmer.backend.api.controller.login.OAuthUserInfoDto;
+import com.farmer.backend.api.controller.login.ResponseOAuthUserInfoDto;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
@@ -219,7 +219,7 @@ public class MemberService {
      * @param socialType (kakao, google, naver) 소셜 로그인 타입
      * @param code 인가코드
      */
-    public OAuthUserInfoDto socialUserInfo(String socialType, String code) {
+    public ResponseOAuthUserInfoDto socialUserInfo(String socialType, String code) {
 
         if (socialType.equals("google")) {
             return googleSocialLogin.getUserInfo(code);
