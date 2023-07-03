@@ -2,12 +2,15 @@ package com.farmer.backend.domain.memberscoupon;
 
 import com.farmer.backend.domain.coupon.Coupon;
 import com.farmer.backend.domain.member.Member;
-import lombok.Getter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @Getter
+@Builder
 public class MembersCoupon {
 
     @Id

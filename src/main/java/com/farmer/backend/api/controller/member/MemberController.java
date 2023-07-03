@@ -5,8 +5,10 @@ import com.farmer.backend.api.controller.join.EmailDto;
 import com.farmer.backend.api.controller.join.RequestJoinDto;
 import com.farmer.backend.api.controller.login.OAuthUserInfoDto;
 import com.farmer.backend.api.service.member.MemberService;
+import com.farmer.backend.domain.memberscoupon.QMembersCoupon;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -83,6 +85,7 @@ public class MemberController {
         return memberService.socialUserInfo(socialType,code);
 
     }
+
 
 
 }
