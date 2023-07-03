@@ -2,6 +2,8 @@ package com.farmer.backend.api.service.news;
 
 import com.farmer.backend.api.controller.news.response.ResponseNewsDto;
 import com.farmer.backend.domain.news.NewsRepository;
+import com.farmer.backend.exception.CustomException;
+import com.farmer.backend.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,7 @@ public class NewsService {
     private final NewsRepository newsRepository;
 
     @Transactional(readOnly = true)
-    public List<ResponseNewsDto> findNewsInfo() {
-        return newsRepository.findAll().stream().map(ResponseNewsDto::newsInfo).collect(Collectors.toList());
+    public ResponseNewsDto findNewsInfo() {
+        return newsRepository.findNews().map(ResponseNewsDto::newsInfo).orElseThrow(() -> new CustomException(ErrorCode.NEWS_NOT_FOUND));
     }
 }
