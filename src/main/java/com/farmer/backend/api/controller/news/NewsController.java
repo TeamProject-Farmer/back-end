@@ -21,7 +21,7 @@ public class NewsController {
     private final NewsService newsService;
 
     @GetMapping
-    public List<ResponseNewsDto> newsInfo() {
+    public ResponseNewsDto newsInfo() {
         return newsService.findNewsInfo();
     }
 
