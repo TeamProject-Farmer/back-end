@@ -20,7 +20,6 @@ public class ResponseLoginMemberDto {
     private Long point;
     private Grade grade;
     private UserRole role;
-    private AccountStatus accountStatus;
     private Long cumulativeAmount;
     private Long memberCoupon;
 
@@ -35,7 +34,6 @@ public class ResponseLoginMemberDto {
                 .grade(member.getGrade())
                 .role(member.getRole())
                 .memberCoupon(memberCoupon)
-                .accountStatus(member.getAccountStatus())
                 .cumulativeAmount(member.getCumulativeAmount())
                 .accessToken(member.getAccessToken())
                 .refreshToken(member.getRefreshToken())

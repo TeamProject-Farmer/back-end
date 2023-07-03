@@ -20,7 +20,6 @@ public class ResponseOAuthUserInfoDto {
     private Long point;
     private Grade grade;
     private UserRole userRole;
-    private AccountStatus accountStatus;
     private Long memberCoupon;
     private Long cumulativeAmount;
     private String accessToken;
@@ -34,7 +33,6 @@ public class ResponseOAuthUserInfoDto {
                 .point(member.get().getPoint())
                 .userRole(member.get().getRole())
                 .memberCoupon(memberCoupon)
-                .accountStatus(member.get().getAccountStatus())
                 .cumulativeAmount(member.get().getCumulativeAmount())
                 .accessToken(member.get().getAccessToken())
                 .refreshToken(member.get().getRefreshToken())
