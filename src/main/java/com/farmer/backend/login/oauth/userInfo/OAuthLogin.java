@@ -1,5 +1,6 @@
 package com.farmer.backend.login.oauth.userInfo;
-import com.farmer.backend.api.controller.login.OAuthUserInfoDto;
+import com.farmer.backend.api.controller.login.RequestOAuthUserInfoDto;
+import com.farmer.backend.api.controller.login.ResponseOAuthUserInfoDto;
 import com.farmer.backend.domain.member.Member;
 
 
@@ -7,9 +8,9 @@ public interface OAuthLogin {
 
     String getAccessToken(String code);
 
-    OAuthUserInfoDto getUserInfo(String code) ;
+    ResponseOAuthUserInfoDto getUserInfo(String code) ;
 
-    Member userSave(OAuthUserInfoDto userInfo);
+    Member userSave(RequestOAuthUserInfoDto userInfo);
 
 
 }
