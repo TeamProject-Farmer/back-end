@@ -1,8 +1,10 @@
 package com.farmer.backend.login.oauth.userInfo;
 
-import com.farmer.backend.api.controller.login.OAuthUserInfoDto;
+import com.farmer.backend.api.controller.login.RequestOAuthUserInfoDto;
+import com.farmer.backend.api.controller.login.ResponseOAuthUserInfoDto;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.SocialType;
+import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.jwt.JwtService;
@@ -31,6 +33,7 @@ public class KakaoSocialLogin implements OAuthLogin {
 
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
+    private final MemberCouponRepository memberCouponRepository;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String clientId;
@@ -45,7 +48,7 @@ public class KakaoSocialLogin implements OAuthLogin {
     String socialId = "";
     String email = "";
     String nickname="";
-
+    Long couponCount;
     /**
      * 인가 코드를 통해 AccessToken 얻기
      */
@@ -91,7 +94,7 @@ public class KakaoSocialLogin implements OAuthLogin {
      * AccessToken으로 사용자 정보 얻기
      */
     @Override
-    public OAuthUserInfoDto getUserInfo(String code) {
+    public ResponseOAuthUserInfoDto getUserInfo(String code) {
         accessToken = getAccessToken(code);
 
         try {
@@ -115,8 +118,8 @@ public class KakaoSocialLogin implements OAuthLogin {
             JSONObject profile = (JSONObject) account.get("profile");
 
             socialId = String.valueOf(jsonObj.get("id"));
-            email = String.valueOf(account.get("email"));
-            nickname=String.valueOf(profile.get("nickname"))+ (int)((Math.random() * 8999) + 1000);
+            email = String.valueOf(account.get("email")) +"[" +socialType +"]";
+            nickname=String.valueOf(profile.get("nickname"))+(int)((Math.random() * 8999) + 1000);
             accessToken = jwtService.createAccessToken(email);
             refreshToken = jwtService.createRefreshToken();
 
@@ -124,10 +127,11 @@ public class KakaoSocialLogin implements OAuthLogin {
                 kakaoUser=memberRepository.findBySocialId(socialId);
             }
             else{
-                OAuthUserInfoDto userInfo = new OAuthUserInfoDto(socialId,socialType,email,nickname,accessToken,refreshToken);
+                RequestOAuthUserInfoDto userInfo = new RequestOAuthUserInfoDto(socialId,socialType,email,nickname,accessToken,refreshToken);
                 kakaoUser = Optional.ofNullable(userSave(userInfo));
             }
 
+            couponCount=memberCouponRepository.countByMemberId(kakaoUser.get().getId());
 
         } catch (ParseException e) {
             throw new CustomException(ErrorCode.KAKAO_LOGIN_FAILURE);
@@ -137,14 +141,14 @@ public class KakaoSocialLogin implements OAuthLogin {
 
 
 
-        return OAuthUserInfoDto.getUserInfo(kakaoUser);
+        return ResponseOAuthUserInfoDto.getUserInfo(kakaoUser,couponCount);
     }
 
     /**
      * 유저 정보 저장
      */
     @Override
-    public Member userSave(OAuthUserInfoDto userInfo) {
+    public Member userSave(RequestOAuthUserInfoDto userInfo) {
 
         Member member = userInfo.toEntity(userInfo);
 

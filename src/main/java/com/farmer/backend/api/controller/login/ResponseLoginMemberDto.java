@@ -1,5 +1,6 @@
 package com.farmer.backend.api.controller.login;
 
+import com.farmer.backend.domain.member.AccountStatus;
 import com.farmer.backend.domain.member.Grade;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.UserRole;
@@ -12,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-
 public class ResponseLoginMemberDto {
 
     private String email;
@@ -20,17 +20,21 @@ public class ResponseLoginMemberDto {
     private Long point;
     private Grade grade;
     private UserRole role;
+    private Long cumulativeAmount;
+    private Long memberCoupon;
 
     private String accessToken;
     private String refreshToken;
 
-    public static ResponseLoginMemberDto getLoginMember(Member member){
+    public static ResponseLoginMemberDto getLoginMember(Member member,Long memberCoupon){
         return ResponseLoginMemberDto.builder()
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .point(member.getPoint())
                 .grade(member.getGrade())
                 .role(member.getRole())
+                .memberCoupon(memberCoupon)
+                .cumulativeAmount(member.getCumulativeAmount())
                 .accessToken(member.getAccessToken())
                 .refreshToken(member.getRefreshToken())
                 .build();

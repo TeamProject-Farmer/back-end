@@ -1,36 +1,22 @@
 package com.farmer.backend.api.controller.login;
 
 import com.farmer.backend.domain.member.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.util.Optional;
 import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
-@Builder
-public class OAuthUserInfoDto {
+@NoArgsConstructor
+public class RequestOAuthUserInfoDto {
 
     private SocialType socialType;
     private String socialId;
     private String email;
     private String nickname;
-
     private String accessToken;
     private String refreshToken;
-
-    public static OAuthUserInfoDto getUserInfo(Optional<Member> member){
-        return OAuthUserInfoDto.builder()
-                .email(member.get().getEmail())
-                .nickname(member.get().getNickname())
-                .accessToken(member.get().getAccessToken())
-                .refreshToken(member.get().getRefreshToken())
-                .socialType(SocialType.valueOf(member.get().getSocialType().name()))
-                .socialId(member.get().getSocialId())
-                .build();
-    }
-    public OAuthUserInfoDto(String socialId, SocialType socialType, String email, String nickname, String accessToken, String refreshToken){
+    public RequestOAuthUserInfoDto(String socialId, SocialType socialType, String email, String nickname, String accessToken, String refreshToken){
         this.socialId=socialId;
         this.socialType=socialType;
         this.email=email;
@@ -39,7 +25,7 @@ public class OAuthUserInfoDto {
         this.refreshToken=refreshToken;
     }
 
-    public Member toEntity(OAuthUserInfoDto userInfo){
+    public Member toEntity(RequestOAuthUserInfoDto userInfo){
         return Member.builder()
                 .email(userInfo.email)
                 .password(String.valueOf(UUID.randomUUID()))
