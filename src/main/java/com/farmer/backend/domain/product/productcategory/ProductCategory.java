@@ -23,6 +23,9 @@ public class ProductCategory extends BaseTimeEntity {
     @Column(length = 20)
     private String name;
 
+    @Column(length = 512)
+    private String imgUrl;
+
     @Column(length = 1)
     @NotNull
     private char useYn;

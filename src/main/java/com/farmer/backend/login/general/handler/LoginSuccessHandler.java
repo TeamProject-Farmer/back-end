@@ -1,7 +1,8 @@
 package com.farmer.backend.login.general.handler;
 
-import com.farmer.backend.api.controller.user.login.ResponseLoginMemberDto;
+import com.farmer.backend.api.controller.login.ResponseLoginMemberDto;
 import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.jwt.JwtService;
@@ -21,10 +22,9 @@ import java.io.IOException;
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtService jwtService;
-
     private final ObjectMapper objectMapper;
     private final MemberRepository memberRepository;
-
+    private final MemberCouponRepository memberCouponRepository;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
@@ -40,7 +40,9 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         member.updateToken(refreshToken,accessToken);
         memberRepository.saveAndFlush(member);
 
-        ResponseLoginMemberDto loginMemberDto = ResponseLoginMemberDto.getLoginMember(member);
+        Long couponCount = memberCouponRepository.countByMemberId(member.getId());
+        ResponseLoginMemberDto loginMemberDto = ResponseLoginMemberDto.getLoginMember(member,couponCount);
+
 
         String res = objectMapper.writeValueAsString(loginMemberDto);
 

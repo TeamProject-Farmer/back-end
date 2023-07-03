@@ -1,5 +1,5 @@
 package com.farmer.backend.domain.member;
-import com.farmer.backend.api.controller.admin.member.request.SearchMemberCondition;
+import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;

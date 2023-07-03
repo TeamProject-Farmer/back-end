@@ -1,10 +1,11 @@
 package com.farmer.backend.domain.product;
 
 import com.farmer.backend.domain.BaseTimeEntity;
-import com.farmer.backend.api.controller.admin.product.request.RequestProductDto;
+import com.farmer.backend.api.controller.product.request.RequestProductDto;
 import com.farmer.backend.domain.product.productcategory.ProductCategory;
 import com.sun.istack.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -36,10 +37,14 @@ public class Product extends BaseTimeEntity {
     @NotNull
     private Integer price;
 
-    @NotNull
-    private int averageStarRating;
-
     private Integer sellQuantity;
+
+    @Column(columnDefinition = "0")
+    private Double averageStarRating;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private ProductDivision division;
 
     private Integer discountRate;
 
@@ -49,6 +54,9 @@ public class Product extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(length = 50)
     private ProductSize size;
+
+    @ColumnDefault("0")
+    private Long reviewCount;
 
     @Column(columnDefinition = "text")
     private String description;

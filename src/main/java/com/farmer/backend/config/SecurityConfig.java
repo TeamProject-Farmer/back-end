@@ -1,6 +1,7 @@
 package com.farmer.backend.config;
 
 
+import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
 import com.farmer.backend.jwt.JwtAuthenticationProcessingFilter;
 import com.farmer.backend.jwt.JwtService;
 import com.farmer.backend.login.general.CustomLoginFilter;
@@ -33,7 +34,7 @@ public class SecurityConfig  {
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
-
+    private final MemberCouponRepository memberCouponRepository;
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -97,7 +98,7 @@ public class SecurityConfig  {
 
     @Bean
     public LoginSuccessHandler loginSuccessHandler() {
-        return new LoginSuccessHandler(jwtService,objectMapper,memberRepository);
+        return new LoginSuccessHandler(jwtService,objectMapper,memberRepository,memberCouponRepository);
     }
 
     @Bean

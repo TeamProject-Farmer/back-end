@@ -3,12 +3,12 @@ package com.farmer.backend.domain.admin.board;
 import com.farmer.backend.domain.admin.notice.Notice;
 import com.farmer.backend.domain.admin.qna.Qna;
 import com.farmer.backend.domain.admin.faq.Faq;
-import com.farmer.backend.domain.orderdetail.OrderDetail;
+import com.farmer.backend.domain.orderproduct.OrderProduct;
 import com.farmer.backend.domain.product.productreview.ProductReviews;
-import com.farmer.backend.api.controller.admin.faq.request.SearchFaqCondition;
-import com.farmer.backend.api.controller.admin.notice.request.SearchNoticeCondition;
-import com.farmer.backend.api.controller.admin.qna.request.SearchQnaCondition;
-import com.farmer.backend.api.controller.admin.review.request.SearchReviewCondition;
+import com.farmer.backend.api.controller.faq.request.SearchFaqCondition;
+import com.farmer.backend.api.controller.notice.request.SearchNoticeCondition;
+import com.farmer.backend.api.controller.qna.request.SearchQnaCondition;
+import com.farmer.backend.api.controller.review.request.SearchReviewCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -26,7 +26,7 @@ public interface BoardQueryRepository
 
     Page<Faq> findAll(Pageable pageable, String sortQnaCond, SearchFaqCondition searchFaqCondition);
 
-    List<OrderDetail> orderProductFindAll();
+    List<OrderProduct> orderProductFindAll();
 
     void deleteQna(Long qnaId);
 

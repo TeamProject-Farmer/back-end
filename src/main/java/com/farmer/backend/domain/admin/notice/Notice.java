@@ -3,8 +3,8 @@ package com.farmer.backend.domain.admin.notice;
 
 import com.farmer.backend.domain.BaseTimeEntity;
 import com.farmer.backend.domain.member.Member;
-import com.farmer.backend.api.controller.admin.notice.request.RequestNoticeDto;
-import com.farmer.backend.api.controller.admin.notice.response.ResponseNoticeDto;
+import com.farmer.backend.api.controller.notice.request.RequestNoticeDto;
+import com.farmer.backend.api.controller.notice.response.ResponseNoticeDto;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
