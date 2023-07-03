@@ -1,5 +1,7 @@
 package com.farmer.backend.api.service.orderproduct;
 
+import com.farmer.backend.api.controller.orderproduct.request.RequestOrderProductStatusSearchDto;
+import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductDetailDto;
 import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductDto;
 import com.farmer.backend.api.controller.product.response.ResponseProductDto;
 import com.farmer.backend.domain.member.Member;
@@ -29,12 +31,12 @@ public class OrderProductService {
 
     /**
      * 마이페이지 -> 구매목록 기능(최대 6까지 데이터 출력)
-     * @param username 회원 이메일
-     * @return ResponseOrderProductDto
+     * @param userId 회원 아이디(이메일)
+     * @return List<ResponseOrderProductDto>
      */
     @Transactional(readOnly = true)
-    public List<ResponseOrderProductDto> shoppingList(String username) {
-        Member findMember = memberRepository.findByEmail(username).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    public List<ResponseOrderProductDto> shoppingList(String userId) {
+        Member findMember = memberRepository.findByEmail(userId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         List<Orders> orderList = orderRepository.findByMemberId(findMember.getId());
         List<ResponseOrderProductDto> responseOrderProductDto = new ArrayList<>();
 
@@ -51,4 +53,20 @@ public class OrderProductService {
         return responseOrderProductDto;
     }
 
+    /**
+     * 마이페이지 장바구니 목록(주문내역 조회)
+     * @param statusSearchDto 날짜 정보, 주문 처리상태 검색정보
+     * @return List<ResponseOrderProductDetailDto>
+     */
+    @Transactional(readOnly = true)
+    public List<ResponseOrderProductDetailDto> orderList(RequestOrderProductStatusSearchDto statusSearchDto, String userId) {
+        Member findMember = memberRepository.findByEmail(userId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        List<Orders> orderList = orderRepository.findByMemberId(findMember.getId());
+        List<ResponseOrderProductDetailDto> orderProductList = new ArrayList<>();
+        for (Orders orders : orderList) {
+            orderProductList = orderProductQueryRepositoryImpl.findUserOrderProductDetail(statusSearchDto, orders.getId());
+        }
+
+        return orderProductList;
+    }
 }
