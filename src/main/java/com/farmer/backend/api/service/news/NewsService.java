@@ -19,6 +19,10 @@ public class NewsService {
 
     private final NewsRepository newsRepository;
 
+    /**
+     * 메인 페이지 기사 정보
+     * @return ResponseNewsDto
+     */
     @Transactional(readOnly = true)
     public ResponseNewsDto findNewsInfo() {
         return newsRepository.findNews().map(ResponseNewsDto::newsInfo).orElseThrow(() -> new CustomException(ErrorCode.NEWS_NOT_FOUND));
