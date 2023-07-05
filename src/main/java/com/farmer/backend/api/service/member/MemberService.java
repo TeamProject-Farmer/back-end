@@ -235,8 +235,6 @@ public class MemberService {
 
     }
 
-
-
     /**
      * 회원 프로필 수정
      *
