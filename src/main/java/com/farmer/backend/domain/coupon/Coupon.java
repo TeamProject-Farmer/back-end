@@ -38,6 +38,7 @@ public class Coupon extends BaseTimeEntity {
     @Column(length = 50)
     private String name;
 
+    //쿠폰에 대한 간략한 설명
     @NotNull
     @Column(length = 100)
     private String benefits;
