@@ -2,6 +2,9 @@ package com.farmer.backend.jwt;
 
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;
+import com.farmer.backend.exception.CustomException;
+import com.farmer.backend.exception.ErrorCode;
+import com.farmer.backend.login.general.MemberAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -17,24 +19,22 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
-    private static final String NO_CHECK_URL ="/api/member/login/*";
-
+    private static final String LOGIN_URL ="/api/member/login";
+    private static final String JOIN_URL = "/api/member/join";
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
-
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException{
 
-        if(!request.getRequestURI().equals(NO_CHECK_URL)){
+        if(request.getRequestURI().contains(LOGIN_URL) || request.getRequestURI().contains(JOIN_URL)){
             filterChain.doFilter(request,response);
             return;
         }
@@ -49,28 +49,25 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
             return;
         }
 
-
         if (refreshToken == null){
             checkAccessTokenAndAuthentication(request, response, filterChain);
         }
     }
 
     public void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken){
-        memberRepository.findByRefreshToken(refreshToken)
-                .ifPresent(member -> {
-                    String reIssueRefreshToken = reIssueRereshToken(member);
-                    jwtService.sendAccessAndRefreshToken(response,jwtService.createAccessToken(member.getEmail()),
-                            reIssueRefreshToken);
-                });
-    }
 
+        Member member= memberRepository.findByRefreshToken(refreshToken).orElseThrow(()->
+                new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-    private String reIssueRereshToken(Member member){
-        String reIssuedRefreshToken = jwtService.createRefreshToken();
-        member.updateRefreshToken(reIssuedRefreshToken);
+        String reIssueRefreshToken = jwtService.createRefreshToken();;
+        String reIssueAccessToken= jwtService.createAccessToken(member.getEmail());
+
+        member.updateToken(reIssueRefreshToken,reIssueAccessToken);
         memberRepository.saveAndFlush(member);
-        return reIssuedRefreshToken;
+        jwtService.sendAccessAndRefreshToken(response, reIssueAccessToken,reIssueRefreshToken);
+
     }
+
 
     public void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
                                                   FilterChain filterChain) throws ServletException, IOException {
@@ -81,28 +78,21 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                         .ifPresent(email -> memberRepository.findByEmail(email)
                                 .ifPresent(this::saveAuthentication)));
 
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(request,response);
     }
 
     public void saveAuthentication(Member myUser) {
 
         String password = myUser.getPassword();
-        if (password == null) {
-            password = String.valueOf(UUID.randomUUID());
-        }
-        UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
-                .username(myUser.getEmail())
-                .password(password)
-                .roles(myUser.getRole().name())
-                .build();
+
+        MemberAdapter memberAdapter = new MemberAdapter(myUser);
 
         Authentication authentication =
-                new UsernamePasswordAuthenticationToken(userDetailsUser, null,
-                        authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
+                new UsernamePasswordAuthenticationToken(memberAdapter, password,
+                        authoritiesMapper.mapAuthorities(memberAdapter.getAuthorities()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
     }
-
-
 }
 

@@ -1,6 +1,5 @@
 package com.farmer.backend.api.controller.login;
 
-import com.farmer.backend.domain.member.AccountStatus;
 import com.farmer.backend.domain.member.Grade;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.UserRole;
