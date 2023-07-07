@@ -60,23 +60,23 @@ class OrderProductControllerTest {
     @DisplayName("주문내역 상품리스트 전체 조회")
     @WithMockCustomUser
     void orderList() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        MemberAdapter memberAdapter = (MemberAdapter) loginService.loadUserByUsername(authentication.getPrincipal().toString());
+        log.info("member={}", memberAdapter);
+
         RequestOrderProductStatusSearchDto statusSearchDto = new RequestOrderProductStatusSearchDto();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDateTime st = LocalDate.parse("2022-02-03", dateTimeFormatter).atStartOfDay();
-        LocalDateTime ed = LocalDate.parse("2023-02-03", dateTimeFormatter).atStartOfDay();
 
-//        LocalDateTime st = LocalDateTime.parse("2022-02-03");
-//        LocalDateTime ed = LocalDateTime.parse("2023-05-03");
-
+        LocalDate st = LocalDate.of(2022, 03, 05);
+        LocalDate ed = LocalDate.of(2023, 07, 11);
         statusSearchDto.setStartDate(st);
         statusSearchDto.setEndDate(ed);
-        List<ResponseOrderProductDetailDto> responseOrderProductDetailDtos = orderProductService.orderList(statusSearchDto, "2020112112@dgu.ac.kr");
+
+        List<ResponseOrderProductDetailDto> responseOrderProductDetailDtos = orderProductController.orderList(statusSearchDto, memberAdapter);
         for (ResponseOrderProductDetailDto responseOrderProductDetailDto : responseOrderProductDetailDtos) {
             log.info("responseOrderProductDetailDto={}", responseOrderProductDetailDto.getProductName());
         }
 
-        log.info("st={}", st);
-        log.info("ed={}", ed);
     }
 
 }

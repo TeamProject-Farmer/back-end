@@ -22,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +66,8 @@ class OrderProductServiceTest {
         RequestOrderProductStatusSearchDto requestOrderProductStatusSearchDto = new RequestOrderProductStatusSearchDto();
         Member findMember = memberRepository.findByEmail("2020112112@dgu.ac.kr").orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         requestOrderProductStatusSearchDto.setOrderStatus(OrderStatus.DONE);
-        LocalDateTime startDate = LocalDateTime.of(2022, 05, 04, 0, 0, 0);
-        LocalDateTime endDate = LocalDateTime.of(2023, 05, 20, 0, 0, 0);
+        LocalDate startDate = LocalDate.of(2022, 05, 03);
+        LocalDate endDate = LocalDate.of(2023, 05, 03);
 
         requestOrderProductStatusSearchDto.setStartDate(startDate);
         requestOrderProductStatusSearchDto.setEndDate(endDate);
