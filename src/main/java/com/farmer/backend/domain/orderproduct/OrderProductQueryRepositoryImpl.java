@@ -9,10 +9,12 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.util.StringUtils;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -50,6 +52,8 @@ public class OrderProductQueryRepositoryImpl implements OrderProductQueryReposit
 
     @Override
     public List<ResponseOrderProductDetailDto> findUserOrderProductDetail(RequestOrderProductStatusSearchDto statusSearchDto, Long orderId) {
+
+
         List<ResponseOrderProductDetailDto> productOrderList = query
                 .select(Projections.constructor(
                                 ResponseOrderProductDetailDto.class,
@@ -70,7 +74,7 @@ public class OrderProductQueryRepositoryImpl implements OrderProductQueryReposit
                 .where(
                         orderProduct.orders.id.eq(orderId),
                         eqOrderStatus(statusSearchDto.getOrderStatus()),
-                        betweenDatetime(statusSearchDto.getStartDate(), statusSearchDto.getEndDate())
+                        betweenDatetime(statusSearchDto.getStartDate().atStartOfDay(), statusSearchDto.getEndDate().atStartOfDay())
                 )
                 .fetch();
         return productOrderList;
