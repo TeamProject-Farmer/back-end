@@ -249,6 +249,7 @@ public class MemberService {
         Long memberCoupon = memberCouponRepository.countByMemberId(member.getId());
 
         member.updateProfile(requestMemberProfileDto);
+        member.encodePassword(passwordEncoder);
 
         return ResponseLoginMemberDto.getLoginMember(member, memberCoupon);
     }
