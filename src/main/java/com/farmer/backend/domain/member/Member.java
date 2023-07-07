@@ -70,9 +70,6 @@ public class Member extends BaseTimeEntity {
         this.emailAuth=updateEmailAuth;
     }
 
-    public void updateRefreshToken(String updateRefreshToken){
-        this.refreshToken=updateRefreshToken;
-    }
     public void updateToken(String updateRefreshToken,String updateAccessToken) {
         this.refreshToken=updateRefreshToken;
         this.accessToken=updateAccessToken;

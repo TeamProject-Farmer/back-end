@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,14 +44,12 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         Long couponCount = memberCouponRepository.countByMemberId(member.getId());
         ResponseLoginMemberDto loginMemberDto = ResponseLoginMemberDto.getLoginMember(member,couponCount);
 
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String res = objectMapper.writeValueAsString(loginMemberDto);
-
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpStatus.OK.value());
         response.getWriter().write(res);
     }
-
-
 }
