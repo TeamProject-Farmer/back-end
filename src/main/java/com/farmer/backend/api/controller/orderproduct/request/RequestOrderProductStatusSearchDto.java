@@ -4,6 +4,7 @@ import com.farmer.backend.domain.orders.OrderStatus;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -19,5 +20,6 @@ public class RequestOrderProductStatusSearchDto {
     private LocalDateTime endDate;
 
     private OrderStatus orderStatus;
+
 
 }
