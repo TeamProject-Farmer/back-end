@@ -2,19 +2,26 @@ package com.farmer.backend.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.domain.member.MemberRepository;
+import com.farmer.backend.exception.GlobalExceptionHandler;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.security.oauth2.jwt.JwtValidationException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.Date;
+import java.util.IllformedLocaleException;
 import java.util.Optional;
 
 @Service
@@ -83,6 +90,7 @@ public class JwtService {
      * AccessToken , RefreshToken 헤더 설정 후 보내기
      */
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
+
         response.setStatus(HttpServletResponse.SC_OK);
 
         setAccessTokenHeader(response, accessToken);
@@ -102,18 +110,18 @@ public class JwtService {
     /**
      * 헤더에서 AccessToken 추출
      */
-    public Optional<String> extractAccessToken(HttpServletRequest request) throws IOException {
+    public Optional<String> extractAccessToken(HttpServletRequest request) {
 
-
-        return Optional.ofNullable(request.getParameter(accessHeader))
-                .filter(refreshToken -> refreshToken.startsWith(BEARER))
-                .map(refreshToken -> refreshToken.replace(BEARER, ""));
+        return Optional.ofNullable(request.getHeader(accessHeader))
+                .filter(accessToken -> accessToken.startsWith(BEARER))
+                .map(accessToken -> accessToken.replace(BEARER, ""));
     }
 
     /**
      * AccessToken에서 Email추출
      */
     public Optional<String> extractUserEmail(String accessToken) {
+
         try {
             return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
                     .build()
@@ -121,7 +129,7 @@ public class JwtService {
                     .getClaim(USERID_CLAIM)
                     .asString());
         } catch (Exception e) {
-            return Optional.empty();
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
     }
 
@@ -129,6 +137,7 @@ public class JwtService {
      * AccessToken 헤더 설정
      */
     public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
+        log.info("AccessToken 헤더 설정");
         response.setHeader(accessHeader, accessToken);
     }
 
@@ -136,37 +145,26 @@ public class JwtService {
      * RefreshToken 헤더 설정
      */
     public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
+        log.info("RefreshToken 헤더 설정");
         response.setHeader(refreshHeader, refreshToken);
     }
 
-    /**
-     * RefreshToken, AccessToken DB 저장(업데이트)
-     */
-    public void updateToken(String socialId, String accessToken, String refreshToken) {
-
-        memberRepository.findBySocialId(socialId).ifPresentOrElse(
-
-                member -> {
-                    member.updateToken(refreshToken,accessToken);
-                    memberRepository.saveAndFlush(member);
-                },
-                ()-> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
-        );
-
-    }
 
     /**
      * 토큰 유효성 검사
-     * @param token
+     * @param token 토큰값
      * @return
      */
     public boolean isTokenValid(String token) {
+
         try {
             JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token);
             return true;
-        } catch (Exception e) {
+        }
+        catch (Exception e){
             return false;
         }
+
     }
 
 }

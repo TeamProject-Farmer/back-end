@@ -1,5 +1,6 @@
 package com.farmer.backend.domain.member;
 
+import com.farmer.backend.api.controller.member.request.RequestMemberProfileDto;
 import com.farmer.backend.domain.BaseTimeEntity;
 import com.farmer.backend.api.controller.member.request.RequestMemberDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberDto;
@@ -7,6 +8,7 @@ import com.farmer.backend.api.controller.join.EmailDto;
 import com.farmer.backend.api.controller.join.RequestJoinDto;
 import com.sun.istack.NotNull;
 import lombok.*;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -68,12 +70,14 @@ public class Member extends BaseTimeEntity {
         this.emailAuth=updateEmailAuth;
     }
 
-    public void updateRefreshToken(String updateRefreshToken){
-        this.refreshToken=updateRefreshToken;
-    }
     public void updateToken(String updateRefreshToken,String updateAccessToken) {
         this.refreshToken=updateRefreshToken;
         this.accessToken=updateAccessToken;
+    }
+
+    public void updateProfile(RequestMemberProfileDto requestMemberProfileDto){
+        this.password=requestMemberProfileDto.getPassword();
+        this.nickname=requestMemberProfileDto.getNickname();
     }
 
     public ResponseMemberDto memberList() {

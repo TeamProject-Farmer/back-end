@@ -1,4 +1,4 @@
-package com.farmer.backend.service;
+package com.farmer.backend.api.service.product;
 
 import com.farmer.backend.api.controller.options.response.ResponseOptionDto;
 import com.farmer.backend.api.controller.product.response.ResponseProductDto;

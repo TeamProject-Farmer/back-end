@@ -1,12 +1,15 @@
 package com.farmer.backend.api.service.member;
 
+import com.farmer.backend.api.controller.login.ResponseLoginMemberDto;
 import com.farmer.backend.api.controller.member.request.RequestMemberDto;
+import com.farmer.backend.api.controller.member.request.RequestMemberProfileDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberDto;
 import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
 import com.farmer.backend.api.controller.join.EmailDto;
 import com.farmer.backend.api.controller.join.RequestJoinDto;
 import com.farmer.backend.api.controller.login.ResponseOAuthUserInfoDto;
 import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.login.oauth.userInfo.GoogleSocialLogin;
@@ -39,6 +42,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemberQueryRepository memberQueryRepositoryImpl;
+    private final MemberCouponRepository memberCouponRepository;
     private final GoogleSocialLogin googleSocialLogin;
     private final KakaoSocialLogin kakaoSocialLogin;
     private final NaverSocialLogin naverSocialLogin;
@@ -180,7 +184,6 @@ public class MemberService {
 
         Member member = memberRepository.findByEmail(requestDto.getEmail()).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-
         if(member.getEmailAuth().equals("JoinDone")){
             throw new CustomException(ErrorCode.MEMBER_FOUND);
         }
@@ -230,6 +233,25 @@ public class MemberService {
 
         return naverSocialLogin.getUserInfo(code);
 
+    }
+
+    /**
+     * 회원 프로필 수정
+     *
+     * @param memberEmail 회원 이메일
+     * @param requestMemberProfileDto 프로필 수정 데이터
+     */
+    @Transactional
+    public ResponseLoginMemberDto profileUpdate(String memberEmail, RequestMemberProfileDto requestMemberProfileDto) {
+
+        System.out.println(memberEmail);
+        Member member=memberRepository.findByEmail(memberEmail).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Long memberCoupon = memberCouponRepository.countByMemberId(member.getId());
+
+        member.updateProfile(requestMemberProfileDto);
+        member.encodePassword(passwordEncoder);
+
+        return ResponseLoginMemberDto.getLoginMember(member, memberCoupon);
     }
 
 }

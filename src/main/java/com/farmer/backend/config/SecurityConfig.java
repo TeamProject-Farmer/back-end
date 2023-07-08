@@ -65,9 +65,9 @@ public class SecurityConfig  {
 //                .antMatchers("/member/join").permitAll()
 //                .antMatchers("/api/admin/**").permitAll()
 //                .anyRequest().authenticated();
-
         http.addFilterAfter(customLoginFilter(), LogoutFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), CustomLoginFilter.class);
+
         return http.build();
 
     }
@@ -93,6 +93,7 @@ public class SecurityConfig  {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
         provider.setUserDetailsService(loginService);
+
         return new ProviderManager(provider);
     }
 

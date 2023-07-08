@@ -27,4 +27,7 @@ public class News extends BaseTimeEntity {
 
     @NotNull
     private String newsImgUrl;
+
+    @Enumerated(EnumType.STRING)
+    private NewsExposure exposure;
 }
