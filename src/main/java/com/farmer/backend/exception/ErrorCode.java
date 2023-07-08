@@ -29,6 +29,7 @@ public enum ErrorCode {
     REVIEW_FOUND(BAD_REQUEST,"해당 리뷰 ID가 이미 존재합니다."),
     QNA_NOT_FOUND (BAD_REQUEST, "해당 QNA가 존재하지 않습니다."),
     NOTICE_NOT_FOUND (BAD_REQUEST, "해당 공지사항이 존재하지 않습니다."),
+    NEWS_NOT_FOUND(BAD_REQUEST, "해당 뉴스가 존재하지 않습니다."),
 
     COUPON_NOT_FOUND(BAD_REQUEST, "해당 쿠폰이 존재하지 않습니다."),
     FAQ_NOT_FOUND(BAD_REQUEST,"해당 자주 묻는 질문이 존재하지 않습니다."),
