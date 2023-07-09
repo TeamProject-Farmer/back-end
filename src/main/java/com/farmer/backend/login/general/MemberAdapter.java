@@ -3,6 +3,8 @@ package com.farmer.backend.login.general;
 import com.farmer.backend.domain.member.Member;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+
 
 import java.util.List;
 
