@@ -32,7 +32,7 @@ public class CouponController {
      */
     @ApiDocumentResponse
     @Operation(summary = "회원 보유 쿠폰 조회",description = "회원이 보유한 쿠폰 리스트를 출력합니다.")
-    @PostMapping("/coupon")
+    @GetMapping("/coupon")
     public List<ResponseMembersCouponDto> couponList(Authentication authentication){
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
