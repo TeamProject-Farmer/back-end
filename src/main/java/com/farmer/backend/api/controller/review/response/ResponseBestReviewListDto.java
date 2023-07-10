@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @AllArgsConstructor
-public class ResponseProductReviewListDto {
+public class ResponseBestReviewListDto {
 
     private String memberNickName;
     private String imgUrl ;
