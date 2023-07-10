@@ -1,13 +1,23 @@
 package com.farmer.backend.domain.product.productreview;
 
+import com.farmer.backend.api.controller.SortOrderCondition;
+import com.farmer.backend.api.controller.review.request.SearchProductReviewCondition;
+import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
 import com.farmer.backend.api.controller.review.response.ResponseProductReviewListDto;
+import com.querydsl.core.types.NullExpression;
+import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Objects;
 
 import static com.farmer.backend.domain.product.productreview.QProductReviews.productReviews;
 
@@ -25,10 +35,10 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
      * @return
      */
     @Override
-    public List<ResponseProductReviewListDto> bestReviewList(){
-        List<ResponseProductReviewListDto> productReviewList = query
+    public List<ResponseBestReviewListDto> bestReviewList(){
+        List<ResponseBestReviewListDto> productReviewList = query
                 .select(Projections.constructor(
-                        ResponseProductReviewListDto.class,
+                        ResponseBestReviewListDto.class,
                         productReviews.member.nickname,
                         productReviews.imgUrl,
                         productReviews.content,
@@ -42,5 +52,54 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
         return productReviewList;
     }
 
+    /**
+     * 상품별 리뷰 리스트 출력
+     */
+    @Override
+    public Page<ResponseProductReviewListDto> productReviewList(Pageable pageable,
+                                                                String sortOrderCond,
+                                                                SearchProductReviewCondition searchCond,
+                                                                Long productId){
+        List<ResponseProductReviewListDto> productReviewList = query
+                .select(Projections.constructor(
+                        ResponseProductReviewListDto.class,
+                        productReviews.member.nickname,
+                        productReviews.fiveStarRating,
+                        productReviews.createdDate,
+                        productReviews.orderProduct.product.name,
+                        productReviews.orderProduct.options.optionName,
+                        productReviews.imgUrl,
+                        productReviews.likeCount,
+                        productReviews.content
+                ))
+                .from(productReviews)
+                .where(productReviews.orderProduct.product.id.eq(productId),likeStar(searchCond.getStar()))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(sortOrderProductReview(sortOrderCond))
+                .fetch();
 
+        Long count = query
+                .select(productReviews.count())
+                .from(productReviews)
+                .where(productReviews.orderProduct.product.id.eq(productId))
+                .fetchOne();
+
+        return new PageImpl<>(productReviewList,pageable,count);
+
+    }
+
+    public BooleanExpression likeStar(String star){
+        return star != null ? productReviews.fiveStarRating.eq(Integer.valueOf(star)) :null;
+    }
+
+    public OrderSpecifier<?> sortOrderProductReview(String sortOrderCond){
+        if(Objects.isNull(sortOrderCond)||sortOrderCond.equals("recent")){
+            return new OrderSpecifier<>(Order.DESC,productReviews.createdDate);
+        }
+        else if(sortOrderCond.equals("best")){
+            return new OrderSpecifier<>(Order.ASC,productReviews.fiveStarRating);
+        }
+        return new OrderSpecifier(Order.DESC, NullExpression.DEFAULT,OrderSpecifier.NullHandling.Default);
+    }
 }

@@ -2,7 +2,6 @@ package com.farmer.backend.domain.product.productreview;
 
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.orderproduct.OrderProduct;
-import com.farmer.backend.domain.orders.Orders;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
