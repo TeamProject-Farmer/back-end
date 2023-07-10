@@ -1,7 +1,6 @@
 package com.farmer.backend.api.controller.review;
 
-import com.farmer.backend.api.controller.review.response.ResponseProductReviewListDto;
-import lombok.RequiredArgsConstructor;
+import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
@@ -22,9 +19,9 @@ class ReviewControllerTest {
     @Test
     void bestReviewList() {
 
-        List<ResponseProductReviewListDto> bestReviewList = reviewController.bestReviewList();
+        List<ResponseBestReviewListDto> bestReviewList = reviewController.bestReviewList();
 
-        for(ResponseProductReviewListDto bestReview : bestReviewList){
+        for(ResponseBestReviewListDto bestReview : bestReviewList){
             log.info("best Review : {} , {}" ,bestReview.getMemberNickName(),bestReview.getContent() );
             log.info("like count : {}",bestReview.getLikeCount());
         }
