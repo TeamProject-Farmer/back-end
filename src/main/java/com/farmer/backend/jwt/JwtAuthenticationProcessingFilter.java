@@ -24,8 +24,7 @@ import java.io.*;
 @Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
-    private static final String LOGIN_URL ="/api/member/login";
-    private static final String JOIN_URL = "/api/member/join";
+    private static final String MAIN_URL = "/api/main";
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
@@ -34,7 +33,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException{
 
-        if(request.getRequestURI().contains(LOGIN_URL) || request.getRequestURI().contains(JOIN_URL)){
+        if(request.getRequestURI().contains(MAIN_URL)){
             filterChain.doFilter(request,response);
             return;
         }
