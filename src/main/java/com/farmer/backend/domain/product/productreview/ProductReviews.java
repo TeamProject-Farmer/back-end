@@ -36,7 +36,7 @@ public class ProductReviews {
     private OrderProduct orderProduct;
 
     @NotNull
-    private Integer fiveStarRating;
+    private int fiveStarRating;
 
     @NotNull
     @Column(columnDefinition = "text")
