@@ -51,9 +51,9 @@ public class OrderProductController {
     @ApiDocumentResponse
     @Operation(summary = "주문내역 전체 조회", description = "현재 로그인 한 사용자의 전체 주문내역을 조회합니다.")
     @GetMapping("/order-list")
-    public List<ResponseOrderProductDetailDto> orderList(RequestOrderProductStatusSearchDto statusSearchDto,
-                                                         @AuthenticationPrincipal MemberAdapter member) {
-
+    public List<ResponseOrderProductDetailDto> orderList(@AuthenticationPrincipal MemberAdapter member,
+                                                         RequestOrderProductStatusSearchDto statusSearchDto) {
+        log.info("member={}", member.getMember().getEmail());
         return orderProductService.orderList(statusSearchDto, member.getUsername());
     }
 }

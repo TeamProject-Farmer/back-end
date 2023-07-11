@@ -14,6 +14,7 @@ import com.farmer.backend.domain.orders.Orders;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class OrderProductService {
 
@@ -63,6 +65,7 @@ public class OrderProductService {
         Member findMember = memberRepository.findByEmail(userId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         List<Orders> orderList = orderRepository.findByMemberId(findMember.getId());
         List<ResponseOrderProductDetailDto> orderProductList = new ArrayList<>();
+        log.info("userId={}", userId);
         for (Orders orders : orderList) {
             orderProductList = orderProductQueryRepositoryImpl.findUserOrderProductDetail(statusSearchDto, orders.getId());
         }
