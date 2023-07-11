@@ -1,6 +1,6 @@
 package com.farmer.backend.domain.product.productreview;
 
-import com.farmer.backend.api.controller.SortOrderCondition;
+import com.farmer.backend.api.controller.review.request.RequestReviewStarDto;
 import com.farmer.backend.api.controller.review.request.SearchProductReviewCondition;
 import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
 import com.farmer.backend.api.controller.review.response.ResponseProductReviewListDto;
@@ -14,4 +14,7 @@ public interface ProductReviewQueryRepository {
 
     Page<ResponseProductReviewListDto> productReviewList(Pageable pageable, String sortOrderCondition,
                                                          SearchProductReviewCondition searchCondition, Long productId);
+
+
+    RequestReviewStarDto fiveStars(Long productId);
 }

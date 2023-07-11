@@ -1,9 +1,9 @@
 package com.farmer.backend.api.controller.review;
 
-import com.farmer.backend.api.controller.SortOrderCondition;
 import com.farmer.backend.api.controller.review.request.SearchProductReviewCondition;
 import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
 import com.farmer.backend.api.controller.review.response.ResponseProductReviewListDto;
+import com.farmer.backend.api.controller.review.response.ResponseReviewStarDto;
 import com.farmer.backend.api.service.review.ReviewService;
 import com.farmer.backend.config.ApiDocumentResponse;
 import com.farmer.backend.paging.PageRequest;
@@ -39,6 +39,15 @@ public class ReviewController {
         return reviewService.bestReviewList();
     }
 
+    /**
+     * 상품별 리뷰 평점 조회
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "상품별 리뷰 평점 출력", description = "상품별 리뷰 평점을 출력합니다.")
+    @GetMapping("/main/review/star/{productId}")
+    public ResponseReviewStarDto reviewAverage(@PathVariable(name = "productId") Long productId){
+        return reviewService.reviewAverage(productId);
+    }
 
     /**
      * 상품별 리뷰 출력
