@@ -52,8 +52,6 @@ public class ReviewService {
     @Transactional(readOnly = true)
     public Page<ResponseProductReviewListDto> productReviewList(Pageable pageable, String sortOrderCond, SearchProductReviewCondition searchCond, Long productId) {
 
-
-
         Page<ResponseProductReviewListDto> productReviewList
                 = reviewQueryRepositoryImpl.productReviewList(pageable,sortOrderCond,searchCond,productId);
 
@@ -66,6 +64,7 @@ public class ReviewService {
      * @param productId 상품 ID값
      * @return ResponseReviewStarDto
      */
+
     public ResponseReviewStarDto reviewAverage(Long productId) {
 
         Product product = productRepository.findById(productId).orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
@@ -74,11 +73,9 @@ public class ReviewService {
         ProductReviewAverage productReviewAverage = reviewStar.toEntity(product);
 
         if(productReviewAverageRepository.findByProductId(productId).isPresent()){
-            log.info("기존값 업데이트");
             productReviewAverage.updateReviewAverage(reviewStar);
         }
         else{
-            log.info("새로 업데이트");
             productReviewAverageRepository.save(productReviewAverage);
         }
 
