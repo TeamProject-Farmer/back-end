@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/member")
+@RequestMapping("/api/main")
 @Tag(name = "BannerController", description = "배너 API")
 public class BannerController {
 

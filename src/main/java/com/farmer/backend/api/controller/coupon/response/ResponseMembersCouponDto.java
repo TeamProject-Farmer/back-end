@@ -13,9 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ResponseMembersCouponDto {
 
-    private String serialNumber;
     private String name;
-    private int rateAmount;
+    private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
 
 }
