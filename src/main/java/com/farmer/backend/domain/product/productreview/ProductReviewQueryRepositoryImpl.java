@@ -3,6 +3,7 @@ import com.farmer.backend.api.controller.review.request.RequestReviewStarDto;
 import com.farmer.backend.api.controller.review.request.SearchProductReviewCondition;
 import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
 import com.farmer.backend.api.controller.review.response.ResponseProductReviewListDto;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,10 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.farmer.backend.domain.product.productreview.QProductReviews.productReviews;
+
 @Repository
 public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepository{
 
@@ -88,53 +90,30 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
     @Override
     public RequestReviewStarDto fiveStars(Long productId){
 
-        Long reviewCount = query
-                .select(productReviews.count())
+        ArrayList<Long> reviewCount = new ArrayList<>(Arrays.asList(0L, 0L, 0L, 0L, 0L));
+
+        List<Tuple> allStar =query
+                .select(productReviews.fiveStarRating,productReviews.fiveStarRating.count())
                 .from(productReviews)
                 .where(productReviews.orderProduct.product.id.eq(productId))
-                .fetchOne();
+                .groupBy(productReviews.fiveStarRating)
+                .fetch();
 
-        Long fiveStarsReview =  query
-                .select(productReviews.fiveStarRating.count())
+        for (Tuple reviewStar : allStar){
+            Integer reviewStarRating = reviewStar.get(0,Integer.class)-1;
+            Long reviewStarCount = reviewStar.get(1,Long.class);
+
+            reviewCount.set(reviewStarRating,reviewStarCount);
+
+        }
+
+        Double starAverage = Double.valueOf(query
+                .select((productReviews.fiveStarRating.avg().multiply(10)).round().divide(10.0))
                 .from(productReviews)
-                .where(productReviews.orderProduct.product.id.eq(productId),productReviews.fiveStarRating.eq(5))
-                .fetchOne();
+                .where(productReviews.orderProduct.product.id.eq(productId))
+                .fetchOne());
 
-        Long fourStarsReview =  query
-                .select(
-                        productReviews.fiveStarRating.count()
-                )
-                .from(productReviews)
-                .where(productReviews.orderProduct.product.id.eq(productId),productReviews.fiveStarRating.eq(4))
-                .fetchOne();
-
-        Long threeStarsReview =  query
-                .select(
-                        productReviews.fiveStarRating.count()
-                )
-                .from(productReviews)
-                .where(productReviews.orderProduct.product.id.eq(productId),productReviews.fiveStarRating.eq(3))
-                .fetchOne();
-
-        Long twoStarsReview =  query
-                .select(
-                        productReviews.fiveStarRating.count()
-                )
-                .from(productReviews)
-                .where(productReviews.orderProduct.product.id.eq(productId),productReviews.fiveStarRating.eq(2))
-                .fetchOne();
-
-        Long oneStarsReview =  query
-                .select(
-                        productReviews.fiveStarRating.count()
-                )
-                .from(productReviews)
-                .where(productReviews.orderProduct.product.id.eq(productId),productReviews.fiveStarRating.eq(1))
-                .fetchOne();
-
-        float starAverage = Math.round((((fiveStarsReview*5+fourStarsReview*4+threeStarsReview*3+twoStarsReview*2+oneStarsReview)/reviewCount)*100)/100.0);
-
-        RequestReviewStarDto reviewStarDto = new RequestReviewStarDto(starAverage,fiveStarsReview, fourStarsReview, threeStarsReview, twoStarsReview, oneStarsReview) ;
+        RequestReviewStarDto reviewStarDto = new RequestReviewStarDto(starAverage,reviewCount.get(4),reviewCount.get(3),reviewCount.get(2),reviewCount.get(1),reviewCount.get(0));
         return reviewStarDto;
     }
 
@@ -146,7 +125,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
         if (Objects.isNull(sortOrderCond) || sortOrderCond.equals("recent")) {
             return new OrderSpecifier<>(Order.DESC, productReviews.createdDate);
         } else if (sortOrderCond.equals("best")) {
-            return new OrderSpecifier<>(Order.ASC, productReviews.fiveStarRating);
+            return new OrderSpecifier<>(Order.ASC, productReviews.likeCount);
         }
         return new OrderSpecifier(Order.DESC, NullExpression.DEFAULT, OrderSpecifier.NullHandling.Default);
     }

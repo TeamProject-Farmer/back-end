@@ -14,7 +14,6 @@ import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -68,7 +67,7 @@ public class ReviewService {
     public ResponseReviewStarDto reviewAverage(Long productId) {
 
         Product product = productRepository.findById(productId).orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
-        RequestReviewStarDto reviewStar= reviewQueryRepositoryImpl.fiveStars( productId);
+        RequestReviewStarDto reviewStar = reviewQueryRepositoryImpl.fiveStars( productId);
 
         ProductReviewAverage productReviewAverage = reviewStar.toEntity(product);
 

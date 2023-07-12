@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequestReviewStarDto {
 
-    private float averageStarRating;
+    private double averageStarRating;
     private Long fiveStar;
     private Long fourStar;
     private Long threeStar;
@@ -19,7 +19,7 @@ public class RequestReviewStarDto {
     private Long oneStar;
 
     @Builder
-    public RequestReviewStarDto(float averageStarRating , Long fiveStar , Long fourStar, Long threeStar,
+    public RequestReviewStarDto(double averageStarRating , Long fiveStar , Long fourStar, Long threeStar,
                                 Long twoStar, Long oneStar){
         this.averageStarRating=averageStarRating;
         this.fiveStar=fiveStar;

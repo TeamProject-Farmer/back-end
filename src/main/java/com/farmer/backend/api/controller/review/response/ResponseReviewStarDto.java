@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ResponseReviewStarDto {
 
-    private float averageStarRating;
+    private double averageStarRating;
     private Long fiveStar;
     private Long fourStar;
     private Long threeStar;
     private Long twoStar;
     private Long oneStar;
 
-    public ResponseReviewStarDto (float averageStarRating , Long fiveStar , Long fourStar, Long threeStar,
+    public ResponseReviewStarDto (double averageStarRating , Long fiveStar , Long fourStar, Long threeStar,
                                   Long twoStar, Long oneStar){
         this.averageStarRating=averageStarRating;
         this.fiveStar=fiveStar;

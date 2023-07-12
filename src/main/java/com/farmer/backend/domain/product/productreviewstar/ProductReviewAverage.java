@@ -27,7 +27,7 @@ public class ProductReviewAverage {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    private float averageStarRating;
+    private double averageStarRating;
     @ColumnDefault("0")
     private Long fiveStar;
     @ColumnDefault("0")
