@@ -28,8 +28,11 @@ public class Delivery {
     @Column(length = 255)
     private String address;
 
-    @Column(length = 50)
-    private String memo;
+    @Enumerated(EnumType.STRING)
+    private DeliveryMemo memo;
+
+    @Column(length = 100)
+    private String selfMemo;
 
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
