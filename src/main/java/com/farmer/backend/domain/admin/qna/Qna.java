@@ -42,7 +42,9 @@ public class Qna {
 
     @Column(columnDefinition = "text")
     private String answer;
-
+    
+    @Enumerated(EnumType.STRING)
+    private SecretQuestion secretQuestion;
     @NotNull
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
