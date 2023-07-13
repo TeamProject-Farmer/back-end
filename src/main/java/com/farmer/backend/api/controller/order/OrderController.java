@@ -44,6 +44,10 @@ public class OrderController {
         return ResponseEntity.ok(orderInfoDto);
     }
 
+    /**
+     * 주문/결제 페이지
+     * 배송 메모 리스트 조회
+     */
     @ApiDocumentResponse
     @Operation(summary = "배송 메모 리스트", description = "배송 메모 정보 리스트를 출력합니다.")
     @GetMapping("/delivery/memo-list")
