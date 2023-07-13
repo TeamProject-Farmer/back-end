@@ -36,6 +36,12 @@ public class membersCouponService {
         return memberCouponList;
     }
 
+    /**
+     * 쿠폰 적용
+     * @param memberEmail
+     * @param couponId
+     * @return
+     */
     @Transactional
     public int applyCoupon(String memberEmail, Long couponId) {
         Long findCouponId = memberCouponRepository.findById(couponId).orElseThrow(() -> new CustomException(ErrorCode.COUPON_NOT_FOUND)).getCoupons().getId();
