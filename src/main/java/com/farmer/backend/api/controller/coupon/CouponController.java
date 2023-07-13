@@ -38,12 +38,6 @@ public class CouponController {
         return membersCouponService.couponList(member.getUsername());
     }
 
-    @ApiDocumentResponse
-    @Operation(summary = "쿠폰 적용",description = "회원이 보유한 쿠폰 리스트를 출력합니다.")
-    @PostMapping("/coupon-apply/{couponId}")
-    public int applyCoupon(@AuthenticationPrincipal MemberAdapter member, @PathVariable Long couponId){
-        return membersCouponService.applyCoupon(member.getUsername(), couponId);
-    }
 
     /**
      * 쿠폰 추가
