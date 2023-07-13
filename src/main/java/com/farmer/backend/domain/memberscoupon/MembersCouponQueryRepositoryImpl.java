@@ -24,6 +24,7 @@ public class MembersCouponQueryRepositoryImpl implements MembersCouponQueryRepos
         List<ResponseMembersCouponDto> memberCouponList = query
                 .select(Projections.constructor(
                         ResponseMembersCouponDto.class,
+                        membersCoupon.coupons.id,
                         membersCoupon.coupons.serialNumber,
                         membersCoupon.coupons.name,
                         membersCoupon.coupons.rateAmount,

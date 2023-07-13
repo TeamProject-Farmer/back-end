@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ResponseMembersCouponDto {
 
+    private Long couponId;
     private String serialNumber;
     private String name;
     private int rateAmount;
