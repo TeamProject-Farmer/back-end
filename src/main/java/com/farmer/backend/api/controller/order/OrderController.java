@@ -30,11 +30,11 @@ public class OrderController {
 
     /**
      * 주문/결제 페이지
-     * 주문자 배송지 정보 리턴
+     * 주문자 최근 배송지 정보 리턴
      * 주문자 정보가 없다면 null, 그게 아니면 배송정보를 response
      */
     @ApiDocumentResponse
-    @Operation(summary = "주문자 정보 페이지", description = "해당 회원의 주문자 정보를 출력합니다.")
+    @Operation(summary = "주문자 최근 배송지 정보", description = "해당 회원의 최근 배송지 정보를 출력합니다.")
     @GetMapping("/order-form")
     public ResponseEntity orderMemberInfo(@AuthenticationPrincipal MemberAdapter member) {
         ResponseOrderInfoDto orderInfoDto = orderService.orderForm(member.getUsername());
