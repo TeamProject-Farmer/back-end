@@ -2,7 +2,6 @@ package com.farmer.backend.domain.product.productreview;
 
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.orderproduct.OrderProduct;
-import com.farmer.backend.domain.orders.Orders;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -36,7 +35,7 @@ public class ProductReviews {
     private OrderProduct orderProduct;
 
     @NotNull
-    private Integer fiveStarRating;
+    private int fiveStarRating;
 
     @NotNull
     @Column(columnDefinition = "text")
