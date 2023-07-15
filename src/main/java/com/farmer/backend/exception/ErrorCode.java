@@ -3,7 +3,6 @@ package com.farmer.backend.exception;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -39,10 +38,7 @@ public enum ErrorCode {
 
     NAVER_LOGIN_FAILURE(BAD_REQUEST,"네이버 로그인에 실패하였습니다."),
 
-    GOOGLE_LOGIN_FAILURE(BAD_REQUEST,"구글 로그인에 실패하였습니다."),
-
-    REFRESH_TOKEN_EXPIRATION(INTERNAL_SERVER_ERROR , "Refresh 토큰이 만료되었습니다."),
-    ACCESS_TOKEN_EXPIRATION(INTERNAL_SERVER_ERROR,"Access 토큰이 만료되었습니다.");
+    GOOGLE_LOGIN_FAILURE(BAD_REQUEST,"구글 로그인에 실패하였습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
