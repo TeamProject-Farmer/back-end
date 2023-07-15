@@ -4,7 +4,9 @@ import com.farmer.backend.api.controller.coupon.response.ResponseCouponListDto;
 import com.farmer.backend.api.controller.coupon.response.ResponseMembersCouponDto;
 import com.farmer.backend.api.service.membersCoupon.membersCouponService;
 import com.farmer.backend.config.ApiDocumentResponse;
+
 import com.farmer.backend.domain.memberscoupon.MembersCoupon;
+
 import com.farmer.backend.login.general.MemberAdapter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,9 +35,12 @@ public class CouponController {
      */
     @ApiDocumentResponse
     @Operation(summary = "회원 보유 쿠폰 조회",description = "회원이 보유한 쿠폰 리스트를 출력합니다.")
-    @PostMapping("/coupon")
-    public List<ResponseMembersCouponDto> couponList(@AuthenticationPrincipal MemberAdapter member){
-        return membersCouponService.couponList(member.getUsername());
+    @GetMapping("/coupon")
+    public List<ResponseMembersCouponDto> couponList(@AuthenticationPrincipal MemberAdapter memberAdapter){
+
+        String memberEmail = memberAdapter.getMember().getEmail();
+        return membersCouponService.couponList(memberEmail);
+
     }
 
 

@@ -27,7 +27,7 @@ public class MembersCouponQueryRepositoryImpl implements MembersCouponQueryRepos
                         membersCoupon.coupons.id,
                         membersCoupon.coupons.serialNumber,
                         membersCoupon.coupons.name,
-                        membersCoupon.coupons.rateAmount,
+                        membersCoupon.coupons.startDateTime,
                         membersCoupon.coupons.endDateTime
                         )
                 )

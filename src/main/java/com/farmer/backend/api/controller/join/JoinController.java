@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequiredArgsConstructor
 @RestController
 @Slf4j
-@RequestMapping("/api/member")
+@RequestMapping("/api/main")
 @Tag(name = "JoinController", description = "회원가입 페이지 API")
 public class JoinController {
 
