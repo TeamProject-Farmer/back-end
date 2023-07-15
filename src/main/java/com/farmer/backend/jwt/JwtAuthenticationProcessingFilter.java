@@ -2,8 +2,6 @@ package com.farmer.backend.jwt;
 
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;
-import com.farmer.backend.exception.CustomException;
-import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.login.general.MemberAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,21 +47,22 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         }
 
         if (refreshToken == null){
+
             checkAccessTokenAndAuthentication(request, response, filterChain);
         }
     }
 
-    public void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken){
+    public void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
 
-        Member member= memberRepository.findByRefreshToken(refreshToken).orElseThrow(()->
-                new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Member member= memberRepository.findByRefreshToken(refreshToken).orElseThrow(()-> new NullPointerException("회원이 존재하지 않습니다."));
 
-        String reIssueRefreshToken = jwtService.createRefreshToken();;
+        String reIssueRefreshToken = jwtService.createRefreshToken();
         String reIssueAccessToken= jwtService.createAccessToken(member.getEmail());
 
         member.updateToken(reIssueRefreshToken,reIssueAccessToken);
         memberRepository.saveAndFlush(member);
         jwtService.sendAccessAndRefreshToken(response, reIssueAccessToken,reIssueRefreshToken);
+
 
     }
 
@@ -72,10 +71,14 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                                                   FilterChain filterChain) throws ServletException, IOException {
 
         jwtService.extractAccessToken(request)
-                .filter(jwtService::isTokenValid)
-                .ifPresent(accessToken -> jwtService.extractUserEmail(accessToken)
-                        .ifPresent(email -> memberRepository.findByEmail(email)
-                                .ifPresent(this::saveAuthentication)));
+                .filter(token -> jwtService.isTokenValid(token))
+                .ifPresentOrElse(
+                        accessToken -> {
+                            jwtService.extractUserEmail(accessToken)
+                                    .ifPresent(email -> memberRepository.findByEmail(email)
+                                            .ifPresent(this::saveAuthentication));},
+                        ()-> {throw new NullPointerException("토큰을 다시 확인해주세요");
+                        });
 
         filterChain.doFilter(request,response);
     }

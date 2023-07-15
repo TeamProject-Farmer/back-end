@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api")
-@Tag(name = "ReviewController", description = "회원 페이지 API")
+@Tag(name = "ReviewController", description = "리뷰 도메인 API")
 public class ReviewController {
 
     private final ReviewService reviewService;
