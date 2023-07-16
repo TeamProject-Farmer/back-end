@@ -1,6 +1,8 @@
 package com.farmer.backend.domain.cart;
 
+import com.farmer.backend.api.controller.cart.request.RequestCartProductQuantityDto;
 import com.farmer.backend.api.controller.cart.response.ResponseCartProductListDto;
+import com.farmer.backend.api.controller.cart.response.ResponseCartProductQuantityDto;
 import com.farmer.backend.domain.member.Member;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -37,5 +39,20 @@ public class CartQueryRepositoryImpl implements CartQueryRepository{
                 .from(cart)
                 .fetch();
 
+    }
+
+    @Override
+    public ResponseCartProductQuantityDto findCartProductByCartId(Long cartId) {
+        return query
+                .select(Projections.constructor(
+                        ResponseCartProductQuantityDto.class,
+                        cart.product.id,
+                        cart.count,
+                        cart.product.price,
+                        cart.product.price.multiply(cart.count)
+                ))
+                .from(cart)
+                .where(cart.id.eq(cartId))
+                .fetchFirst();
     }
 }

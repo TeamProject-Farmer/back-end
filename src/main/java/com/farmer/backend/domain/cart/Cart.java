@@ -1,6 +1,6 @@
 package com.farmer.backend.domain.cart;
 
-import com.farmer.backend.api.controller.cart.request.RequestProductCartDto;
+import com.farmer.backend.api.controller.cart.request.RequestCartProductQuantityDto;
 import com.farmer.backend.domain.BaseTimeEntity;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.options.Options;
@@ -40,4 +40,7 @@ public class Cart extends BaseTimeEntity {
 
     private Integer count;
 
+    public void cartProductQuantityUpdate(Integer beforeCount) {
+        this.count = beforeCount;
+    }
 }

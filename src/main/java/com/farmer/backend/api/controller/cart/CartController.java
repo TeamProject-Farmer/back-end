@@ -1,7 +1,9 @@
 package com.farmer.backend.api.controller.cart;
 
 import com.farmer.backend.api.controller.cart.request.RequestProductCartDto;
+import com.farmer.backend.api.controller.cart.request.RequestCartProductQuantityDto;
 import com.farmer.backend.api.controller.cart.response.ResponseCartProductListDto;
+import com.farmer.backend.api.controller.cart.response.ResponseCartProductQuantityDto;
 import com.farmer.backend.api.service.cart.CartService;
 import com.farmer.backend.config.ApiDocumentResponse;
 import com.farmer.backend.login.general.MemberAdapter;
@@ -25,6 +27,10 @@ public class CartController {
 
     private final CartService cartService;
 
+    /**
+     * 상품 상세페이지
+     * 장바구니에 상품 추가 기능
+     */
     @ApiDocumentResponse
     @Operation(summary = "장바구니 추가", description = "상품 한건을 장바구니에 추가합니다.")
     @PostMapping
@@ -33,6 +39,10 @@ public class CartController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    /**
+     * 장바구니 목록 페이지
+     * 장바구니 상품 목록 출력
+     */
     @ApiDocumentResponse
     @Operation(summary = "장바구니 목록", description = "장바구니의 상품 리스트를 출력합니다")
     @GetMapping("/cart-list")
@@ -40,5 +50,14 @@ public class CartController {
         return cartService.cartList(member.getUsername());
     }
 
-
+    /**
+     * 장바구니 목록 페이지
+     * 장바구니 상품 수량 업데이트
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "장바구니 상품 수량 업데이트", description = "장바구니의 상품 수량을 변경합니다.")
+    @PostMapping("/change-quantity")
+    public ResponseCartProductQuantityDto changeQuantity(@ModelAttribute RequestCartProductQuantityDto cartProductQuantityDto, @AuthenticationPrincipal MemberAdapter member) {
+        return cartService.changeQuantityAction(cartProductQuantityDto, member.getUsername());
+    }
 }
