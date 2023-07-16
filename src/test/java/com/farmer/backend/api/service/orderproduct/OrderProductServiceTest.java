@@ -1,8 +1,11 @@
 package com.farmer.backend.api.service.orderproduct;
 
+import com.farmer.backend.api.controller.order.response.ResponseOrderInfoDto;
 import com.farmer.backend.api.controller.orderproduct.request.RequestOrderProductStatusSearchDto;
 import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductDetailDto;
 import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductDto;
+import com.farmer.backend.domain.deliveryaddress.DeliveryAddress;
+import com.farmer.backend.domain.deliveryaddress.DeliveryAddressRepository;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;
 import com.farmer.backend.domain.orderproduct.OrderProduct;
@@ -43,6 +46,8 @@ class OrderProductServiceTest {
     OrderProductRepository orderProductRepository;
     @Autowired
     OrderProductQueryRepository orderProductQueryRepositoryImpl;
+    @Autowired
+    DeliveryAddressRepository deliveryAddressRepository;
 
     @Test
     @DisplayName("마이페이지 구매목록 기능")
@@ -80,6 +85,26 @@ class OrderProductServiceTest {
         for (ResponseOrderProductDetailDto res : orderProductList) {
             log.info("res={}", res.getProductName());
         }
+
+    }
+
+    @Test
+    @DisplayName("주문자 배송지 정보 조회")
+    void orderForm() {
+        Member member = memberRepository.findByEmail("kce2360@naver.com").orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findByMember(member);
+        ResponseOrderInfoDto orderInfo = null;
+        if (deliveryAddress != null) {
+            orderInfo = ResponseOrderInfoDto.builder()
+                    .username(deliveryAddress.getName())
+                    .zipcode(deliveryAddress.getZipcode())
+                    .address(deliveryAddress.getAddress())
+                    .addressDetail(deliveryAddress.getAddressDetail())
+                    .zipcode(deliveryAddress.getZipcode())
+                    .build();
+        }
+
+        log.info("orderInfo={}", orderInfo);
 
     }
 

@@ -8,6 +8,7 @@ import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
 import com.farmer.backend.api.controller.join.EmailDto;
 import com.farmer.backend.api.controller.join.RequestJoinDto;
 import com.farmer.backend.api.controller.login.ResponseOAuthUserInfoDto;
+import com.farmer.backend.api.controller.member.response.ResponseMemberPoint;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
 import com.farmer.backend.exception.CustomException;
@@ -252,6 +253,17 @@ public class MemberService {
         member.encodePassword(passwordEncoder);
 
         return ResponseLoginMemberDto.getLoginMember(member, memberCoupon);
+    }
+
+    /**
+     * 회원 적립금
+     * @param memberEmail
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public ResponseMemberPoint getPoint(String memberEmail) {
+        Long point = memberRepository.findByEmail(memberEmail).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)).getPoint();
+        return new ResponseMemberPoint(point);
     }
 
 }

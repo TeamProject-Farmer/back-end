@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/user/product-category")
+@RequestMapping("/api/main/product-category")
 @Tag(name = "ProductCategoryController", description = "상품 카테고리 API")
 public class ProductCategoryController {
 

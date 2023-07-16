@@ -9,10 +9,14 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.util.StringUtils;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -23,6 +27,7 @@ import static com.farmer.backend.domain.orders.QOrders.orders;
 
 
 @Repository
+@Slf4j
 public class OrderProductQueryRepositoryImpl implements OrderProductQueryRepository {
 
     private final JPAQueryFactory query;
@@ -74,17 +79,17 @@ public class OrderProductQueryRepositoryImpl implements OrderProductQueryReposit
                 .where(
                         orderProduct.orders.id.eq(orderId),
                         eqOrderStatus(statusSearchDto.getOrderStatus()),
-                        betweenDatetime(statusSearchDto.getStartDate().atStartOfDay(), statusSearchDto.getEndDate().atStartOfDay())
+                        betweenDatetime(statusSearchDto.getStartDate(), statusSearchDto.getEndDate())
                 )
                 .fetch();
         return productOrderList;
     }
 
-    private BooleanExpression betweenDatetime(LocalDateTime startDate, LocalDateTime endDate) {
+    private BooleanExpression betweenDatetime(LocalDate startDate, LocalDate endDate) {
         if (Objects.isNull(startDate) || Objects.isNull(endDate)) {
             return null;
         }
-        return orders.createdDate.between(startDate, endDate);
+        return orders.createdDate.between(startDate.atStartOfDay(), endDate.atStartOfDay());
     }
 
     private BooleanExpression eqOrderStatus(OrderStatus orderStatus) {
