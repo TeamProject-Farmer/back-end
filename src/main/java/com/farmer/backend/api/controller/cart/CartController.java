@@ -1,11 +1,9 @@
 package com.farmer.backend.api.controller.cart;
 
 import com.farmer.backend.api.controller.cart.request.RequestProductCartDto;
-import com.farmer.backend.api.controller.orderproduct.request.RequestOrderProductList;
-import com.farmer.backend.api.controller.product.response.ResponseProductDtoList;
+import com.farmer.backend.api.controller.cart.response.ResponseCartProductListDto;
 import com.farmer.backend.api.service.cart.CartService;
 import com.farmer.backend.config.ApiDocumentResponse;
-import com.farmer.backend.domain.product.ProductOrderCondition;
 import com.farmer.backend.login.general.MemberAdapter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,4 +32,13 @@ public class CartController {
         cartService.addToCart(productCartDto, member.getUsername());
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @ApiDocumentResponse
+    @Operation(summary = "장바구니 목록", description = "장바구니의 상품 리스트를 출력합니다")
+    @GetMapping("/cart-list")
+    public List<ResponseCartProductListDto> cartList(@AuthenticationPrincipal MemberAdapter member) {
+        return cartService.cartList(member.getUsername());
+    }
+
+
 }

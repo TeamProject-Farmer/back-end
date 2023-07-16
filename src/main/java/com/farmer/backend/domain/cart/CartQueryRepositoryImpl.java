@@ -1,9 +1,15 @@
 package com.farmer.backend.domain.cart;
 
+import com.farmer.backend.api.controller.cart.response.ResponseCartProductListDto;
+import com.farmer.backend.domain.member.Member;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.List;
+
+import static com.farmer.backend.domain.cart.QCart.cart;
 
 @Repository
 public class CartQueryRepositoryImpl implements CartQueryRepository{
@@ -15,4 +21,21 @@ public class CartQueryRepositoryImpl implements CartQueryRepository{
     }
 
 
+    @Override
+    public List<ResponseCartProductListDto> findCartProductListByMember(Member findMember) {
+        return query
+                .select(Projections.constructor(
+                        ResponseCartProductListDto.class,
+                        cart.product.id,
+                        cart.product.thumbnailImg,
+                        cart.product.name,
+                        cart.options.optionName,
+                        cart.count,
+                        cart.product.price,
+                        cart.product.price.multiply(cart.count)
+                ))
+                .from(cart)
+                .fetch();
+
+    }
 }
