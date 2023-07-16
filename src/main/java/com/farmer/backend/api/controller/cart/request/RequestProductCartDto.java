@@ -1,5 +1,9 @@
 package com.farmer.backend.api.controller.cart.request;
 
+import com.farmer.backend.domain.cart.Cart;
+import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.domain.options.Options;
+import com.farmer.backend.domain.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,10 +15,17 @@ import lombok.Setter;
 @Builder
 public class RequestProductCartDto {
 
-    private Long productId;
-    private String productName;
-    private Long price;
-    private String option;
+    private Product product;
+    private Options option;
     private Integer count;
+
+    public Cart toEntity(Member member) {
+        return Cart.builder()
+                .product(product)
+                .options(option)
+                .member(member)
+                .count(count)
+                .build();
+    }
 
 }

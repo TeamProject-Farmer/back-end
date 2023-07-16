@@ -1,9 +1,12 @@
 package com.farmer.backend.domain.cart;
 
+import com.farmer.backend.api.controller.cart.request.RequestProductCartDto;
 import com.farmer.backend.domain.BaseTimeEntity;
 import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.domain.options.Options;
 import com.farmer.backend.domain.product.Product;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +18,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Cart extends BaseTimeEntity {
 
     @Id
@@ -30,8 +34,10 @@ public class Cart extends BaseTimeEntity {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "option_id")
+    private Options options;
+
     private Integer count;
-
-
 
 }

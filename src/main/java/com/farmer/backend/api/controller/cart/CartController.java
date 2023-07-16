@@ -31,7 +31,7 @@ public class CartController {
     @Operation(summary = "장바구니 추가", description = "상품 한건을 장바구니에 추가합니다.")
     @PostMapping
     public ResponseEntity addCart(@ModelAttribute RequestProductCartDto productCartDto, @AuthenticationPrincipal MemberAdapter member) {
-        cartService.addToCart(productCartDto, member);
+        cartService.addToCart(productCartDto, member.getUsername());
         return new ResponseEntity(HttpStatus.OK);
     }
 }
