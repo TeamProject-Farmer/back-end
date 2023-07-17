@@ -3,7 +3,6 @@ package com.farmer.backend.exception;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -30,6 +29,7 @@ public enum ErrorCode {
     QNA_NOT_FOUND (BAD_REQUEST, "해당 QNA가 존재하지 않습니다."),
     NOTICE_NOT_FOUND (BAD_REQUEST, "해당 공지사항이 존재하지 않습니다."),
     NEWS_NOT_FOUND(BAD_REQUEST, "해당 뉴스가 존재하지 않습니다."),
+    CART_PRODUCT_NOT_FOUNT(BAD_REQUEST, "해당 장바구니에 상품이 존재하지 않습니다."),
 
     COUPON_NOT_FOUND(BAD_REQUEST, "해당 쿠폰이 존재하지 않습니다."),
     FAQ_NOT_FOUND(BAD_REQUEST,"해당 자주 묻는 질문이 존재하지 않습니다."),
@@ -39,10 +39,7 @@ public enum ErrorCode {
 
     NAVER_LOGIN_FAILURE(BAD_REQUEST,"네이버 로그인에 실패하였습니다."),
 
-    GOOGLE_LOGIN_FAILURE(BAD_REQUEST,"구글 로그인에 실패하였습니다."),
-
-    REFRESH_TOKEN_EXPIRATION(INTERNAL_SERVER_ERROR , "Refresh 토큰이 만료되었습니다."),
-    ACCESS_TOKEN_EXPIRATION(INTERNAL_SERVER_ERROR,"Access 토큰이 만료되었습니다.");
+    GOOGLE_LOGIN_FAILURE(BAD_REQUEST,"구글 로그인에 실패하였습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

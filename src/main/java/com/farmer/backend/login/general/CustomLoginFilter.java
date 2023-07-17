@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class CustomLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static final String LOGIN_REQUEST_URL = "/api/member/login";
+    private static final String LOGIN_REQUEST_URL = "/api/main/login";
     private static final String HTTP_METHOD = "POST";
     private final ObjectMapper objectMapper;
     private static final AntPathRequestMatcher LOGIN_REQUEST_MATCHER =

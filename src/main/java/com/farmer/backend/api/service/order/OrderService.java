@@ -2,9 +2,16 @@ package com.farmer.backend.api.service.order;
 
 import com.farmer.backend.api.controller.order.request.SearchOrdersCondition;
 import com.farmer.backend.api.controller.order.response.ResponseOrderDetailDto;
+import com.farmer.backend.api.controller.order.response.ResponseOrderInfoDto;
 import com.farmer.backend.api.controller.order.response.ResponseOrdersAndPaymentDto;
 import com.farmer.backend.api.controller.order.response.ResponseOrdersDto;
+import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductListDto;
+import com.farmer.backend.domain.deliveryaddress.DeliveryAddress;
+import com.farmer.backend.domain.deliveryaddress.DeliveryAddressRepository;
+import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.domain.member.MemberRepository;
 import com.farmer.backend.domain.orders.Orders;
+import com.farmer.backend.domain.product.ProductQueryRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.domain.orderproduct.OrderProductQueryRepository;
@@ -31,8 +38,11 @@ public class OrderService {
     private final OrderQueryRepository orderQueryRepositoryImpl;
     private final OrderProductRepository orderProductRepository;
     private final OrderProductQueryRepository orderProductQueryRepositoryImpl;
+    private final ProductQueryRepository productQueryRepositoryImpl;
     private final PaymentRepository paymentRepository;
     private final PaymentQueryRepository paymentQueryRepositoryImpl;
+    private final MemberRepository memberRepository;
+    private final DeliveryAddressRepository deliveryAddressRepository;
 
     /**
      * 주문 전체 리스트
@@ -87,4 +97,24 @@ public class OrderService {
         orderRepository.delete(findOrder);
     }
 
+    /**
+     * 주문자 배송지 정보 조회
+     * @param userId 회원 아이디
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public ResponseOrderInfoDto deliveryAddressForm(String userId) {
+        Member findMember = memberRepository.findByEmail(userId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        DeliveryAddress deliveryAddress = deliveryAddressRepository.findByMember(findMember);
+        if (deliveryAddress != null) {
+            return ResponseOrderInfoDto.builder()
+                    .username(deliveryAddress.getName())
+                    .zipcode(deliveryAddress.getZipcode())
+                    .address(deliveryAddress.getAddress())
+                    .addressDetail(deliveryAddress.getAddressDetail())
+                    .zipcode(deliveryAddress.getZipcode())
+                    .build();
+        }
+        return null;
+    }
 }

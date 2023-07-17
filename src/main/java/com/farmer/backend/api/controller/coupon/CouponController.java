@@ -4,16 +4,19 @@ import com.farmer.backend.api.controller.coupon.response.ResponseCouponListDto;
 import com.farmer.backend.api.controller.coupon.response.ResponseMembersCouponDto;
 import com.farmer.backend.api.service.membersCoupon.membersCouponService;
 import com.farmer.backend.config.ApiDocumentResponse;
+
+import com.farmer.backend.domain.memberscoupon.MembersCoupon;
+
+import com.farmer.backend.login.general.MemberAdapter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,12 +35,14 @@ public class CouponController {
      */
     @ApiDocumentResponse
     @Operation(summary = "회원 보유 쿠폰 조회",description = "회원이 보유한 쿠폰 리스트를 출력합니다.")
-    @PostMapping("/coupon")
-    public List<ResponseMembersCouponDto> couponList(Authentication authentication){
+    @GetMapping("/coupon")
+    public List<ResponseMembersCouponDto> couponList(@AuthenticationPrincipal MemberAdapter memberAdapter){
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return membersCouponService.couponList(userDetails.getUsername());
+        String memberEmail = memberAdapter.getMember().getEmail();
+        return membersCouponService.couponList(memberEmail);
+
     }
+
 
     /**
      * 쿠폰 추가
