@@ -2,7 +2,6 @@ package com.farmer.backend.api.controller.cart.request;
 
 import com.farmer.backend.domain.cart.Cart;
 import com.farmer.backend.domain.member.Member;
-import com.farmer.backend.domain.options.Options;
 import com.farmer.backend.domain.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,18 +12,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @Builder
-public class RequestProductCartDto {
+public class RequestCartProductQuantityDto {
 
-    private Product product;
-    private Options option;
-    private Integer count;
+    private Long cartId;
+    private String quantityCond;
 
-    public Cart toEntity(Member member) {
+    public Cart toEntity() {
         return Cart.builder()
-                .product(product)
-                .options(option)
-                .member(member)
-                .count(count)
+                .id(cartId)
                 .build();
     }
 
