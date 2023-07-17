@@ -4,6 +4,7 @@ import com.farmer.backend.api.controller.cart.request.RequestCartProductQuantity
 import com.farmer.backend.api.controller.cart.request.RequestProductCartDto;
 import com.farmer.backend.api.controller.cart.response.ResponseCartProductListDto;
 import com.farmer.backend.api.controller.cart.response.ResponseCartProductQuantityDto;
+import com.farmer.backend.api.controller.cart.response.ResponseTotalPriceAndCountDto;
 import com.farmer.backend.domain.cart.Cart;
 import com.farmer.backend.domain.cart.CartQueryRepository;
 import com.farmer.backend.domain.cart.CartRepository;
@@ -69,11 +70,33 @@ public class CartService {
         return cartQueryRepositoryImpl.findCartProductByCartId(findCartProduct.getId());
     }
 
+    /**
+     * 장바구니 상품 삭제
+     * @param cartId 장바구니 일련번호
+     */
     @Transactional
     public void removeToCartProduct(Long[] cartId) {
         for (Long id : cartId) {
             Cart findCartProduct = cartRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.CART_PRODUCT_NOT_FOUNT));
             cartRepository.delete(findCartProduct);
         }
+    }
+
+    /**
+     * 장바구니 합계금액, 수량조회
+     * @param cartId 장바구니 일련번호
+     * @return
+     */
+    @Transactional
+    public ResponseTotalPriceAndCountDto totalPriceAndCountOfCartProduct(Long[] cartId) {
+        Integer totalPrice = 0;
+        Integer totalCount = 0;
+        for (Long id : cartId) {
+            Cart findCartProduct = cartRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.CART_PRODUCT_NOT_FOUNT));
+            totalPrice += findCartProduct.getProduct().getPrice() * findCartProduct.getCount();
+            totalCount += findCartProduct.getCount();
+        }
+        ResponseTotalPriceAndCountDto totalPriceInfo = new ResponseTotalPriceAndCountDto(totalCount, totalPrice);
+        return totalPriceInfo;
     }
 }
