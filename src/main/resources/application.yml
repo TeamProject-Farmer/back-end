@@ -45,7 +45,7 @@ springdoc:
     tags-sorter: alpha                # alpha: ??? ? ?? ??, method: HTTP Method ? ??
     operations-sorter: alpha          # alpha: ??? ? ?? ??, method: HTTP Method ? ??
   api-docs:
-    path: /api-docs
+    path: /api/main/api-docs
     groups:
       enabled: true
   cache:
