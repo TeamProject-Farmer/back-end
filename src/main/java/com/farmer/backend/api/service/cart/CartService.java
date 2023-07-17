@@ -68,4 +68,12 @@ public class CartService {
         findCartProduct.cartProductQuantityUpdate(beforeCount);
         return cartQueryRepositoryImpl.findCartProductByCartId(findCartProduct.getId());
     }
+
+    @Transactional
+    public void removeToCartProduct(Long[] cartId) {
+        for (Long id : cartId) {
+            Cart findCartProduct = cartRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.CART_PRODUCT_NOT_FOUNT));
+            cartRepository.delete(findCartProduct);
+        }
+    }
 }

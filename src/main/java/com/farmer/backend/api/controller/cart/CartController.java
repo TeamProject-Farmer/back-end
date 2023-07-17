@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -59,5 +60,17 @@ public class CartController {
     @PostMapping("/change-quantity")
     public ResponseCartProductQuantityDto changeQuantity(@ModelAttribute RequestCartProductQuantityDto cartProductQuantityDto, @AuthenticationPrincipal MemberAdapter member) {
         return cartService.changeQuantityAction(cartProductQuantityDto, member.getUsername());
+    }
+
+    /**
+     * 장바구니 목록 페이지
+     * 장바구니 상품 삭제
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "장바구니 상품 삭제", description = "장바구니의 상품을 삭제합니다.")
+    @PostMapping("/remove-product/{cartId}")
+    public ResponseEntity removeToCartProduct(@PathVariable Long[] cartId, @AuthenticationPrincipal MemberAdapter member) {
+        cartService.removeToCartProduct(cartId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

@@ -12,6 +12,7 @@ public class ResponseCartProductListDto {
     private Long productId;
     private String imgUrl;
     private String productName;
+    private Long optionId;
     private String optionName;
     private Integer count;
     private Integer productPrice;

@@ -31,6 +31,7 @@ public class CartQueryRepositoryImpl implements CartQueryRepository{
                         cart.product.id,
                         cart.product.thumbnailImg,
                         cart.product.name,
+                        cart.options.id,
                         cart.options.optionName,
                         cart.count,
                         cart.product.price,
