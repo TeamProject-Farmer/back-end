@@ -36,6 +36,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
         List<ResponseBestReviewListDto> productReviewList = query
                 .select(Projections.constructor(
                         ResponseBestReviewListDto.class,
+                        productReviews.id,
                         productReviews.member.nickname,
                         productReviews.imgUrl,
                         productReviews.content,
@@ -45,6 +46,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                 ))
                 .from(productReviews)
                 .orderBy(productReviews.likeCount.desc())
+                .limit(12L)
                 .fetch();
         return productReviewList;
     }
@@ -56,7 +58,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
     @Override
     public Page<ResponseProductReviewListDto> productReviewList(Pageable pageable,
                                                                 String sortOrderCond,
-                                                                SearchProductReviewCondition searchCond,
+                                                                SearchProductReviewCondition reviewCond,
                                                                 Long productId){
         List<ResponseProductReviewListDto> productReviewList = query
                 .select(Projections.constructor(
@@ -71,7 +73,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                         productReviews.content
                 ))
                 .from(productReviews)
-                .where(productReviews.orderProduct.product.id.eq(productId),likeStar(searchCond.getStar()))
+                    .where(productReviews.orderProduct.product.id.eq(productId),likeStar(reviewCond.getStar()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(sortOrderProductReview(sortOrderCond))

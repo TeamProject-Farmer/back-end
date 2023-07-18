@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
@@ -33,11 +35,27 @@ class MemberServiceTest {
     @DisplayName("마이페이지 프로필 수정")
     void profileUpdate() {
 
-        Member member = memberRepository.findByEmail("kce2360@naver.com").orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Member member = memberRepository.findByEmail("codms7020@naver.com[NAVER]").orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        RequestMemberProfileDto requestMemberProfileDto = new RequestMemberProfileDto("0000","챈잉1");
+        RequestMemberProfileDto requestMemberProfileDto = new RequestMemberProfileDto(null,"챈s");
+        String nickname = requestMemberProfileDto.getNickname();
+        String socialId = member.getSocialId();
 
-        member.updateProfile(requestMemberProfileDto);
+        if(requestMemberProfileDto.getPassword() == null){
+            RequestMemberProfileDto socialMember = new RequestMemberProfileDto(UUID.randomUUID().toString(),requestMemberProfileDto.getNickname());
+            requestMemberProfileDto=socialMember;
+        }
+
+        if(!member.getNickname().equals(nickname) && memberRepository.findByNickname(nickname).isPresent()){
+            throw new CustomException(ErrorCode.NICKNAME_FOUND);
+        }
+        else if (!socialId.equals(null)) {
+            member.updateProfile(member.getPassword(),requestMemberProfileDto.getNickname());
+        }
+        else{
+            member.updateProfile(requestMemberProfileDto.getPassword(),requestMemberProfileDto.getNickname());
+        }
+
         Long coupon= memberCouponRepository.countByMemberId(member.getId());
 
         ResponseLoginMemberDto responseLoginMemberDto= ResponseLoginMemberDto.getLoginMember(member, coupon);
