@@ -30,7 +30,6 @@ public class MemberController {
     public ResponseLoginMemberDto profileUpdate(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                                 @ModelAttribute RequestMemberProfileDto requestMemberProfileDto){
         String memberEmail = memberAdapter.getMember().getEmail();
-        log.info(memberEmail);
         return memberService.profileUpdate(memberEmail,requestMemberProfileDto);
     }
 
