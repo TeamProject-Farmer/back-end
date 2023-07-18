@@ -245,12 +245,18 @@ public class MemberService {
     @Transactional
     public ResponseLoginMemberDto profileUpdate(String memberEmail, RequestMemberProfileDto requestMemberProfileDto) {
 
-        System.out.println(memberEmail);
         Member member=memberRepository.findByEmail(memberEmail).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         Long memberCoupon = memberCouponRepository.countByMemberId(member.getId());
 
-        member.updateProfile(requestMemberProfileDto);
-        member.encodePassword(passwordEncoder);
+        String nickname = requestMemberProfileDto.getNickname();
+
+        if(memberRepository.findByNickname(nickname).isPresent()){
+            throw new CustomException(ErrorCode.NICKNAME_FOUND);
+        }
+        else{
+            member.updateProfile(requestMemberProfileDto);
+            member.encodePassword(passwordEncoder);
+        }
 
         return ResponseLoginMemberDto.getLoginMember(member, memberCoupon);
     }
