@@ -39,16 +39,25 @@ public class SearchService {
                                             Pageable pageable,
                                             String sortSearchCond,
                                             SearchProductCondition searchProductCondition) {
+
+        List<String> memberSearchWord = null;
+
+
         Page<ResponseSearchProductDto> searchProduct =
-                searchQueryRepositoryImpl.searchProduct(pageable,sortSearchCond, searchProductCondition.getSearchWord());
+                searchQueryRepositoryImpl.searchProduct(pageable,sortSearchCond, searchProductCondition.getSearchWord().trim());
 
-        List<String> memberSearchWord = searchQueryRepositoryImpl.memberSearchWordList(memberEmail);
 
-        if(memberEmail!=null && searchProduct.getTotalElements()!=0 && !memberSearchWord.contains(searchProductCondition.getSearchWord())){
-            Member member = memberRepository.findByEmail(memberEmail).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-            RequestSearchDto searchWord = new RequestSearchDto(member,searchProductCondition.getSearchWord());
-            searchRepository.save(searchWord.toEntity(searchWord));
+        if(memberEmail!=null ){
+            memberSearchWord = searchQueryRepositoryImpl.memberSearchWordList(memberEmail);
+
+            if(!memberSearchWord.contains(searchProductCondition.getSearchWord().trim())&& searchProduct.getTotalElements()!=0 ){
+                Member member = memberRepository.findByEmail(memberEmail).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+                RequestSearchDto searchWord = new RequestSearchDto(member,searchProductCondition.getSearchWord().trim());
+                searchRepository.save(searchWord.toEntity(searchWord));
+            }
+
 
         }
 
