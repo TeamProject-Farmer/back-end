@@ -17,4 +17,6 @@ public interface ProductReviewQueryRepository {
 
 
     RequestReviewStarDto fiveStars(Long productId);
+
+    List<String> productReviewImg(Long productId);
 }

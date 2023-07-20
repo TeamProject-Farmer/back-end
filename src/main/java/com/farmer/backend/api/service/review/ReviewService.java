@@ -51,11 +51,7 @@ public class ReviewService {
     @Transactional(readOnly = true)
     public Page<ResponseProductReviewListDto> productReviewList(Pageable pageable, String sortOrderCond, SearchProductReviewCondition searchCond, Long productId) {
 
-        Page<ResponseProductReviewListDto> productReviewList
-                = reviewQueryRepositoryImpl.productReviewList(pageable,sortOrderCond,searchCond,productId);
-
-
-        return productReviewList;
+        return reviewQueryRepositoryImpl.productReviewList(pageable,sortOrderCond,searchCond,productId);
     }
 
     /**
@@ -78,11 +74,18 @@ public class ReviewService {
             productReviewAverageRepository.save(productReviewAverage);
         }
 
-        ResponseReviewStarDto responseReviewStarDto = new ResponseReviewStarDto(reviewStar.getAverageStarRating(),reviewStar.getFiveStar(),
+        return new ResponseReviewStarDto(reviewStar.getAverageStarRating(),reviewStar.getFiveStar(),
                 reviewStar.getFourStar(),reviewStar.getThreeStar(),reviewStar.getTwoStar(),reviewStar.getOneStar());
 
+    }
 
-        return responseReviewStarDto;
+    /**
+     * 상품별 리뷰 이미지 리스트
+     * @param productId 상품 ID값
+     */
+    @Transactional
+    public List<String> productReviewImg(Long productId) {
 
+        return reviewQueryRepositoryImpl.productReviewImg(productId);
     }
 }
