@@ -39,6 +39,8 @@ public class ProductQnAQueryRepositoryImpl implements ProductQnAQueryRepository 
                 ))
                 .from(qna)
                 .orderBy(qna.qCreatedDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         Long count =query

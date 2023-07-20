@@ -49,9 +49,8 @@ public class ReviewService {
      * @return Page<ResponseProductReviewListDto>
      */
     @Transactional(readOnly = true)
-    public Page<ResponseProductReviewListDto> productReviewList(String sortOrderCond, Integer reviewCond, Long productId) {
+    public Page<ResponseProductReviewListDto> productReviewList(Pageable pageable , String sortOrderCond, Integer reviewCond, Long productId) {
 
-        Pageable pageable = PageRequest.of(1, 3);
         return reviewQueryRepositoryImpl.productReviewList(pageable,sortOrderCond,reviewCond,productId);
     }
 

@@ -55,11 +55,12 @@ public class ReviewController {
     @ApiDocumentResponse
     @Operation(summary = "상품별 리뷰 출력", description = "상품별 리뷰를 출력합니다.")
     @GetMapping("/main/review/{productId}")
-    public Page<ResponseProductReviewListDto> productReviewList(String sortOrderCond,
+    public Page<ResponseProductReviewListDto> productReviewList(PageRequest pageRequest,
+                                                                String sortOrderCond,
                                                                 Integer reviewCond,
                                                                 @PathVariable(name = "productId") Long productId){
 
-        return reviewService.productReviewList(sortOrderCond,reviewCond,productId);
+        return reviewService.productReviewList(pageRequest.of(),sortOrderCond,reviewCond,productId);
     }
 
     /**
