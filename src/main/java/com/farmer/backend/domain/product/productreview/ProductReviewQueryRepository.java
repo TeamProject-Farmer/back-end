@@ -13,7 +13,7 @@ public interface ProductReviewQueryRepository {
     List<ResponseBestReviewListDto> bestReviewList();
 
     Page<ResponseProductReviewListDto> productReviewList(Pageable pageable, String sortOrderCondition,
-                                                         SearchProductReviewCondition searchCondition, Long productId);
+                                                         Integer searchCondition, Long productId);
 
 
     RequestReviewStarDto fiveStars(Long productId);

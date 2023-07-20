@@ -44,7 +44,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                 ))
                 .from(productReviews)
                 .orderBy(productReviews.likeCount.desc())
-                .limit(12L)
+                .limit(12)
                 .fetch();
         return productReviewList;
     }
@@ -56,7 +56,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
     @Override
     public Page<ResponseProductReviewListDto> productReviewList(Pageable pageable,
                                                                 String sortOrderCond,
-                                                                SearchProductReviewCondition reviewCond,
+                                                                Integer reviewCond,
                                                                 Long productId){
         List<ResponseProductReviewListDto> productReviewList = query
                 .select(Projections.constructor(
@@ -71,7 +71,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                         productReviews.content
                 ))
                 .from(productReviews)
-                    .where(productReviews.orderProduct.product.id.eq(productId),likeStar(reviewCond.getStar()))
+                    .where(productReviews.orderProduct.product.id.eq(productId),likeStar(reviewCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(sortOrderProductReview(sortOrderCond))
@@ -134,8 +134,8 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
 
         return imgList;
     }
-    public BooleanExpression likeStar(String star){
-        return star != null ? productReviews.fiveStarRating.eq(Integer.valueOf(star)) :null;
+    public BooleanExpression likeStar(Integer star){
+        return star != null ? productReviews.fiveStarRating.eq(star) :null;
     }
 
     public OrderSpecifier<?> sortOrderProductReview(String sortOrderCond) {
