@@ -1,6 +1,5 @@
 package com.farmer.backend.api.controller.review;
 
-import com.farmer.backend.api.controller.review.request.SearchProductReviewCondition;
 import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
 import com.farmer.backend.api.controller.review.response.ResponseProductReviewListDto;
 import com.farmer.backend.api.controller.review.response.ResponseReviewStarDto;
@@ -59,7 +58,7 @@ public class ReviewController {
                                                                 String sortOrderCond,
                                                                 Integer reviewCond,
                                                                 @PathVariable(name = "productId") Long productId){
-
+        pageRequest.setSize(3);
         return reviewService.productReviewList(pageRequest.of(),sortOrderCond,reviewCond,productId);
     }
 
