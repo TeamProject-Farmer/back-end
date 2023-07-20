@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ResponseBannerDtoList {
 
+    private Long id;
     private String name;
     private String linkUrl;
     private String imgUrl;

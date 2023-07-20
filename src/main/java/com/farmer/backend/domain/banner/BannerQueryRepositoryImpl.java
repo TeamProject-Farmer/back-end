@@ -24,11 +24,13 @@ public class BannerQueryRepositoryImpl implements BannerQueryRepository{
     public List<ResponseBannerDtoList> bannerList(){
         List<ResponseBannerDtoList> bannerList = query
                 .select(Projections.constructor(ResponseBannerDtoList.class,
+                        banner.id,
                         banner.name,
                         banner.imgUrl,
                         banner.linkUrl))
                 .from(banner)
                 .orderBy(banner.createdDate.desc())
+                .limit(3)
                 .fetch();
         return bannerList;
     }

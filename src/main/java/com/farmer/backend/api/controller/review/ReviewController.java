@@ -57,10 +57,20 @@ public class ReviewController {
     @GetMapping("/main/review/{productId}")
     public Page<ResponseProductReviewListDto> productReviewList(PageRequest pageRequest,
                                                                 String sortOrderCond,
-                                                                SearchProductReviewCondition searchProductReviewCond,
+                                                                Integer reviewCond,
                                                                 @PathVariable(name = "productId") Long productId){
 
-        return reviewService.productReviewList(pageRequest.of(),sortOrderCond,searchProductReviewCond,productId);
+        return reviewService.productReviewList(pageRequest.of(),sortOrderCond,reviewCond,productId);
+    }
+
+    /**
+     * 상품별 사진 리뷰
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "상품별 사진 리뷰" ,description = "상품별 사진 리뷰를 출력합니다. ")
+    @GetMapping("/main/review/img/{productId}")
+    public List<String> productReviewImg(@PathVariable(name = "productId") Long productId){
+        return reviewService.productReviewImg(productId);
     }
 
 }
