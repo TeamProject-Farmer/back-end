@@ -56,12 +56,10 @@ class ReviewServiceTest {
     @DisplayName("상품별 리뷰 리스트")
     void productReviewList() {
         Long productId = 5L;
-        Pageable pageable = PageRequest.of(0, 10);
-        SearchProductReviewCondition searchProductReviewCondition = new SearchProductReviewCondition();
-
+        Pageable pageable = PageRequest.of(1,3);
 
         Page<ResponseProductReviewListDto> productReviewListDtoPage
-                = productReviewQueryRepository.productReviewList(pageable, "best", searchProductReviewCondition, productId);
+                = productReviewQueryRepository.productReviewList(pageable, "best", 5, productId);
 
         for (ResponseProductReviewListDto productReviewListDto : productReviewListDtoPage) {
 

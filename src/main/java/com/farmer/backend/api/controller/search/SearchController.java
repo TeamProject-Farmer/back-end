@@ -1,7 +1,6 @@
 package com.farmer.backend.api.controller.search;
 
 import com.farmer.backend.api.controller.search.response.ResponseSearchPage;
-import com.farmer.backend.api.controller.search.request.SearchProductCondition;
 import com.farmer.backend.api.service.search.SearchService;
 import com.farmer.backend.config.ApiDocumentResponse;
 import com.farmer.backend.paging.PageRequest;
@@ -31,9 +30,9 @@ public class SearchController {
     public ResponseSearchPage searchProduct(String memberEmail,
                                             PageRequest pageRequest,
                                             String sortSearchCond,
-                                            SearchProductCondition searchProductCondition){
+                                            String searchWord){
 
-        return searchService.searchProduct(memberEmail,pageRequest.of(),sortSearchCond, searchProductCondition);
+        return searchService.searchProduct(memberEmail,pageRequest.of(),sortSearchCond, searchWord);
     }
 
 

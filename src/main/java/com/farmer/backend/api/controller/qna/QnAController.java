@@ -25,6 +25,8 @@ public class QnAController {
     @Operation(summary = "QnA 리스트 전체 출력",description = "상품 QnA 리스트를 전체 출력합니다.")
     @GetMapping("/main/qna")
     public Page<ResponseProductQnADto> productQnA(PageRequest pageRequest){
+
+        pageRequest.setSize(5);
         return productQnAService.productQnA(pageRequest.of());
     }
 }
