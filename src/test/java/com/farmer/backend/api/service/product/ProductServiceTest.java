@@ -50,7 +50,7 @@ class ProductServiceTest {
     @Test
     @DisplayName("상품 전체 리스트")
     void productList() {
-        Pageable page = PageRequest.of(1, 14);
+        Pageable page = PageRequest.of(0, 14);
         Page<ResponseProductDtoList> productList = productQueryRepositoryImpl.productList(3L, page, ProductOrderCondition.LOW);
         for (ResponseProductDtoList product : productList) {
             log.info("product={}", product.getProductName());
