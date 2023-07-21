@@ -2,6 +2,7 @@ package com.farmer.backend.domain.product;
 
 import com.farmer.backend.api.controller.product.response.ResponseProductDtoList;
 import com.farmer.backend.api.controller.product.response.ResponseShopBySizeProduct;
+import com.farmer.backend.domain.product.productreviewstar.QProductReviewAverage;
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -20,6 +21,7 @@ import java.util.Objects;
 
 import static com.farmer.backend.domain.product.QProduct.product;
 import static com.farmer.backend.domain.product.productcategory.QProductCategory.productCategory;
+import static com.farmer.backend.domain.product.productreviewstar.QProductReviewAverage.productReviewAverage;
 
 
 @Repository
@@ -103,11 +105,13 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                         product.name,
                         product.discountRate,
                         product.price,
-                        product.averageStarRating,
+                        productReviewAverage.averageStarRating,
                         product.reviewCount))
-                .from(product)
+                .from(productReviewAverage)
+                .join(product)
+                .on(productReviewAverage.product.eq(product))
                 .limit(10)
-                .orderBy(product.averageStarRating.desc())
+                .orderBy(productReviewAverage.averageStarRating.desc())
                 .fetch();
         return productList;
     }
