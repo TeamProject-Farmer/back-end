@@ -14,9 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -50,9 +48,9 @@ public class OrderProductController {
      */
     @ApiDocumentResponse
     @Operation(summary = "주문내역 전체 조회", description = "현재 로그인 한 사용자의 전체 주문내역을 조회합니다.")
-    @GetMapping("/order-list")
+    @PostMapping("/order-list")
     public List<ResponseOrderProductDetailDto> orderList(@AuthenticationPrincipal MemberAdapter member,
-                                                         RequestOrderProductStatusSearchDto statusSearchDto) {
+                                                         @ModelAttribute RequestOrderProductStatusSearchDto statusSearchDto) {
         log.info("member={}", member.getMember().getEmail());
         return orderProductService.orderList(statusSearchDto, member.getUsername());
     }

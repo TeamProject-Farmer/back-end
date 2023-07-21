@@ -53,7 +53,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
     }
 
     @Override
-    public List<ResponseProductDtoList> productList(ProductOrderCondition orderCondition) {
+    public Page<ResponseProductDtoList> productList(Long categoryId, Pageable pageable, ProductOrderCondition orderCondition) {
         List<ResponseProductDtoList> productList = query
                 .select(Projections.constructor(ResponseProductDtoList.class,
                         product.id,
@@ -63,9 +63,19 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                         product.averageStarRating,
                         product.reviewCount))
                 .from(product)
+                .where(product.category.id.eq(categoryId))
                 .orderBy(productOrderCondition(orderCondition))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
-        return productList;
+
+        Long count = query
+                .select(product.count())
+                .from(product)
+                .where(product.category.id.eq(categoryId))
+                .fetchOne();
+
+        return new PageImpl<>(productList, pageable, count);
     }
 
     @Override
