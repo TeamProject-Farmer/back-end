@@ -7,10 +7,14 @@ import com.farmer.backend.api.service.product.ProductService;
 import com.farmer.backend.config.ApiDocumentResponse;
 import com.farmer.backend.domain.product.ProductOrderCondition;
 import com.farmer.backend.domain.product.ProductSize;
+import com.farmer.backend.paging.PageRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,9 +38,9 @@ public class ProductController {
      */
     @ApiDocumentResponse
     @Operation(summary = "상품 전체 리스트", description = "상품 전체 리스트를 출력합니다.")
-    @GetMapping
-    public List<ResponseProductDtoList> productList(ProductOrderCondition orderCondition) {
-        return productService.productList(orderCondition);
+    @GetMapping("/{categoryId}")
+    public Page<ResponseProductDtoList> productList(@PathVariable Long categoryId, @PageableDefault(size = 14) Pageable pageable, ProductOrderCondition orderCondition) {
+        return productService.productList(categoryId, pageable, orderCondition);
     }
 
     /**
