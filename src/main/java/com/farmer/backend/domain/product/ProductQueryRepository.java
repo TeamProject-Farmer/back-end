@@ -11,7 +11,7 @@ import java.util.List;
 public interface ProductQueryRepository {
     Page<Product> findAll(Pageable pageable, String productName, String orderCondition);
 
-    List<ResponseProductDtoList> productList(ProductOrderCondition orderCondition);
+    Page<ResponseProductDtoList> productList(Long categoryId, Pageable pageable, ProductOrderCondition orderCondition);
 
     List<ResponseProductDtoList> mdPickList();
 

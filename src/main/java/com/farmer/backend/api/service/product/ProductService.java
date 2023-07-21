@@ -44,8 +44,8 @@ public class ProductService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<ResponseProductDtoList> productList(ProductOrderCondition orderCondition) {
-        List<ResponseProductDtoList> productList = productQueryRepositoryImpl.productList(orderCondition);
+    public Page<ResponseProductDtoList> productList(Long categoryId, Pageable pageable, ProductOrderCondition orderCondition) {
+        Page<ResponseProductDtoList> productList = productQueryRepositoryImpl.productList(categoryId, pageable, orderCondition);
         return productList;
     }
 
