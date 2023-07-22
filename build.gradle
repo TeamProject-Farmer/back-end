@@ -25,8 +25,13 @@ configurations {
 
 repositories {
 	mavenCentral()
-	//아임포트
-	maven { url 'https://jitpack.io' }
+}
+
+allprojects {
+	repositories {
+		//아임포트
+		maven { url 'https://jitpack.io' }
+	}
 }
 
 dependencies {
