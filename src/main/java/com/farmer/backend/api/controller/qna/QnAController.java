@@ -2,6 +2,7 @@ package com.farmer.backend.api.controller.qna;
 
 import com.farmer.backend.api.controller.qna.request.RequestQnAWriteDto;
 import com.farmer.backend.api.controller.qna.response.ResponseProductQnADto;
+import com.farmer.backend.api.controller.qna.response.ResponseQnADetailDto;
 import com.farmer.backend.api.service.qna.ProductQnAService;
 import com.farmer.backend.config.ApiDocumentResponse;
 import com.farmer.backend.domain.member.Member;
@@ -14,10 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -54,6 +52,14 @@ public class QnAController {
     /**
      * 문의사항 상세보기
      */
+    @ApiDocumentResponse
+    @Operation(summary = "문의사항 상세보기",description = "상품 문의사항 상세보기")
+    @GetMapping("/main/qna/{qnaId}")
+    public ResponseQnADetailDto qnaRead(@PathVariable(name = "qnaId") Long qnaId,String memberEmail){
+
+        return productQnAService.qnaRead(qnaId,memberEmail);
+    }
+
 
     /**
      * 내 문의사항만 보기
