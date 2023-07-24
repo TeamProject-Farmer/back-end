@@ -15,6 +15,7 @@ import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductQnAService {
     private final ProductQnAQueryRepositoryImpl productQnAQueryRepositoryImpl;
     private final ProductRepository productRepository;
-    private final MemberRepository memberRepository;
     private final QnARepository qnaRepository;
 
+    @Transactional
     public Page<ResponseProductQnADto> productQnA(Pageable pageable) {
         return productQnAQueryRepositoryImpl.productQnAList(pageable);
     }
@@ -57,5 +58,11 @@ public class ProductQnAService {
 
         return ResponseQnADetailDto.getQnaDetail(qna);
 
+    }
+
+    @Transactional
+    public Page<ResponseProductQnADto> qnaMine(Pageable pageable,String memberEmail) {
+
+        return productQnAQueryRepositoryImpl.qnaMineList(pageable,memberEmail);
     }
 }

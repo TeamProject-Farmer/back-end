@@ -19,15 +19,17 @@ import static com.farmer.backend.domain.admin.qna.QQna.qna;
 public class ProductQnAQueryRepositoryImpl implements ProductQnAQueryRepository {
 
     private final JPAQueryFactory query;
-    public ProductQnAQueryRepositoryImpl(EntityManager em){
+
+    public ProductQnAQueryRepositoryImpl(EntityManager em) {
         this.query = new JPAQueryFactory(em);
     }
 
     @Override
-    public Page<ResponseProductQnADto> productQnAList(Pageable pageable){
+    public Page<ResponseProductQnADto> productQnAList(Pageable pageable) {
         List<ResponseProductQnADto> productQnAList = query
                 .select(Projections.constructor(
                         ResponseProductQnADto.class,
+                        qna.id,
                         qna.member.nickname,
                         qna.product.name,
                         qna.subject,
@@ -43,12 +45,42 @@ public class ProductQnAQueryRepositoryImpl implements ProductQnAQueryRepository 
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long count =query
+        Long count = query
                 .select(qna.count())
                 .from(qna)
                 .fetchOne();
 
-        return new PageImpl<>(productQnAList,pageable,count);
+        return new PageImpl<>(productQnAList, pageable, count);
     }
 
+    @Override
+    public Page<ResponseProductQnADto> qnaMineList(Pageable pageable, String memberEmail) {
+        List<ResponseProductQnADto> productQnAMainList = query
+                .select(Projections.constructor(
+                        ResponseProductQnADto.class,
+                        qna.id,
+                        qna.member.nickname,
+                        qna.product.name,
+                        qna.subject,
+                        qna.content,
+                        qna.answer,
+                        qna.secretQuestion,
+                        qna.qCreatedDate
+
+                ))
+                .from(qna)
+                .where(qna.member.email.eq(memberEmail))
+                .orderBy(qna.qCreatedDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = query
+                .select(qna.count())
+                .from(qna)
+                .fetchOne();
+
+        return new PageImpl<>(productQnAMainList, pageable, count);
+
+    }
 }

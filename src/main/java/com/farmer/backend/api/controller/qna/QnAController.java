@@ -64,4 +64,14 @@ public class QnAController {
     /**
      * 내 문의사항만 보기
      */
+
+    @ApiDocumentResponse
+    @Operation
+    @GetMapping("member/qna/mine")
+    public Page<ResponseProductQnADto> qnaMine(@AuthenticationPrincipal MemberAdapter memberAdapter, PageRequest pageRequest){
+
+        pageRequest.setSize(5);
+        String memberEmail = memberAdapter.getMember().getEmail();
+        return productQnAService.qnaMine(pageRequest.of(),memberEmail);
+    }
 }
