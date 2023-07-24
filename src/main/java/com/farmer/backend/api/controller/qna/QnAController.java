@@ -27,7 +27,7 @@ public class QnAController {
     private final ProductQnAService productQnAService;
 
     /**
-     * 문의사항 리스트 출력`
+     * 문의사항 리스트 출력
      */
     @ApiDocumentResponse
     @Operation(summary = "QnA 리스트 전체 출력",description = "상품 QnA 리스트를 전체 출력합니다.")
