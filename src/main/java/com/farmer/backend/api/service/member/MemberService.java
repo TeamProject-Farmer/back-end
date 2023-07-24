@@ -243,7 +243,7 @@ public class MemberService {
      * @param requestMemberProfileDto 프로필 수정 데이터
      */
     @Transactional
-    public ResponseLoginMemberDto profileUpdate(String memberEmail, RequestMemberProfileDto requestMemberProfileDto) {
+    public String profileUpdate(String memberEmail, RequestMemberProfileDto requestMemberProfileDto) {
 
         Member member=memberRepository.findByEmail(memberEmail).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         Long memberCoupon = memberCouponRepository.countByMemberId(member.getId());
@@ -261,7 +261,7 @@ public class MemberService {
             member.encodePassword(passwordEncoder);
         }
 
-        return ResponseLoginMemberDto.getLoginMember(member, memberCoupon);
+        return "수정 완료";
     }
 
     /**
