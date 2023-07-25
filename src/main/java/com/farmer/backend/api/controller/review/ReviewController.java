@@ -1,20 +1,22 @@
 package com.farmer.backend.api.controller.review;
 
+import com.farmer.backend.api.controller.review.request.RequestReviewWriteDto;
 import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
 import com.farmer.backend.api.controller.review.response.ResponseProductReviewListDto;
 import com.farmer.backend.api.controller.review.response.ResponseReviewStarDto;
 import com.farmer.backend.api.service.review.ReviewService;
 import com.farmer.backend.config.ApiDocumentResponse;
+import com.farmer.backend.login.general.MemberAdapter;
 import com.farmer.backend.paging.PageRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -70,6 +72,23 @@ public class ReviewController {
     @GetMapping("/main/review/img/{productId}")
     public List<String> productReviewImg(@PathVariable(name = "productId") Long productId){
         return reviewService.productReviewImg(productId);
+    }
+
+    /**
+     * 리뷰 작성
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "상품 리뷰 작성", description = "상품 리뷰를 작성합니다.")
+    @PostMapping("/member/review/write/{productId}")
+    public ResponseEntity<String> productReviewWrite(@AuthenticationPrincipal MemberAdapter memberAdapter,
+                                                     @PathVariable(name="productId") Long productId,
+                                                     RequestReviewWriteDto requestReviewWriteDto){
+
+        String memberEmail = memberAdapter.getMember().getEmail();
+        reviewService.reviewWrite(memberEmail,productId,requestReviewWriteDto);
+
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+
     }
 
 }

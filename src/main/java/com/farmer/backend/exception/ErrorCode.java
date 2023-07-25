@@ -40,7 +40,9 @@ public enum ErrorCode {
 
     NAVER_LOGIN_FAILURE(BAD_REQUEST,"네이버 로그인에 실패하였습니다."),
 
-    GOOGLE_LOGIN_FAILURE(BAD_REQUEST,"구글 로그인에 실패하였습니다.");
+    GOOGLE_LOGIN_FAILURE(BAD_REQUEST,"구글 로그인에 실패하였습니다."),
+
+    FILE_NOT_CONVERT(BAD_REQUEST,"파일 변환에 실패하였습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
