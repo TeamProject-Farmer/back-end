@@ -29,7 +29,7 @@ public class MemberController {
     @ApiDocumentResponse
     @Operation(summary = "회원 프로필 수정",description = "회원 프로필을 수정합니다.")
     @PostMapping(value = "mypage/profile")
-    public ResponseLoginMemberDto profileUpdate(@AuthenticationPrincipal MemberAdapter memberAdapter,
+    public String profileUpdate(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                                 @ModelAttribute RequestMemberProfileDto requestMemberProfileDto){
 
         String memberEmail = memberAdapter.getMember().getEmail();
