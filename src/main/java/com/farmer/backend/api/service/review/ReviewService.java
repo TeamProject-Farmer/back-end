@@ -1,13 +1,20 @@
 package com.farmer.backend.api.service.review;
 
 import com.farmer.backend.api.controller.review.request.RequestReviewStarDto;
-import com.farmer.backend.api.controller.review.request.SearchProductReviewCondition;
+import com.farmer.backend.api.controller.review.request.RequestReviewWriteDto;
 import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
 import com.farmer.backend.api.controller.review.response.ResponseProductReviewListDto;
 import com.farmer.backend.api.controller.review.response.ResponseReviewStarDto;
+import com.farmer.backend.api.service.S3Service;
+import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.domain.member.MemberRepository;
+import com.farmer.backend.domain.orderproduct.OrderProduct;
+import com.farmer.backend.domain.orderproduct.OrderProductRepository;
 import com.farmer.backend.domain.product.Product;
 import com.farmer.backend.domain.product.ProductRepository;
 import com.farmer.backend.domain.product.productreview.ProductReviewQueryRepositoryImpl;
+import com.farmer.backend.domain.product.productreview.ProductReviewRepository;
+import com.farmer.backend.domain.product.productreview.ProductReviews;
 import com.farmer.backend.domain.product.productreviewstar.ProductReviewAverage;
 import com.farmer.backend.domain.product.productreviewstar.ProductReviewAverageRepository;
 import com.farmer.backend.exception.CustomException;
@@ -15,11 +22,11 @@ import com.farmer.backend.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -29,7 +36,12 @@ public class ReviewService {
 
     private final ProductReviewQueryRepositoryImpl reviewQueryRepositoryImpl;
     private final ProductRepository productRepository;
+    private final MemberRepository memberRepository;
+    private final ProductReviewRepository productReviewRepository;
+    private final OrderProductRepository orderProductRepository;
     private final ProductReviewAverageRepository productReviewAverageRepository;
+    private final S3Service s3Service;
+
 
     /**
      * 베스트 리뷰 전체 리스트
@@ -87,5 +99,31 @@ public class ReviewService {
     public List<String> productReviewImg(Long productId) {
 
         return reviewQueryRepositoryImpl.productReviewImg(productId);
+    }
+
+    /**
+     * 상품 리뷰 작성
+     * @param productId 리뷰 ID
+     * @param requestReviewWriteDto 리뷰 내용
+     */
+    public void reviewWrite(String memberEmail, Long productId, RequestReviewWriteDto requestReviewWriteDto) {
+
+        String reviewImgUrl ;
+
+        OrderProduct product = orderProductRepository.findById(productId).orElseThrow(()-> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(()-> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+
+        try {
+            reviewImgUrl = s3Service.reviewImgUpload(requestReviewWriteDto.getReviewImage());
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.FILE_NOT_CONVERT);
+        }
+
+        ProductReviews productReviews = requestReviewWriteDto.toEntity(product,member,reviewImgUrl);
+        productReviewRepository.save(productReviews);
+
+
+
     }
 }
