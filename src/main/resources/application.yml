@@ -1,7 +1,7 @@
 spring:
   profiles:
     group:
-      "local" : "local, jwt, oauth, cloud, secret"
+      "local" : "local, jwt, oauth, cloud"
     active : local
 
 ---
@@ -44,7 +44,7 @@ spring:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-    password: ${jasypt.encryptor.password}
+    password: my_jasypt_key
 
 
 # Swagger springdoc-ui Configuration
