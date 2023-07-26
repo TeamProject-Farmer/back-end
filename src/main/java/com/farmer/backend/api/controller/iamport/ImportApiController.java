@@ -23,7 +23,7 @@ public class ImportApiController {
     private final IamportClient iamportClient;
 
     public ImportApiController() {
-        this.iamportClient = new IamportClient("6276271433478523", "ofRhg3AJqmyhu2G47G8L599vy1cpZsAT1z9Ii8Dlh28NTLfaeUGl8pab0rlJykeIMdn8VtiERbHm6tzx");
+        this.iamportClient = new IamportClient("7310614134771042", "atck8j8CBuK2HLjMFwTudtzCtLCG3vTKy5CTsFmNesF6lwJiXZnlOyw8ftKcHwhQ8HZ8MJMvsUmOT5eh");
     }
 
     @PostMapping("/{imp_uid}")
