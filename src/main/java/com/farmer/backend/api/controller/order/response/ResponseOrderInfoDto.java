@@ -15,6 +15,7 @@ public class ResponseOrderInfoDto {
     private String zipcode;
     private String address;
     private String addressDetail;
+    private String phoneNumber;
 
 
 

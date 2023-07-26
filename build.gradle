@@ -27,6 +27,13 @@ repositories {
 	mavenCentral()
 }
 
+allprojects {
+	repositories {
+		//아임포트
+		maven { url 'https://jitpack.io' }
+	}
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -38,13 +45,17 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-tomcat:2.6.5'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	//아임포트
+	implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
+	//Jasypt
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation 'com.auth0:java-jwt:4.2.1'
 
 	compileOnly 'org.projectlombok:lombok'
 
 	// s3 dependencies 추가
-//	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 	// querydsl dependencies 추가
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
@@ -67,6 +78,11 @@ dependencies {
 //tasks.named('test') {
 //	useJUnitPlatform()
 //}
+
+test {
+	useJUnitPlatform()
+	systemProperty 'jasypt.encryptor.password', findProperty("jasypt.encryptor.password")
+}
 
 /*
  * queryDSL 설정 추가

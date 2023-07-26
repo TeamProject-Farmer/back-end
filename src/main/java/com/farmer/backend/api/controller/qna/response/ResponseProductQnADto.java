@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ResponseProductQnADto {
 
+    private Long qnaId;
     private String memberName;
     private String productName;
     private String subject;

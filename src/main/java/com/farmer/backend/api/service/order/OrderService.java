@@ -113,6 +113,7 @@ public class OrderService {
                     .address(deliveryAddress.getAddress())
                     .addressDetail(deliveryAddress.getAddressDetail())
                     .zipcode(deliveryAddress.getZipcode())
+                    .phoneNumber(deliveryAddress.getHp())
                     .build();
         }
         return null;
