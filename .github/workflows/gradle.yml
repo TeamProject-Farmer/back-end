@@ -33,11 +33,13 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
-    - run: touch ./src/main/resources/application.yml
-
-    - run: echo "${{ secrets.APPLICATION_SECRET }}" > ./src/main/resources/application.yml
-
-    - run: cat ./src/main/resources/application.yml
+    - name: make application-database.yaml
+      run: |
+        
+        touch ./application-database.yaml
+        
+        echo "${{ secrets.DATABASE }}" >> ./application-database.yaml
+      shell: bash  
       
     - name: Set CLOUD YML
       run: |
