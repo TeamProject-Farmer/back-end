@@ -19,6 +19,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      JASYPT_PASSWORD: ${ secrets.APPLICATION_SECRET }
 
     steps:    
     - uses: actions/checkout@v3
