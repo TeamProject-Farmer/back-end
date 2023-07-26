@@ -74,21 +74,21 @@ public class ReviewController {
         return reviewService.productReviewImg(productId);
     }
 
-    /**
-     * 리뷰 작성
-     */
-    @ApiDocumentResponse
-    @Operation(summary = "상품 리뷰 작성", description = "상품 리뷰를 작성합니다.")
-    @PostMapping("/member/review/write/{productId}")
-    public ResponseEntity<String> productReviewWrite(@AuthenticationPrincipal MemberAdapter memberAdapter,
-                                                     @PathVariable(name="productId") Long productId,
-                                                     RequestReviewWriteDto requestReviewWriteDto){
-
-        String memberEmail = memberAdapter.getMember().getEmail();
-        reviewService.reviewWrite(memberEmail,productId,requestReviewWriteDto);
-
-        return new ResponseEntity<>("ok", HttpStatus.OK);
-
-    }
+//    /**
+//     * 리뷰 작성
+//     */
+//    @ApiDocumentResponse
+//    @Operation(summary = "상품 리뷰 작성", description = "상품 리뷰를 작성합니다.")
+//    @PostMapping("/member/review/write/{productId}")
+//    public ResponseEntity<String> productReviewWrite(@AuthenticationPrincipal MemberAdapter memberAdapter,
+//                                                     @PathVariable(name="productId") Long productId,
+//                                                     RequestReviewWriteDto requestReviewWriteDto){
+//
+//        String memberEmail = memberAdapter.getMember().getEmail();
+//        reviewService.reviewWrite(memberEmail,productId,requestReviewWriteDto);
+//
+//        return new ResponseEntity<>("ok", HttpStatus.OK);
+//
+//    }
 
 }
