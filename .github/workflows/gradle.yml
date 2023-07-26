@@ -37,7 +37,7 @@ jobs:
     - name: Set SECRET YML
       run: |
         mkdir -p src/main/resources
-        echo "${{secrets.APPLICATION_SECRET}}" | base64 --decode > src/main/resources/application-secret.yml
+        echo "${{APPLICATION_SECRET_YML}}" | base64 --decode > src/main/resources/application-secret.yml
         find src
         
     - name: Set CLOUD YML
