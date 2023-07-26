@@ -6,8 +6,6 @@ spring:
 
 ---
 spring:
-  profiles:
-    include: secret
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ENC(/koEKCsdCMn32obOs3TbqG/akiFEdOF1lYuQLYabQdsNoUFxI1bv1eh4jpo4WnVLqxIBlCPFVKj6oUUag4POjnHAZcA3tCsOLI2YrXjSqoK4IbFRItKTkVs1AngQ7owI53UZ5k5tV15AmCtFbAL+Z97S5+hRPRgx9MmO3G+OMJQ0fLZUed3Njg==)
