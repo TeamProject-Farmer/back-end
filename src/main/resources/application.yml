@@ -8,9 +8,9 @@ spring:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(/koEKCsdCMn32obOs3TbqG/akiFEdOF1lYuQLYabQdsNoUFxI1bv1eh4jpo4WnVLqxIBlCPFVKj6oUUag4POjnHAZcA3tCsOLI2YrXjSqoK4IbFRItKTkVs1AngQ7owI53UZ5k5tV15AmCtFbAL+Z97S5+hRPRgx9MmO3G+OMJQ0fLZUed3Njg==)
-    username: ENC(tes9Ki6p8z1V6ycUPq3qdw==)
-    password: ENC(b75JJtNMPkeZh6+d9aa1TAKJFcCNWLD0)
+    url: jdbc:mysql://farmer-db.cfnicvrzrvza.ap-northeast-2.rds.amazonaws.com:3306/farmerDB
+    username: admin
+    password: farmer123
 
   jpa:
     database: mysql
