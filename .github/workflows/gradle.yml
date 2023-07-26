@@ -20,7 +20,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      APPLICATION_SECRET: ${ secrets.APPLICATION_SECRET }
+      APPLICATION_SECRET: "${{ secrets.APPLICATION_SECRET }}"
 
     steps:    
     - uses: actions/checkout@v3
