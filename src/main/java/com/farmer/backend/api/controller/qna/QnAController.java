@@ -66,7 +66,7 @@ public class QnAController {
      */
 
     @ApiDocumentResponse
-    @Operation
+    @Operation(summary = "내가 쓴 문의 사항",description = "내가 쓴 문의 사항 리스트 보기")
     @GetMapping("member/qna/mine")
     public Page<ResponseProductQnADto> qnaMine(@AuthenticationPrincipal MemberAdapter memberAdapter, PageRequest pageRequest){
 
