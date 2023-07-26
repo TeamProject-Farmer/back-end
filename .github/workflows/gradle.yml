@@ -31,12 +31,6 @@ jobs:
         
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    
-    - name: Set SECRET YML
-      run: |
-        mkdir -p src/main/resources
-        echo "${{APPLICATION_SECRET_YML}}" | base64 --decode > src/main/resources/application-secret.yml
-        find src
         
     - name: Set CLOUD YML
       run: |
