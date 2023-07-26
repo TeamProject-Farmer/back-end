@@ -44,7 +44,7 @@ spring:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-    password: my_jasypt_key
+
 
 # Swagger springdoc-ui Configuration
 springdoc:
