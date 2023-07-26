@@ -21,8 +21,53 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
+    steps:    
+
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - run: touch ./src/main/resources/application-secret.properties
+    - run: echo "${{ secrets.APPLICATION_SECRET }}" > ./src/main/resources/application-secret.properties
+    - run: cat ./src/main/resources/application-secret.properties
+    
+    - name: Set CLOUD YML
+      run: |
+        mkdir -p src/main/resources
+        echo "${{secrets.APPLICATION_CLOUD_YML}}" | base64 --decode > src/main/resources/application-cloud.yml
+        find src
+
+    - name: Set JWT YML
+      run: |
+        mkdir -p src/main/resources
+        echo "${{secrets.APPLICATION_JWT_YML}}" | base64 --decode > src/main/resources/application-jwt.yml
+        find src
+
+    - name: Set OAUTH YML
+      run: |
+        mkdir -p src/main/resources
+        echo "${{secrets.APPLICATION_OATUH_YML}}" | base64 --decode > src/main/resources/application-oauth.yml
+        find src
+        
+    # build    
+    - name: Build with Gradle
+      run: ./gradlew clean build
+      
+    - name: Make Directory for deliver
+      run: mkdir deploy
+      
+    - name: Copy jar
+      run: cp ./build/libs/*.jar ./deploy/
+      
+    - name: Copy appspec
+      run: cp appspec.yml ./deploy/
 
       - name: Set up JDK 11
         uses: actions/setup-java@v3
