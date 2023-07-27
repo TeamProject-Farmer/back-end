@@ -64,13 +64,13 @@ jobs:
       run: mkdir deploy
       
     - name: Copy jar
-      run: cp ./build/libs/*.jar ./deploy/
+      run: cp ./build/libs/*.jar app/deploy/
       
     - name: Copy appspec
-      run: cp appspec.yml ./deploy/
+      run: cp appspec.yml app/deploy/
 
     - name: Make zip file
-      run: zip -r -qq -j ./back-end-build.zip ./deploy
+      run: zip -r -qq -j ./back-end-build.zip app/deploy
 
     - name: Deliver to AWS S3
       env:
