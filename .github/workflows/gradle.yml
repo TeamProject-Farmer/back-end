@@ -38,17 +38,17 @@ jobs:
 #         echo "${{secrets.APPLICATION_CLOUD_YML}}" | base64 --decode > src/main/resources/application-cloud.yml
 #         find src
 
-#     - name: Set JWT YML
-#       run: |
-#         mkdir -p src/main/resources
-#         echo "${{secrets.APPLICATION_JWT_YML}}" | base64 --decode > src/main/resources/application-jwt.yml
-#         find src
+    - name: Set JWT YML
+      run: |
+        mkdir -p src/main/resources
+        echo "${{secrets.APPLICATION_JWT_YML}}" | base64 --decode > src/main/resources/application-jwt.yml
+        find src
 
-#     - name: Set OAUTH YML
-#       run: |
-#         mkdir -p src/main/resources
-#         echo "${{secrets.APPLICATION_OATUH_YML}}" | base64 --decode > src/main/resources/application-oauth.yml
-#         find src
+    - name: Set OAUTH YML
+      run: |
+        mkdir -p src/main/resources
+        echo "${{secrets.APPLICATION_OATUH_YML}}" | base64 --decode > src/main/resources/application-oauth.yml
+        find src
       
 #     - name: Set SECRET YML
 #       run: |
