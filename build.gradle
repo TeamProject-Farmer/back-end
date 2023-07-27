@@ -55,7 +55,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 
 	// s3 dependencies 추가
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	//implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 	// querydsl dependencies 추가
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
