@@ -19,34 +19,34 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:    
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
   
     - name: Set up JDK 11
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v3
       with:
         java-version: '11'
+        distribution: 'temurin'
         
     - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew
-      shell: bash
-      
-    - name: Build and Test
-      run: ./gradlew build test
+      run: chmod +x gradlew
         
     - name: Set JWT YML
       run: |
         mkdir -p src/main/resources
         echo "${{secrets.APPLICATION_JWT_YML}}" | base64 --decode > src/main/resources/application-jwt.yml
         find src
-
     - name: Set OAUTH YML
       run: |
         mkdir -p src/main/resources
         echo "${{secrets.APPLICATION_OATUH_YML}}" | base64 --decode > src/main/resources/application-oauth.yml
         find src    
         
-    # build         
+    # build    
+    - name: Build with Gradle
+      run: ./gradlew clean build
+      
     - name: Make Directory for deliver
       run: mkdir deploy
       
@@ -63,23 +63,20 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-2
       run: |
-        aws s3 cp 
-        --region ap-northeast-2 
-        --acl private 
+        aws s3 cp \
+        --region ap-northeast-2 \
+        --acl private \
         ./back-end-build.zip s3://farmer-project-bucket/
-
-    # Deploy
+      #Deploy
     - name: Deploy
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: aws deploy create-deployment
-            --application-name farmer-cicd 
-            --deployment-group-name farmer-project-cicd 
-            --file-exists-behavior OVERWRITE         
-            --s3-location bucket=farmer-project-bucket,bundleType=zip,key=back-end-build.zip 
-            
-    
-      
+      run: |
+        aws deploy create-deployment \
+        --application-name farmer-cicd \
+        --deployment-group-name farmer-project-cicd \
+        --file-exists-behavior OVERWRITE \
+        --s3-location bucket=farmer-project-bucket,bundleType=zip,key=back-end-build.zip \
+        --region ap-northeast-2
