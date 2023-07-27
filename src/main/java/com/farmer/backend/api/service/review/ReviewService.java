@@ -5,7 +5,6 @@ import com.farmer.backend.api.controller.review.request.RequestReviewWriteDto;
 import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
 import com.farmer.backend.api.controller.review.response.ResponseProductReviewListDto;
 import com.farmer.backend.api.controller.review.response.ResponseReviewStarDto;
-import com.farmer.backend.api.service.S3Service;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;
 import com.farmer.backend.domain.orderproduct.OrderProduct;
@@ -40,7 +39,7 @@ public class ReviewService {
     private final ProductReviewRepository productReviewRepository;
     private final OrderProductRepository orderProductRepository;
     private final ProductReviewAverageRepository productReviewAverageRepository;
-    private final S3Service s3Service;
+    //private final S3Service s3Service;
 
     /**
      * 베스트 리뷰 전체 리스트
@@ -105,23 +104,23 @@ public class ReviewService {
      * @param productId 리뷰 ID
      * @param requestReviewWriteDto 리뷰 내용
      */
-    public void reviewWrite(String memberEmail, Long productId, RequestReviewWriteDto requestReviewWriteDto) {
-
-        String reviewImgUrl ;
-
-        OrderProduct product = orderProductRepository.findById(productId).orElseThrow(()-> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(()-> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-
-
-        try {
-            reviewImgUrl = s3Service.reviewImgUpload(requestReviewWriteDto.getReviewImage());
-        } catch (IOException e) {
-            throw new CustomException(ErrorCode.FILE_NOT_CONVERT);
-        }
-
-        ProductReviews productReviews = requestReviewWriteDto.toEntity(product,member,reviewImgUrl);
-        productReviewRepository.save(productReviews);
-
-
-    }
+//    public void reviewWrite(String memberEmail, Long productId, RequestReviewWriteDto requestReviewWriteDto) {
+//
+//        String reviewImgUrl ;
+//
+//        OrderProduct product = orderProductRepository.findById(productId).orElseThrow(()-> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+//        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(()-> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+//
+//
+//        try {
+//            reviewImgUrl = s3Service.reviewImgUpload(requestReviewWriteDto.getReviewImage());
+//        } catch (IOException e) {
+//            throw new CustomException(ErrorCode.FILE_NOT_CONVERT);
+//        }
+//
+//        ProductReviews productReviews = requestReviewWriteDto.toEntity(product,member,reviewImgUrl);
+//        productReviewRepository.save(productReviews);
+//
+//
+//    }
 }
