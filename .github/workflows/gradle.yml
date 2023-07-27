@@ -54,7 +54,7 @@ jobs:
 #       run: |
 #         mkdir -p src/main/resources
 #         echo "${{secrets.APPLICATION_SECRET_YML}}" | base64 --decode > src/main/resources/application-secret.yml
-#         find src
+#         find src 
         
     # build    
     - name: Build with Gradle
