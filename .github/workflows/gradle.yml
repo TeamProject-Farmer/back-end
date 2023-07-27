@@ -91,7 +91,7 @@ jobs:
         aws deploy create-deployment \
         --application-name farmer-cicd \
         --deployment-group-name farmer-project-cicd \
-        --file-exists-behavior OVERWRITE \
+        --ignore-application-stop-failures        
         --s3-location bucket=farmer-project-bucket,bundleType=zip,key=back-end-build.zip \
         --region ap-northeast-2
     
