@@ -32,29 +32,16 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
         
-    - name: Set CLOUD YML
-      run: |
-        mkdir -p src/main/resources
-        echo "${{secrets.APPLICATION_CLOUD_YML}}" | base64 --decode > src/main/resources/application-cloud.yml
-        find src
-
     - name: Set JWT YML
       run: |
         mkdir -p src/main/resources
         echo "${{secrets.APPLICATION_JWT_YML}}" | base64 --decode > src/main/resources/application-jwt.yml
         find src
-
     - name: Set OAUTH YML
       run: |
         mkdir -p src/main/resources
         echo "${{secrets.APPLICATION_OATUH_YML}}" | base64 --decode > src/main/resources/application-oauth.yml
-        find src
-      
-    - name: Set SECRET YML
-      run: |
-        mkdir -p src/main/resources
-        echo "${{secrets.APPLICATION_SECRET_YML}}" | base64 --decode > src/main/resources/application-secret.yml
-        find src
+        find src    
         
     # build    
     - name: Build with Gradle
@@ -81,7 +68,6 @@ jobs:
         --region ap-northeast-2 \
         --acl private \
         ./back-end-build.zip s3://farmer-project-bucket/
-
       #Deploy
     - name: Deploy
       env:
@@ -94,5 +80,3 @@ jobs:
         --file-exists-behavior OVERWRITE \
         --s3-location bucket=farmer-project-bucket,bundleType=zip,key=back-end-build.zip \
         --region ap-northeast-2
-    
-      
