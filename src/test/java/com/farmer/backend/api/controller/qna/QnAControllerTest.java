@@ -97,7 +97,7 @@ class QnAControllerTest {
     void qnaRead() {
 
         ResponseQnADetailDto responseQnADetailDto = productQnAService
-                .qnaRead(7L,"codms7020@naver.com");
+                .qnaRead(1L,"codms7020@naver.com");
 
         log.info(responseQnADetailDto.getSubject());
         log.info(responseQnADetailDto.getContent());
