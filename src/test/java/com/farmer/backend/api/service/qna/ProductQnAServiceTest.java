@@ -71,7 +71,7 @@ class ProductQnAServiceTest {
     void qnaRead() {
 
         Member member = memberRepository.findByEmail("codms7020@naver.com").orElseThrow(()-> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        Qna qna = qnaRepository.findById(7L).orElseThrow(()-> new CustomException(ErrorCode.QNA_NOT_FOUND));
+        Qna qna = qnaRepository.findById(1L).orElseThrow(()-> new CustomException(ErrorCode.QNA_NOT_FOUND));
 
         if(qna.getSecretQuestion().name().equals(SecretQuestion.SECRET.name()) && !qna.getMember().getEmail().equals(member.getEmail())){
             log.info("내가 쓴 비밀글만 볼 수 있습니다.");
