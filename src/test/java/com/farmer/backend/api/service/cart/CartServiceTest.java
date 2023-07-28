@@ -14,7 +14,6 @@ import com.farmer.backend.domain.product.Product;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -67,7 +65,7 @@ class CartServiceTest {
     @DisplayName("장바구니 상품 수량 변경")
     void changeQuantityAction() {
         RequestCartProductQuantityDto requestCartProductQuantityDto = new RequestCartProductQuantityDto(1L, "plus");
-        Member member = memberRepository.findByEmail("kce2360@naver.com").orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Member member = memberRepository.findByEmail("codms7020@naver.com").orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         Cart findCartProduct = cartRepository.findById(requestCartProductQuantityDto.getCartId()).orElseThrow(() -> new CustomException(ErrorCode.CART_PRODUCT_NOT_FOUNT));
         Integer originCount = findCartProduct.getCount();
         Integer beforeCount = findCartProduct.getCount();
