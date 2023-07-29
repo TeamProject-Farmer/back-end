@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.farmer.backend.domain.product.productreview.QProductReviews.productReviews;
 
@@ -29,13 +28,13 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
 
     /**
      * 베스트 리뷰 리스트 출력
-     * @return
      */
     @Override
     public List<ResponseBestReviewListDto> bestReviewList(){
         List<ResponseBestReviewListDto> productReviewList = query
                 .select(Projections.constructor(
                         ResponseBestReviewListDto.class,
+                        productReviews.id,
                         productReviews.member.nickname,
                         productReviews.imgUrl,
                         productReviews.content,
@@ -45,18 +44,19 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                 ))
                 .from(productReviews)
                 .orderBy(productReviews.likeCount.desc())
+                .limit(12)
                 .fetch();
         return productReviewList;
     }
 
+
     /**
      * 상품별 리뷰 리스트 출력
      */
-
     @Override
     public Page<ResponseProductReviewListDto> productReviewList(Pageable pageable,
                                                                 String sortOrderCond,
-                                                                SearchProductReviewCondition searchCond,
+                                                                Integer reviewCond,
                                                                 Long productId){
         List<ResponseProductReviewListDto> productReviewList = query
                 .select(Projections.constructor(
@@ -71,7 +71,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                         productReviews.content
                 ))
                 .from(productReviews)
-                .where(productReviews.orderProduct.product.id.eq(productId),likeStar(searchCond.getStar()))
+                    .where(productReviews.orderProduct.product.id.eq(productId),likeStar(reviewCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(sortOrderProductReview(sortOrderCond))
@@ -87,6 +87,9 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
 
     }
 
+    /**
+     * 상품별 리뷰 별점 리스트
+     */
     @Override
     public RequestReviewStarDto fiveStars(Long productId){
 
@@ -113,12 +116,26 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                 .where(productReviews.orderProduct.product.id.eq(productId))
                 .fetchOne());
 
-        RequestReviewStarDto reviewStarDto = new RequestReviewStarDto(starAverage,reviewCount.get(4),reviewCount.get(3),reviewCount.get(2),reviewCount.get(1),reviewCount.get(0));
-        return reviewStarDto;
+        return new RequestReviewStarDto(starAverage,reviewCount.get(4),reviewCount.get(3),reviewCount.get(2),reviewCount.get(1),reviewCount.get(0));
     }
 
-    public BooleanExpression likeStar(String star){
-        return star != null ? productReviews.fiveStarRating.eq(Integer.valueOf(star)) :null;
+    /**
+     * 상품별 리뷰 이미지
+     */
+
+    @Override
+    public List<String> productReviewImg(Long productId){
+        List<String> imgList = query
+                .select(productReviews.imgUrl)
+                .from(productReviews)
+                .where(productReviews.orderProduct.product.id.eq(productId))
+                .orderBy(productReviews.createdDate.desc())
+                .fetch();
+
+        return imgList;
+    }
+    public BooleanExpression likeStar(Integer star){
+        return star != null ? productReviews.fiveStarRating.eq(star) :null;
     }
 
     public OrderSpecifier<?> sortOrderProductReview(String sortOrderCond) {

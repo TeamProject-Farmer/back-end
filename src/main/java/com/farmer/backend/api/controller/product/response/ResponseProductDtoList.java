@@ -18,15 +18,4 @@ public class ResponseProductDtoList {
     private Integer price;
     private Double averageStarRating;
     private Long reviewCount;
-
-    public static ResponseProductDtoList productList(Product product) {
-        return ResponseProductDtoList.builder()
-                .productId(product.getId())
-                .productName(product.getName())
-                .discountRate(product.getDiscountRate())
-                .price(product.getPrice())
-                .averageStarRating(product.getAverageStarRating())
-                .reviewCount(product.getReviewCount())
-                .build();
-    }
 }

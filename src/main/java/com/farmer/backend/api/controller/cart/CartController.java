@@ -4,6 +4,7 @@ import com.farmer.backend.api.controller.cart.request.RequestProductCartDto;
 import com.farmer.backend.api.controller.cart.request.RequestCartProductQuantityDto;
 import com.farmer.backend.api.controller.cart.response.ResponseCartProductListDto;
 import com.farmer.backend.api.controller.cart.response.ResponseCartProductQuantityDto;
+import com.farmer.backend.api.controller.cart.response.ResponseTotalPriceAndCountDto;
 import com.farmer.backend.api.service.cart.CartService;
 import com.farmer.backend.config.ApiDocumentResponse;
 import com.farmer.backend.login.general.MemberAdapter;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -59,5 +61,29 @@ public class CartController {
     @PostMapping("/change-quantity")
     public ResponseCartProductQuantityDto changeQuantity(@ModelAttribute RequestCartProductQuantityDto cartProductQuantityDto, @AuthenticationPrincipal MemberAdapter member) {
         return cartService.changeQuantityAction(cartProductQuantityDto, member.getUsername());
+    }
+
+    /**
+     * 장바구니 목록 페이지
+     * 장바구니 상품 삭제
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "장바구니 상품 삭제", description = "장바구니의 상품을 삭제합니다.")
+    @PostMapping("/remove-product/{cartId}")
+    public ResponseEntity removeToCartProduct(@PathVariable Long[] cartId, @AuthenticationPrincipal MemberAdapter member) {
+        cartService.removeToCartProduct(cartId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    /**
+     * 장바구니 목록 페이지
+     * 장바구니 상품 합계 금액 조회
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "장바구니 상품 합계금액 조회", description = "장바구니의 상품들의 합계 금액을 조회합니다.")
+    @PostMapping("/total-price/{cartId}")
+    public ResponseEntity<ResponseTotalPriceAndCountDto> totalPriceAndCountOfCartProduct(@PathVariable Long[] cartId, @AuthenticationPrincipal MemberAdapter member) {
+        ResponseTotalPriceAndCountDto totalPriceAndCount = cartService.totalPriceAndCountOfCartProduct(cartId);
+        return ResponseEntity.ok(totalPriceAndCount);
     }
 }
