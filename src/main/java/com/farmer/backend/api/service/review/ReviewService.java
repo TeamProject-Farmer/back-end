@@ -34,7 +34,7 @@ public class ReviewService {
     private final ProductReviewRepository productReviewRepository;
     private final OrderProductRepository orderProductRepository;
     private final ProductReviewAverageRepository productReviewAverageRepository;
-    private final S3Service s3Service;
+
 
     /**
      * 베스트 리뷰 전체 리스트
