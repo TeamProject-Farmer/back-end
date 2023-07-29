@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ResponseBestReviewListDto {
 
+    private Long reviewId;
     private String memberNickName;
     private String imgUrl ;
     private String content;

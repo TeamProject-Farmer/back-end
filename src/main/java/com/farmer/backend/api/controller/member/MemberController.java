@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @RestController
 @Slf4j
@@ -27,10 +29,16 @@ public class MemberController {
     @ApiDocumentResponse
     @Operation(summary = "회원 프로필 수정",description = "회원 프로필을 수정합니다.")
     @PostMapping(value = "mypage/profile")
-    public ResponseLoginMemberDto profileUpdate(@AuthenticationPrincipal MemberAdapter memberAdapter,
+    public String profileUpdate(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                                 @ModelAttribute RequestMemberProfileDto requestMemberProfileDto){
+
         String memberEmail = memberAdapter.getMember().getEmail();
-        log.info(memberEmail);
+
+        if(requestMemberProfileDto.getPassword() == null){
+            RequestMemberProfileDto socialMember = new RequestMemberProfileDto(UUID.randomUUID().toString(), requestMemberProfileDto.getNickname());
+            requestMemberProfileDto=socialMember;
+        }
+
         return memberService.profileUpdate(memberEmail,requestMemberProfileDto);
     }
 

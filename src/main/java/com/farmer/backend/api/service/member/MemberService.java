@@ -211,7 +211,7 @@ public class MemberService {
 
         String emailKey=memberRepository.findByEmail(memberEmail).get().getEmailAuth();
 
-        if (!emailKey.equals("DONE")){
+        if (!emailKey.equals("DONE")|| !emailKey.equals("JoinDone")){
             throw new CustomException(ErrorCode.EMAIL_YET_AUTHENTICATION);
         }
 
@@ -243,16 +243,25 @@ public class MemberService {
      * @param requestMemberProfileDto 프로필 수정 데이터
      */
     @Transactional
-    public ResponseLoginMemberDto profileUpdate(String memberEmail, RequestMemberProfileDto requestMemberProfileDto) {
+    public String profileUpdate(String memberEmail, RequestMemberProfileDto requestMemberProfileDto) {
 
-        System.out.println(memberEmail);
         Member member=memberRepository.findByEmail(memberEmail).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         Long memberCoupon = memberCouponRepository.countByMemberId(member.getId());
+        String nickname = requestMemberProfileDto.getNickname();
+        Optional<String> socialId = Optional.ofNullable(member.getSocialId());
 
-        member.updateProfile(requestMemberProfileDto);
-        member.encodePassword(passwordEncoder);
+        if(!member.getNickname().equals(nickname) && memberRepository.findByNickname(nickname).isPresent()){
+            throw new CustomException(ErrorCode.NICKNAME_FOUND);
+        }
+        else if(!socialId.equals(null)){
+            member.updateProfile(member.getPassword(),requestMemberProfileDto.getNickname());
+        }
+        else{
+            member.updateProfile(requestMemberProfileDto.getPassword(),requestMemberProfileDto.getNickname());
+            member.encodePassword(passwordEncoder);
+        }
 
-        return ResponseLoginMemberDto.getLoginMember(member, memberCoupon);
+        return "수정 완료";
     }
 
     /**

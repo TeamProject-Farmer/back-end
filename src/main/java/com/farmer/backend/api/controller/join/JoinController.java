@@ -41,9 +41,9 @@ public class JoinController {
     @ApiDocumentResponse
     @Operation(summary = "인증 확인 URL 클릭", description = "사용자가 인증 URL을 클릭합니다.")
     @GetMapping(value = "/join/mail/checkDone")
-    public ModelAndView emailCheck(@RequestParam String email){
+    public ModelAndView emailCheck(@RequestParam String memberEmail){
 
-        memberService.codeCheck(email);
+        memberService.codeCheck(memberEmail);
         ModelAndView mailView=new ModelAndView("mailAuthentication");
 
         return mailView;

@@ -1,11 +1,7 @@
 package com.farmer.backend.api.controller.order;
 
 import com.farmer.backend.api.controller.order.response.ResponseOrderInfoDto;
-import com.farmer.backend.api.controller.orderproduct.request.RequestOrderProductList;
-import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductDetailDto;
-import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductDto;
 import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductListDto;
-import com.farmer.backend.api.controller.product.response.ResponseProductDto;
 import com.farmer.backend.api.service.order.OrderService;
 import com.farmer.backend.config.ApiDocumentResponse;
 import com.farmer.backend.domain.delivery.DeliveryMemo;
@@ -41,9 +37,9 @@ public class OrderController {
      */
     @ApiDocumentResponse
     @Operation(summary = "주문자 최근 배송지 정보", description = "해당 회원의 최근 배송지 정보를 출력합니다.")
-    @GetMapping("/order-form")
+    @GetMapping("/address")
     public ResponseEntity orderMemberInfo(@AuthenticationPrincipal MemberAdapter member) {
-        ResponseOrderInfoDto orderInfoDto = orderService.orderForm(member.getUsername());
+        ResponseOrderInfoDto orderInfoDto = orderService.deliveryAddressForm(member.getUsername());
         return ResponseEntity.ok(orderInfoDto);
     }
 

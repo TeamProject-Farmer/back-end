@@ -20,6 +20,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +50,8 @@ class ProductServiceTest {
     @Test
     @DisplayName("상품 전체 리스트")
     void productList() {
-        List<ResponseProductDtoList> productList = productQueryRepositoryImpl.productList(ProductOrderCondition.NEWS);
+        Pageable page = PageRequest.of(0, 14);
+        Page<ResponseProductDtoList> productList = productQueryRepositoryImpl.productList(3L, page, ProductOrderCondition.LOW);
         for (ResponseProductDtoList product : productList) {
             log.info("product={}", product.getProductName());
         }

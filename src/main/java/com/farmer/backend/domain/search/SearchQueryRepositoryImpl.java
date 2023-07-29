@@ -16,6 +16,7 @@ import java.util.Objects;
 
 import static com.farmer.backend.domain.product.QProduct.product;
 import static com.farmer.backend.domain.product.productreviewstar.QProductReviewAverage.productReviewAverage;
+import static com.farmer.backend.domain.search.QSearch.search;
 
 @Repository
 public class SearchQueryRepositoryImpl implements SearchQueryRepository {
@@ -66,6 +67,20 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
         return new PageImpl<>(searchProducts,pageable,count);
     }
 
+    /**
+     * 로그인 회원 검색어 출력
+     */
+    @Override
+    public List<String> memberSearchWordList(String memberEmail){
+        List<String> memberSearchWord = query
+                .select(search.searchWord)
+                .from(search)
+                .where(search.member.email.eq(memberEmail))
+                .fetch();
+
+        return memberSearchWord;
+
+    }
     private BooleanExpression likeBelongCategory(String searchWord) {
 
         return searchWord != null ?product.category.name.contains(searchWord):null;

@@ -75,9 +75,9 @@ public class Member extends BaseTimeEntity {
         this.accessToken=updateAccessToken;
     }
 
-    public void updateProfile(RequestMemberProfileDto requestMemberProfileDto){
-        this.password=requestMemberProfileDto.getPassword();
-        this.nickname=requestMemberProfileDto.getNickname();
+    public void updateProfile(String password, String nickname){
+        this.password=password;
+        this.nickname=nickname;
     }
 
     public ResponseMemberDto memberList() {
