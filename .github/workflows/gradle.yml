@@ -93,5 +93,6 @@ jobs:
         --application-name farmer-cicd \
         --deployment-group-name farmer-project-cicd \
         --file-exists-behavior OVERWRITE \
+        --deployment-config-name CodeDeployDefault.OneAtATime \
         --s3-location bucket=farmer-project-bucket,bundleType=zip,key=back-end-build.zip \
         --region ap-northeast-2
