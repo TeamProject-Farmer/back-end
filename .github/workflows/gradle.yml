@@ -43,11 +43,19 @@ jobs:
 #         echo "${{secrets.APPLICATION_OATUH_YML}}" | base64 --decode > src/main/resources/application-oauth.yml
 #         find src    
 
+
     - name: Set S3 YML
       run: |
         touch ./src/main/resources/application-cloud.yml
         echo "${{ secrets.APPLICATION_CLOUD_YML }}" | base64 --decode > src/main/resources/application-cloud.yml 
         cat ./src/main/resources/application-cloud.yml
+
+#     - name: Set S3 YML
+#       run: |
+#         mkdir -p src/main/resources
+#         echo "${{secrets.APPLICATION_CLOUD_YML}}" | base64 --decode > src/main/resources/application-cloud.yml
+#         find src
+
       
         
     # build    
