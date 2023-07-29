@@ -59,5 +59,12 @@ public class OrderController {
         return memo;
     }
 
+    @ApiDocumentResponse
+    @Operation(summary = "주문 생성", description = "주문 한건을 생성합니다.")
+    @PostMapping()
+    public ResponseEntity order() {
+        return null;
+    }
+
 
 }
