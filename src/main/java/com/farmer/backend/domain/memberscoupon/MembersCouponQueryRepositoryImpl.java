@@ -1,9 +1,9 @@
 package com.farmer.backend.domain.memberscoupon;
 
 import com.farmer.backend.api.controller.coupon.response.ResponseMembersCouponDto;
+import com.farmer.backend.api.controller.coupon.response.ResponseUseCouponListDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.extern.java.Log;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -35,5 +35,25 @@ public class MembersCouponQueryRepositoryImpl implements MembersCouponQueryRepos
                 .where(membersCoupon.member.email.eq(memberEmail))
                 .fetch();
         return memberCouponList;
+    }
+
+    @Override
+    public List<ResponseUseCouponListDto> useCouponList(String memberEmail){
+        List<ResponseUseCouponListDto> useMembersCoupon = query
+                .select(Projections.constructor(
+                        ResponseUseCouponListDto.class,
+                        membersCoupon.coupons.id,
+                        membersCoupon.coupons.name,
+                        membersCoupon.coupons.benefits,
+                        membersCoupon.coupons.discountPolicy,
+                        membersCoupon.coupons.fixedPrice,
+                        membersCoupon.coupons.rateAmount
+                    )
+                )
+                .from(membersCoupon)
+                .where(membersCoupon.member.email.eq(memberEmail))
+                .fetch();
+
+        return useMembersCoupon;
     }
 }

@@ -16,5 +16,5 @@ public class ResponseBestReviewListDto {
     private String imgUrl ;
     private String content;
     private int likeCount;
-    private int fiveStarRating;
+    private int fiveStarRatingq;
 }
