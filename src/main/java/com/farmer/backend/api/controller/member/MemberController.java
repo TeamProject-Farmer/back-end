@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +41,13 @@ public class MemberController {
         }
 
         return memberService.profileUpdate(memberEmail,requestMemberProfileDto);
+    }
+
+    @ApiDocumentResponse
+    @Operation(summary = "회원 적립금", description = "회원 적립금을 조회합니다.")
+    @PostMapping(value = "/point")
+    public ResponseEntity memberPoint(@AuthenticationPrincipal MemberAdapter member) {
+        return ResponseEntity.ok(memberService.getPoint(member.getUsername()));
     }
 
 }
