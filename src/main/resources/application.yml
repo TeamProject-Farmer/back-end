@@ -1,27 +1,9 @@
 spring:
   profiles:
     group:
-      "local" : "local, jwt, oauth, cloud"
+      "local" : "local, jwt, oauth, cloud, database"
     active : local
 
----
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://farmer-db.cfnicvrzrvza.ap-northeast-2.rds.amazonaws.com:3306/farmerDB
-    username: admin
-    password: farmer123
-
-  jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-        use_sql_comments: true
   data:
     web:
       pageable:
@@ -42,7 +24,7 @@ spring:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-    password: my_jasypt_key
+    password: ${jasypt.encryptor.password}
 
 
 # Swagger springdoc-ui Configuration
