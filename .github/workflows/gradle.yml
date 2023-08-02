@@ -56,7 +56,8 @@ jobs:
 #         find src
 
     - name: write database key
-      run: echo "jasypt_encryptor_password=${{secrets.APPLICATION_SECRET_YML}}" >> src/main/resources/application-database.yml
+      run: | 
+        echo "jasypt_encryptor_password=${{secrets.APPLICATION_SECRET_YML}}" | base64 --devode >> src/main/resources/application-database.yml
       env:
         APPLICATION_SECRET_YML: ${{secrets.APPLICATION_SECRET_YML}}
         
