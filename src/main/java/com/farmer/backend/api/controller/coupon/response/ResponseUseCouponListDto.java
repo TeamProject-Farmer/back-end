@@ -9,6 +9,7 @@ import lombok.*;
 public class ResponseUseCouponListDto {
 
     private Long couponId;
+    private Long memberCouponId;
     private String name;
     private String benefits;
     private CouponPolicy couponPolicy;
@@ -16,8 +17,9 @@ public class ResponseUseCouponListDto {
     private int rateAmount;
 
 
-    public ResponseUseCouponListDto(Long couponId, String name, String benefits, CouponPolicy couponPolicy, int fixedPrice, int rateAmount){
+    public ResponseUseCouponListDto(Long couponId, Long memberCouponId, String name, String benefits, CouponPolicy couponPolicy, int fixedPrice, int rateAmount){
         this.couponId=couponId;
+        this.memberCouponId=memberCouponId;
         this.name=name;
         this.benefits=benefits;
         this.couponPolicy=couponPolicy;

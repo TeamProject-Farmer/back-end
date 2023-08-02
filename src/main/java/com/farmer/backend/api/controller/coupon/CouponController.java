@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +50,18 @@ public class CouponController {
         String memberEmail = memberAdapter.getMember().getEmail();
         return membersCouponService.applyCoupon(memberEmail);
 
+
+    }
+
+    /**
+     * 쿠폰 삭제
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "사용 쿠폰 삭제", description = "상품 구매에 사용한 쿠폰을 삭제합니다.")
+    @PostMapping("/coupon/del")
+    public ResponseEntity<String> delCoupon(@RequestParam Long memberCouponId){
+
+        return membersCouponService.delCoupon(memberCouponId);
 
     }
 }

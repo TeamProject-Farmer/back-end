@@ -9,5 +9,4 @@ public interface MembersCouponQueryRepository {
     List<ResponseMembersCouponDto> membersCouponList(String memberEmail);
 
     List<ResponseUseCouponListDto> useCouponList(String memberEmail);
-
 }

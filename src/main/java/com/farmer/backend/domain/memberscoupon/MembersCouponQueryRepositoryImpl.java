@@ -43,6 +43,7 @@ public class MembersCouponQueryRepositoryImpl implements MembersCouponQueryRepos
                 .select(Projections.constructor(
                         ResponseUseCouponListDto.class,
                         membersCoupon.coupons.id,
+                        membersCoupon.id,
                         membersCoupon.coupons.name,
                         membersCoupon.coupons.benefits,
                         membersCoupon.coupons.discountPolicy,
@@ -56,4 +57,5 @@ public class MembersCouponQueryRepositoryImpl implements MembersCouponQueryRepos
 
         return useMembersCoupon;
     }
+
 }
