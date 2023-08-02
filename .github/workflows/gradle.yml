@@ -57,7 +57,9 @@ jobs:
 
     - name: write database key
       run: echo "jasypt_encryptor_password=${{secrets.APPLICATION_SECRET_YML}}" >> src/main/resources/application-database.yml
-      # working-directory: ./back-end/src/main/resources
+      env:
+        APPLICATION_SECRET_YML: ${{secrets.APPLICATION_SECRET_YML}}
+        
       
         
     # build    
