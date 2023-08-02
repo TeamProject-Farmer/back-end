@@ -48,7 +48,6 @@ dependencies {
 	//아임포트
 	implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
 	//Jasypt
-	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation 'com.auth0:java-jwt:4.2.1'
 
