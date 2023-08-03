@@ -59,6 +59,7 @@ class CartServiceTest {
         for (ResponseCartProductListDto responseCartProductListDto : cartProductListByMember) {
             log.info(responseCartProductListDto.getProductName());
         }
+        assertThat(cartProductListByMember.size()).isNotZero();
     }
 
     @Test
