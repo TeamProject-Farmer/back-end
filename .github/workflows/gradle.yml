@@ -55,9 +55,11 @@ jobs:
 #         echo "${{secrets.APPLICATION_CLOUD_YML}}" | base64 --decode > src/main/resources/application-cloud.yml
 #         find src
 
-    - name: write database key
-      run: echo "jasypt_encryptor_password=${{secrets.APPLICATION_SECRET_YML}}" >> env.yml
-      working-directory: ./back-end/src/main/resources
+    - name: Set database YML
+      run: | 
+        touch ./src/main/resources/application-database.yml
+        echo "${{ secrets.APPLICATION_DATABASE_YML }}" | base64 --decode > src/main/resources/application-database.yml
+        
       
         
     # build    
