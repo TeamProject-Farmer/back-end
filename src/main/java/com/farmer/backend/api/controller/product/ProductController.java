@@ -5,6 +5,7 @@ import com.farmer.backend.api.controller.product.response.ResponseProductDtoList
 import com.farmer.backend.api.controller.product.response.ResponseShopBySizeProduct;
 import com.farmer.backend.api.service.product.ProductService;
 import com.farmer.backend.config.ApiDocumentResponse;
+import com.farmer.backend.domain.product.ProductDivision;
 import com.farmer.backend.domain.product.ProductOrderCondition;
 import com.farmer.backend.domain.product.ProductSize;
 import com.farmer.backend.paging.PageRequest;
@@ -49,8 +50,15 @@ public class ProductController {
     @ApiDocumentResponse
     @Operation(summary = "MD PICK 리스트", description = "MD PICK 전체 리스트를 출력합니다.")
     @GetMapping("/md-pick")
-    public List<ResponseProductDtoList> mdPickList() {
-        return productService.mdPickList();
+    public List<ResponseProductDtoList> mdPickList(ProductDivision division) {
+        return productService.mdPickList(division);
+    }
+
+    @ApiDocumentResponse
+    @Operation(summary = "기획전 상품 리스트", description = "기획전 상품 전체 리스트를 출력합니다.")
+    @GetMapping("/plan-products")
+    public List<ResponseProductDtoList> planProductList(ProductDivision division) {
+        return productService.planProductList(division);
     }
 
     /**
