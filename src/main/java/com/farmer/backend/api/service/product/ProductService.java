@@ -18,9 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.SortDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,9 +51,15 @@ public class ProductService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<ResponseProductDtoList> mdPickList() {
-        List<ResponseProductDtoList> mdpickList = productQueryRepositoryImpl.mdPickList();
+    public List<ResponseProductDtoList> mdPickList(ProductDivision division) {
+        List<ResponseProductDtoList> mdpickList = productQueryRepositoryImpl.eventProductList(division);
         return mdpickList;
+    }
+
+    @Transactional(readOnly = true)
+    public List<ResponseProductDtoList> planProductList(ProductDivision division) {
+        List<ResponseProductDtoList> planProductList = productQueryRepositoryImpl.eventProductList(division);
+        return planProductList;
     }
 
     /**
@@ -201,4 +204,5 @@ public class ProductService {
     public Page<ResponseProductDto> searchActionProductList(PageRequest pageable, String productName) {
         return productQueryRepositoryImpl.findAll(pageable, productName, null).map(ResponseProductDto::getAllProductList);
     }
+
 }

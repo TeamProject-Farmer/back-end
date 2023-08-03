@@ -52,17 +52,19 @@ class OrderProductServiceTest {
     @Test
     @DisplayName("마이페이지 구매목록 기능")
     void shoppingList() {
-        Member findMember = memberRepository.findByEmail("2020112112@dgu.ac.kr").orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Member findMember = memberRepository.findByEmail("codms7020@naver.com").orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         List<Orders> orderList = orderRepository.findByMemberId(findMember.getId());
         List<ResponseOrderProductDto> responseOrderProductDto = new ArrayList<>();
-
+        String productName = null;
         for (Orders order : orderList) {
             List<OrderProduct> orderProducts = orderProductRepository.findTop6ByOrdersIdOrderByIdDesc(order.getId());
             for (OrderProduct orderProduct : orderProducts) {
                 log.info("orderProduct={}", orderProduct.getProduct().getName());
+                productName = orderProduct.getProduct().getName();
             }
         }
 
+        assertThat(productName).isNotNull();
     }
 
     @Test
@@ -85,7 +87,7 @@ class OrderProductServiceTest {
         for (ResponseOrderProductDetailDto res : orderProductList) {
             log.info("res={}", res.getProductName());
         }
-
+        assertThat(orderProductList).isNotNull();
     }
 
     @Test
@@ -105,7 +107,7 @@ class OrderProductServiceTest {
         }
 
         log.info("orderInfo={}", orderInfo);
-
+        assertThat(orderInfo).isNull();
     }
 
 }

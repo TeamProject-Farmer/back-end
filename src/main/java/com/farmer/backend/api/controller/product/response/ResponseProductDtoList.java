@@ -14,6 +14,7 @@ public class ResponseProductDtoList {
 
     private Long productId;
     private String productName;
+    private String imgUrl;
     private Integer discountRate;
     private Integer price;
     private Double averageStarRating;

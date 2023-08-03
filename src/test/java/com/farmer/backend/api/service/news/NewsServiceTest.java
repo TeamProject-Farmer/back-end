@@ -31,5 +31,6 @@ class NewsServiceTest {
     void newsInfo() {
         ResponseNewsDto responseNewsDto = newsRepository.findNews().map(ResponseNewsDto::newsInfo).orElseThrow(() -> new CustomException(ErrorCode.NEWS_NOT_FOUND));
         log.info("responseNewsDto={}", responseNewsDto.getSubject());
+        assertThat(responseNewsDto.getSubject()).isNotNull();
     }
 }
