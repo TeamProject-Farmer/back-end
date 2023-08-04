@@ -54,7 +54,7 @@ class CartServiceTest {
     @Test
     @DisplayName("장바구니 목록")
     void cartList() {
-        Member member = memberRepository.findByEmail("kce2360@naver.com").orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Member member = memberRepository.findByEmail("codms7020@naver.com").orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         List<ResponseCartProductListDto> cartProductListByMember = cartQueryRepositoryImpl.findCartProductListByMember(member);
         for (ResponseCartProductListDto responseCartProductListDto : cartProductListByMember) {
             log.info(responseCartProductListDto.getProductName());
