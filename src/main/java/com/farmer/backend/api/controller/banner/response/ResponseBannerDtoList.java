@@ -1,6 +1,5 @@
 package com.farmer.backend.api.controller.banner.response;
 
-import com.farmer.backend.domain.banner.Banner;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,8 +13,8 @@ public class ResponseBannerDtoList {
 
     private Long id;
     private String name;
-    private String linkUrl;
     private String imgUrl;
+    private String linkUrl;
 
 
 }
