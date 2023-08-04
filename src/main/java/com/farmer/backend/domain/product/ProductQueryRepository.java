@@ -1,6 +1,5 @@
 package com.farmer.backend.domain.product;
 
-import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductListDto;
 import com.farmer.backend.api.controller.product.response.ResponseProductDtoList;
 import com.farmer.backend.api.controller.product.response.ResponseShopBySizeProduct;
 import org.springframework.data.domain.Page;
@@ -13,7 +12,7 @@ public interface ProductQueryRepository {
 
     Page<ResponseProductDtoList> productList(Long categoryId, Pageable pageable, ProductOrderCondition orderCondition);
 
-    List<ResponseProductDtoList> mdPickList();
+    List<ResponseProductDtoList> eventProductList(ProductDivision division);
 
     List<ResponseProductDtoList> bestProductList();
 

@@ -30,7 +30,7 @@ class membersCouponServiceTest {
     @Test
     @DisplayName("회원 쿠폰 적용(할인 금액 조회)")
     void applyCoupon() {
-        Long findCouponId = memberCouponRepository.findById(2L).orElseThrow(() -> new CustomException(ErrorCode.COUPON_NOT_FOUND)).getCoupons().getId();
+        Long findCouponId = memberCouponRepository.findById(3L).orElseThrow(() -> new CustomException(ErrorCode.COUPON_NOT_FOUND)).getCoupons().getId();
         Coupon coupon = couponRepository.findById(findCouponId).orElseThrow(() -> new CustomException(ErrorCode.COUPON_NOT_FOUND));
         if (coupon.getDiscountPolicy().equals(CouponPolicy.FIXED)) {
 //            assertThat(coupon.getFixedPrice()).isNotZero();

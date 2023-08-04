@@ -23,6 +23,7 @@ public class News extends BaseTimeEntity {
     private String newsSubject;
 
     @NotNull
+    @Column(columnDefinition = "text")
     private String newsContent;
 
     @NotNull

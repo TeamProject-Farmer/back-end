@@ -58,6 +58,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                 .select(Projections.constructor(ResponseProductDtoList.class,
                         product.id,
                         product.name,
+                        product.thumbnailImg,
                         product.discountRate,
                         product.price,
                         product.averageStarRating,
@@ -79,18 +80,19 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
     }
 
     @Override
-    public List<ResponseProductDtoList> mdPickList() {
+    public List<ResponseProductDtoList> eventProductList(ProductDivision division) {
         List<ResponseProductDtoList> productList = query
                 .select(Projections.constructor(ResponseProductDtoList.class,
                         product.id,
                         product.name,
+                        product.thumbnailImg,
                         product.discountRate,
                         product.price,
                         product.averageStarRating,
                         product.reviewCount))
                 .from(product)
                 .orderBy(product.createdDate.desc())
-                .where(product.division.eq(ProductDivision.MD_PICK))
+                .where(product.division.eq(division))
                 .fetch();
         return productList;
     }
@@ -101,6 +103,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                 .select(Projections.constructor(ResponseProductDtoList.class,
                         product.id,
                         product.name,
+                        product.thumbnailImg,
                         product.discountRate,
                         product.price,
                         product.averageStarRating,
