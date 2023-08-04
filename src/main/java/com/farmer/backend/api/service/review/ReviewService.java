@@ -106,19 +106,17 @@ public class ReviewService {
      * @param orderProductId 주문상품 ID
      * @param requestReviewWriteDto 리뷰 내용
      */
-    public void reviewWrite(String memberEmail, Long orderProductId, RequestReviewWriteDto requestReviewWriteDto) {
+    public void reviewWrite(String memberEmail, Long orderProductId, RequestReviewWriteDto requestReviewWriteDto) throws IOException {
 
-        String reviewImgUrl ;
+        String reviewImgUrl = null;
 
         OrderProduct product = orderProductRepository.findById(orderProductId).orElseThrow(()-> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
         Member member = memberRepository.findByEmail(memberEmail).orElseThrow(()-> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-
-        try {
+        if(requestReviewWriteDto.getReviewImage() != null) {
             reviewImgUrl = s3Service.reviewImgUpload(requestReviewWriteDto.getReviewImage());
-        } catch (IOException e) {
-            throw new CustomException(ErrorCode.FILE_NOT_CONVERT);
         }
+
 
         ProductReviews productReviews = requestReviewWriteDto.toEntity(product,member,reviewImgUrl);
         productReviewRepository.save(productReviews);
