@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -82,7 +83,7 @@ public class ReviewController {
     @PostMapping("/member/review/write/{orderProductId}")
     public ResponseEntity<String> productReviewWrite(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                                      @PathVariable(name="orderProductId") Long orderProductId,
-                                                     RequestReviewWriteDto requestReviewWriteDto){
+                                                     RequestReviewWriteDto requestReviewWriteDto) throws IOException {
 
         String memberEmail = memberAdapter.getMember().getEmail();
         reviewService.reviewWrite(memberEmail,orderProductId,requestReviewWriteDto);

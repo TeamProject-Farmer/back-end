@@ -72,7 +72,7 @@ class ReviewServiceTest {
     @Test
     @DisplayName("상품별 리뷰 별점 리스트")
     void productReviewAverage() {
-        Long productId = 5L;
+        Long productId = 8L;
         double average = 0;
         ArrayList<Long> reviewCount = new ArrayList<>(Arrays.asList(0L, 0L, 0L, 0L,0L));
 
