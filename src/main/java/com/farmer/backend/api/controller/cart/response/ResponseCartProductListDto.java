@@ -9,6 +9,7 @@ import lombok.Getter;
 @Builder
 public class ResponseCartProductListDto {
 
+    private Long cartId;
     private Long productId;
     private String imgUrl;
     private String productName;
