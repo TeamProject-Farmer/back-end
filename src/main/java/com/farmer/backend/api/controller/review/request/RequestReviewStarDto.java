@@ -1,5 +1,6 @@
 package com.farmer.backend.api.controller.review.request;
 
+import com.farmer.backend.domain.orderproduct.OrderProduct;
 import com.farmer.backend.domain.product.Product;
 import com.farmer.backend.domain.product.productreviewstar.ProductReviewAverage;
 import lombok.AccessLevel;

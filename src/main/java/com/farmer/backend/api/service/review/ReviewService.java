@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -55,8 +56,8 @@ public class ReviewService {
 
     /**
      * 상품별 리뷰 페이지
-     * @param sortOrderCond 특정 별점대 ex)star=5
-     * @param reviewCond 베스트순, 최신순 정렬 ex) sortOrderCond = best , sortOrderCond = recent
+     * @param sortOrderCond
+     * @param reviewCond 베스트순
      * @param productId 상품 ID 값
      * @return Page<ResponseProductReviewListDto>
      */
@@ -71,12 +72,13 @@ public class ReviewService {
      * @param productId 상품 ID값
      * @return ResponseReviewStarDto
      */
-
+    @Transactional
     public ResponseReviewStarDto reviewAverage(Long productId) {
 
-        Product product = productRepository.findById(productId).orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
-        RequestReviewStarDto reviewStar = reviewQueryRepositoryImpl.fiveStars( productId);
+        reviewQueryRepositoryImpl.productCount(productId);
 
+        Product product = productRepository.findById(productId).orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        RequestReviewStarDto reviewStar = reviewQueryRepositoryImpl.fiveStars(productId);
         ProductReviewAverage productReviewAverage = reviewStar.toEntity(product);
 
         if(productReviewAverageRepository.findByProductId(productId).isPresent()){
@@ -95,7 +97,7 @@ public class ReviewService {
      * 상품별 리뷰 이미지 리스트
      * @param productId 상품 ID값
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<String> productReviewImg(Long productId) {
 
         return reviewQueryRepositoryImpl.productReviewImg(productId);
@@ -106,6 +108,7 @@ public class ReviewService {
      * @param orderProductId 주문상품 ID
      * @param requestReviewWriteDto 리뷰 내용
      */
+    @Transactional
     public void reviewWrite(String memberEmail, Long orderProductId, RequestReviewWriteDto requestReviewWriteDto) throws IOException {
 
         String reviewImgUrl = null;
