@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface ProductReviewRepository extends JpaRepository<ProductReviews, Long> {
 
-    List<ProductReviews> findByOrderProductProductId(Long aLong);
+    List<ProductReviews> findByOrderProductProductId(Long ProductId);
+
 }

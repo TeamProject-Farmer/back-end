@@ -23,8 +23,6 @@ public class Options {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "option_id")
     private Long id;
-
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
