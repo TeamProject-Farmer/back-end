@@ -7,26 +7,23 @@ import com.farmer.backend.exception.ErrorCode;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
-import java.lang.reflect.AnnotatedElement;
 import java.util.*;
 
 import static com.farmer.backend.domain.orderproduct.QOrderProduct.orderProduct;
 import static com.farmer.backend.domain.product.productreview.QProductReviews.productReviews;
+import static com.farmer.backend.domain.options.QOptions.options;
 
 @Repository
 public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepository{
 
     private final JPAQueryFactory query;
-    private Expression<?> Null;
 
     public ProductReviewQueryRepositoryImpl(EntityManager em){
         this.query=new JPAQueryFactory(em);
@@ -77,6 +74,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                         productReviews.content
                 ))
                 .from(productReviews)
+                .leftJoin(options).on(productReviews.orderProduct.options.optionName.eq(options.optionName))
                 .where(productReviews.orderProduct.product.id.eq(productId),likeStar(reviewCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
