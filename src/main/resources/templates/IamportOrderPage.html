@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        var IMP = window.IMP;
+        IMP.init("imp08866628");
+
+        function requestPay() {
+            IMP.request_pay({
+                pg: 'kakaopay',
+                pay_method: 'card',
+                merchant_uid: 'merchant_' + new Date().getTime(),
+                name: '골든 바렐',
+                amount: 9000,
+                customer_uid: 'TEST' + new Date().getTime(),
+                buyer_email: 'test123@naver.com',
+                buyer_name: 'TEST',
+                buyer_tel: '010-4429-3333',
+                buyer_addr: '서울특별시 은평구 갈현로 11길 46',
+                buyer_postcode: '108-804'
+            }, function (rsp) {
+                if (rsp.success) {
+                    $.ajax({
+                        url: "/api/main/verifyIamport/" + rsp.imp_uid,
+                        type: "POST",
+                        data: {
+                            imp_uid: rsp.imp_uid,            // 결제 고유번호
+                            merchant_uid: rsp.merchant_uid   // 주문번호
+                        }
+                    }).done(function (data) {
+                        if (rsp.paid_amount == data.response.amount) {
+                            alert("결제 및 검증완료");
+                        } else {
+                            alert("결제 실패");
+                        }
+                    });
+                } else {
+                    alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+                }
+
+
+            });
+        }
+    </script>
+</head>
+<body>
+    <button onclick="requestPay()">아임포트 결제 API</button>
+</body>
+
+</html>

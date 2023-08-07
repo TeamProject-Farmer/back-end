@@ -81,7 +81,7 @@ public class CartController {
      */
     @ApiDocumentResponse
     @Operation(summary = "장바구니 상품 합계금액 조회", description = "장바구니의 상품들의 합계 금액을 조회합니다.")
-    @PostMapping("/total-price/{cartId}")
+    @GetMapping("/total-price/{cartId}")
     public ResponseEntity<ResponseTotalPriceAndCountDto> totalPriceAndCountOfCartProduct(@PathVariable Long[] cartId, @AuthenticationPrincipal MemberAdapter member) {
         ResponseTotalPriceAndCountDto totalPriceAndCount = cartService.totalPriceAndCountOfCartProduct(cartId);
         return ResponseEntity.ok(totalPriceAndCount);
