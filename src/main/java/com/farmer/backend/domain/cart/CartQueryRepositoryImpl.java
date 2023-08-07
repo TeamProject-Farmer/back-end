@@ -28,6 +28,7 @@ public class CartQueryRepositoryImpl implements CartQueryRepository{
         return query
                 .select(Projections.constructor(
                         ResponseCartProductListDto.class,
+                        cart.id,
                         cart.product.id,
                         cart.product.thumbnailImg,
                         cart.product.name,
