@@ -3,6 +3,7 @@ import com.farmer.backend.api.controller.review.request.RequestReviewStarDto;
 import com.farmer.backend.api.controller.review.request.SearchProductReviewCondition;
 import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
 import com.farmer.backend.api.controller.review.response.ResponseProductReviewListDto;
+import com.farmer.backend.domain.options.QOptions;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.*;
 
+import static com.farmer.backend.domain.options.QOptions.options;
 import static com.farmer.backend.domain.product.productreview.QProductReviews.productReviews;
 
 @Repository
@@ -71,6 +73,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                         productReviews.content
                 ))
                 .from(productReviews)
+                .leftJoin(options).on(productReviews.orderProduct.options.optionName.eq(options.optionName))
                     .where(productReviews.orderProduct.product.id.eq(productId),likeStar(reviewCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
