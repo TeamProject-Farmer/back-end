@@ -3,6 +3,7 @@ package com.farmer.backend.domain.deliveryaddress;
 import com.farmer.backend.domain.member.Member;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class DeliveryAddress {
 
     @Id
@@ -43,5 +45,15 @@ public class DeliveryAddress {
 
     @Enumerated(EnumType.STRING)
     private AddressStatus status;
+
+    public void updateDeliveryAddress(DeliveryAddress deliveryAddress) {
+        this.id = deliveryAddress.getId();
+        this.member = deliveryAddress.getMember();
+        this.address = deliveryAddress.getAddress();
+        this.addressDetail = deliveryAddress.getAddressDetail();
+        this.zipcode = deliveryAddress.getZipcode();
+        this.hp = deliveryAddress.getHp();
+        this.status = deliveryAddress.getStatus();
+    }
 
 }

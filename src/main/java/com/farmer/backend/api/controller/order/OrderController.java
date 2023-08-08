@@ -1,5 +1,6 @@
 package com.farmer.backend.api.controller.order;
 
+import com.farmer.backend.api.controller.order.request.RequestOrderInfoDto;
 import com.farmer.backend.api.controller.order.response.ResponseOrderInfoDto;
 import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductListDto;
 import com.farmer.backend.api.service.order.OrderService;
@@ -60,10 +61,11 @@ public class OrderController {
     }
 
     @ApiDocumentResponse
-    @Operation(summary = "주문 생성", description = "주문 한건을 생성합니다.")
-    @PostMapping()
-    public ResponseEntity order() {
-        return null;
+    @Operation(summary = "주문 결제 요청", description = "주문 한건을 생성합니다.")
+    @PostMapping
+    public ResponseEntity order(@AuthenticationPrincipal MemberAdapter member, RequestOrderInfoDto orderInfoDto) {
+        log.info("orderInfo={}", orderInfoDto.getOrderNumber().toString());
+        return ResponseEntity.ok(orderService.createOrder(orderInfoDto));
     }
 
 

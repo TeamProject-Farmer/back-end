@@ -18,6 +18,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -43,11 +44,14 @@ class CartServiceTest {
     @Test
     @DisplayName("장바구니 추가")
     void addToCart() {
-        Product product = em.find(Product.class, 10L);
-        Options options = em.find(Options.class, 10L);
-        RequestProductCartDto requestProductCartDto = new RequestProductCartDto(product, options, 3);
-        Member member = memberRepository.findByEmail("kce2360@naver.com").orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        Cart savedCart = cartRepository.save(requestProductCartDto.toEntity(member));
+        Cart savedCart = null;
+        for (int i = 0; i < 40; i++) {
+            Product product = em.find(Product.class, Long.valueOf(i));
+            Options options = em.find(Options.class, 1L);
+            RequestProductCartDto requestProductCartDto = new RequestProductCartDto(product, options, 3);
+            Member member = memberRepository.findByEmail("kce2360@naver.com").orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+            savedCart = cartRepository.save(requestProductCartDto.toEntity(member));
+        }
         assertThat(savedCart).isNotNull();
     }
 
@@ -65,7 +69,7 @@ class CartServiceTest {
     @Test
     @DisplayName("장바구니 상품 수량 변경")
     void changeQuantityAction() {
-        RequestCartProductQuantityDto requestCartProductQuantityDto = new RequestCartProductQuantityDto(1L, "plus");
+        RequestCartProductQuantityDto requestCartProductQuantityDto = new RequestCartProductQuantityDto(100L, "plus");
         Member member = memberRepository.findByEmail("codms7020@naver.com").orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         Cart findCartProduct = cartRepository.findById(requestCartProductQuantityDto.getCartId()).orElseThrow(() -> new CustomException(ErrorCode.CART_PRODUCT_NOT_FOUNT));
         Integer originCount = findCartProduct.getCount();

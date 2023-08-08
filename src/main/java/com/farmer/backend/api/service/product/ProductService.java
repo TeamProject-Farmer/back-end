@@ -84,6 +84,19 @@ public class ProductService {
     }
 
     /**
+     * 쇼핑몰 크기별 상품 리스트 조회
+     *
+     * @param size
+     * @param pageable
+     * @param orderCondition
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Page<ResponseProductDtoList> shopBySizeProductList(ProductSize size, Pageable pageable, ProductOrderCondition orderCondition) {
+        return productQueryRepositoryImpl.findByShopBySizeProductList(size, pageable, orderCondition);
+    }
+
+    /**
      * 쇼핑몰 상품 상세 페이지
      * @param productId 상품 일련번호
      * @return
@@ -204,5 +217,4 @@ public class ProductService {
     public Page<ResponseProductDto> searchActionProductList(PageRequest pageable, String productName) {
         return productQueryRepositoryImpl.findAll(pageable, productName, null).map(ResponseProductDto::getAllProductList);
     }
-
 }

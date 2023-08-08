@@ -4,6 +4,7 @@ import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.delivery.Delivery;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "orders")
 public class Orders {
 
