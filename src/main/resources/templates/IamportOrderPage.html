@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script>
-        var IMP = window.IMP;
+        const IMP = window.IMP;
         IMP.init("imp08866628");
 
         function requestPay() {
@@ -34,6 +34,40 @@
                     }).done(function (data) {
                         if (rsp.paid_amount == data.response.amount) {
                             alert("결제 및 검증완료");
+                            let contents = [
+                                {
+                                    productId: 75,
+                                    optionId: 1,
+                                    count: 3,
+                                    username: "김윤형님",
+                                    address: "서울시 은평구 갈현로 11길",
+                                    zipcode: "145-24",
+                                    addressDetail: "진로아파트 503동 2304호",
+                                    phoneNumber: "010-6474-1234",
+                                    memo: "BOX",
+                                    selfMemo: null,
+                                    defaultAddr: null,
+                                    orderNumber: rsp.merchant_uid,
+                                    orderTotalPrice: 80000,
+                                    totalQuantity: 5,
+                                    payMethod: "kakaopay"
+                                }
+                            ];
+                            $.ajax({
+                                url: "/api/member/orders",
+                                type: "POST",
+                                contentType: "application/json",
+                                beforeSend: function (xhr) {
+                                    xhr.setRequestHeader("Content-type", "application/json");
+                                },
+                                data: JSON.stringify(contents),
+                                success: function (data) {
+                                    console.log('success : ' + data);
+                                },
+                                error: function (e) {
+                                    console.log('error : ' + e);
+                                },
+                            })
                         } else {
                             alert("결제 실패");
                         }

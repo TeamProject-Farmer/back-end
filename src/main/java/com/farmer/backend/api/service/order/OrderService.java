@@ -1,12 +1,16 @@
 package com.farmer.backend.api.service.order;
 
+import com.farmer.backend.api.controller.order.request.RequestOrderInfoDto;
 import com.farmer.backend.api.controller.order.request.SearchOrdersCondition;
 import com.farmer.backend.api.controller.order.response.ResponseOrderDetailDto;
 import com.farmer.backend.api.controller.order.response.ResponseOrderInfoDto;
 import com.farmer.backend.api.controller.order.response.ResponseOrdersAndPaymentDto;
 import com.farmer.backend.api.controller.order.response.ResponseOrdersDto;
 import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductListDto;
+import com.farmer.backend.domain.delivery.Delivery;
+import com.farmer.backend.domain.delivery.DeliveryRepository;
 import com.farmer.backend.domain.deliveryaddress.DeliveryAddress;
+import com.farmer.backend.domain.deliveryaddress.DeliveryAddressQueryRepository;
 import com.farmer.backend.domain.deliveryaddress.DeliveryAddressRepository;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;
@@ -27,6 +31,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.*;
 
 @Service
@@ -36,13 +41,11 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderQueryRepository orderQueryRepositoryImpl;
-    private final OrderProductRepository orderProductRepository;
     private final OrderProductQueryRepository orderProductQueryRepositoryImpl;
-    private final ProductQueryRepository productQueryRepositoryImpl;
-    private final PaymentRepository paymentRepository;
-    private final PaymentQueryRepository paymentQueryRepositoryImpl;
+    private final DeliveryRepository deliveryRepository;
     private final MemberRepository memberRepository;
     private final DeliveryAddressRepository deliveryAddressRepository;
+    private final EntityManager em;
 
     /**
      * 주문 전체 리스트
@@ -117,5 +120,22 @@ public class OrderService {
                     .build();
         }
         return null;
+    }
+
+    @Transactional
+    public Long createOrder(RequestOrderInfoDto orderInfoDto) {
+        Delivery savedDelivery = deliveryRepository.save(orderInfoDto.toEntityDelivery());
+        Optional<Member> findMember = memberRepository.findByNickname(orderInfoDto.getUsername());
+        if (Objects.nonNull(orderInfoDto.getDefaultAddr())) {
+            DeliveryAddress oldAddress = deliveryAddressRepository.findByMember(findMember.get());
+            if (Objects.isNull(oldAddress)) {
+                deliveryAddressRepository.save(orderInfoDto.toEntityDeliveryAddress(findMember.get()));
+            } else {
+                oldAddress.updateDeliveryAddress(oldAddress);
+            }
+        }
+        Orders createdOrder = orderRepository.save(orderInfoDto.toEntity(findMember.get(), savedDelivery));
+
+        return createdOrder.getId();
     }
 }
