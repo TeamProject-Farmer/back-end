@@ -53,4 +53,7 @@ public class ProductReviews {
     private LocalDateTime createdDate;
 
 
+    public void updateLikeCount() {
+        this.likeCount += 1;
+    }
 }

@@ -88,8 +88,20 @@ public class ReviewController {
         String memberEmail = memberAdapter.getMember().getEmail();
         reviewService.reviewWrite(memberEmail,orderProductId,requestReviewWriteDto);
 
-        return new ResponseEntity<>("ok", HttpStatus.OK);
+        return new ResponseEntity<>("OK", HttpStatus.OK);
 
+    }
+
+    /**
+     * 리뷰 LikeCount
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "리뷰 좋아요 누르기",description = "도움이 되는 리뷰의 좋아요를 누릅니다.")
+    @PostMapping("/main/review/like")
+    public ResponseEntity<String> productLikeCount(Long reviewId){
+        reviewService.reviewLikeCount(reviewId);
+
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
 }

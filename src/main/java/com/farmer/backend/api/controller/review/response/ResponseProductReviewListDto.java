@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ResponseProductReviewListDto {
 
+    private Long reviewId;
     private String memberNickname;
     private int fiveStarRating;
     private LocalDateTime createdDate;
