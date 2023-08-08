@@ -31,11 +31,11 @@ public class QnAController {
      */
     @ApiDocumentResponse
     @Operation(summary = "QnA 리스트 전체 출력",description = "상품 QnA 리스트를 전체 출력합니다.")
-    @GetMapping("/main/qna")
-    public Page<ResponseProductQnADto> productQnA(PageRequest pageRequest){
+    @GetMapping("/main/qna/{productId}")
+    public Page<ResponseProductQnADto> productQnA(PageRequest pageRequest,@PathVariable(name = "productId") Long productId){
 
         pageRequest.setSize(5);
-        return productQnAService.productQnA(pageRequest.of());
+        return productQnAService.productQnA(pageRequest.of(),productId);
     }
 
     /**
@@ -54,8 +54,8 @@ public class QnAController {
      */
     @ApiDocumentResponse
     @Operation(summary = "문의사항 상세보기",description = "상품 문의사항 상세보기")
-    @GetMapping("/main/qna/{qnaId}")
-    public ResponseQnADetailDto qnaRead(@PathVariable(name = "qnaId") Long qnaId,String memberEmail){
+    @GetMapping("/main/productQna/{qnaId}")
+    public ResponseQnADetailDto qnaRead(@PathVariable(name = "qnaId") Long qnaId, String memberEmail){
 
         return productQnAService.qnaRead(qnaId,memberEmail);
     }

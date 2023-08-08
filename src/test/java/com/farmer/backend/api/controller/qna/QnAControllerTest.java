@@ -47,9 +47,9 @@ class QnAControllerTest {
     void productQnA() {
 
         Pageable pageable = PageRequest.ofSize(5);
+        Long productId = 6L;
 
-
-        Page<ResponseProductQnADto> qnaList = productQnAService.productQnA(pageable);
+        Page<ResponseProductQnADto> qnaList = productQnAService.productQnA(pageable,productId);
 
         for(ResponseProductQnADto qna :qnaList ){
             log.info(String.valueOf(qna.getQnaId()));
