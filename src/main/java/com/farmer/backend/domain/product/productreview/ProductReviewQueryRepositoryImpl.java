@@ -1,9 +1,9 @@
 package com.farmer.backend.domain.product.productreview;
 import com.farmer.backend.api.controller.review.request.RequestReviewStarDto;
-import com.farmer.backend.api.controller.review.request.SearchProductReviewCondition;
 import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
 import com.farmer.backend.api.controller.review.response.ResponseProductReviewListDto;
-import com.farmer.backend.domain.options.QOptions;
+import com.farmer.backend.exception.CustomException;
+import com.farmer.backend.exception.ErrorCode;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -16,8 +16,9 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.*;
 
-import static com.farmer.backend.domain.options.QOptions.options;
+import static com.farmer.backend.domain.orderproduct.QOrderProduct.orderProduct;
 import static com.farmer.backend.domain.product.productreview.QProductReviews.productReviews;
+import static com.farmer.backend.domain.options.QOptions.options;
 
 @Repository
 public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepository{
@@ -33,7 +34,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
      */
     @Override
     public List<ResponseBestReviewListDto> bestReviewList(){
-        List<ResponseBestReviewListDto> productReviewList = query
+        List<ResponseBestReviewListDto> reviewList = query
                 .select(Projections.constructor(
                         ResponseBestReviewListDto.class,
                         productReviews.id,
@@ -45,10 +46,10 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
 
                 ))
                 .from(productReviews)
+                .limit(10L)
                 .orderBy(productReviews.likeCount.desc())
-                .limit(12)
                 .fetch();
-        return productReviewList;
+        return reviewList;
     }
 
 
@@ -63,6 +64,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
         List<ResponseProductReviewListDto> productReviewList = query
                 .select(Projections.constructor(
                         ResponseProductReviewListDto.class,
+                        productReviews.id,
                         productReviews.member.nickname,
                         productReviews.fiveStarRating,
                         productReviews.createdDate,
@@ -74,7 +76,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                 ))
                 .from(productReviews)
                 .leftJoin(options).on(productReviews.orderProduct.options.optionName.eq(options.optionName))
-                    .where(productReviews.orderProduct.product.id.eq(productId),likeStar(reviewCond))
+                .where(productReviews.orderProduct.product.id.eq(productId),likeStar(reviewCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(sortOrderProductReview(sortOrderCond))
@@ -98,7 +100,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
 
         ArrayList<Long> reviewCount = new ArrayList<>(Arrays.asList(0L, 0L, 0L, 0L, 0L));
 
-        List<Tuple> allStar =query
+        List<Tuple> allStar = query
                 .select(productReviews.fiveStarRating,productReviews.fiveStarRating.count())
                 .from(productReviews)
                 .where(productReviews.orderProduct.product.id.eq(productId))
@@ -137,6 +139,21 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
 
         return imgList;
     }
+
+    @Override
+    public Long productCount(Long productId){
+            Long productCount = query
+                    .select(orderProduct.product.count())
+                    .from(orderProduct)
+                    .where(orderProduct.product.id.eq(productId))
+                    .fetchOne();
+
+            if(productCount==0){
+                throw new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
+            }
+            return productCount;
+    }
+
     public BooleanExpression likeStar(Integer star){
         return star != null ? productReviews.fiveStarRating.eq(star) :null;
     }

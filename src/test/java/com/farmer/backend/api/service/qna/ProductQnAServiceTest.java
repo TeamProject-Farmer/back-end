@@ -43,7 +43,8 @@ class ProductQnAServiceTest {
     void qnaList (){
 
         Pageable pageable = PageRequest.ofSize(5);
-        Page<ResponseProductQnADto> qnaList = productQnAQueryRepositoryImpl.productQnAList(pageable);
+        Long productId = 6L;
+        Page<ResponseProductQnADto> qnaList = productQnAQueryRepositoryImpl.productQnAList(pageable,productId);
 
         for(ResponseProductQnADto qna : qnaList){
             log.info(String.valueOf(qna.getQnaId()));
