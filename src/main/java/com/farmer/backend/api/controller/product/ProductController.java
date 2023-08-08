@@ -75,11 +75,21 @@ public class ProductController {
      * SHOP BY SIZE(사이즈 클릭 시 해당 상품 대표 이미지 노출)
      */
     @ApiDocumentResponse
-    @Operation(summary = "SHOP BY SIZE 상품", description = "크기별 대표 상품 이미지 한건을 노출합니다.")
+    @Operation(summary = "SHOP BY SIZE 대표상품", description = "크기별 대표 상품 이미지 한건을 노출합니다.")
     @GetMapping("/shop-by-size")
     public ResponseEntity shopBySize(ProductSize size) {
         ResponseShopBySizeProduct shopBySizeProduct = productService.shopBySizeOne(size);
         return ResponseEntity.ok(shopBySizeProduct);
+    }
+
+    /**
+     * SHOP BY SIZE(사이즈 별 상품 전체 리스트 노출)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "SHOP BY SIZE 크기별 상품리스트", description = "크기별로 상품리스트를 출력합니다.")
+    @GetMapping("/shop-by-size/product-list")
+    public Page<ResponseProductDtoList> shopBySizeProductList(ProductSize productSize, @PageableDefault(size = 14) Pageable pageable, ProductOrderCondition orderCondition) {
+        return productService.shopBySizeProductList(productSize, pageable, orderCondition);
     }
 
     /**

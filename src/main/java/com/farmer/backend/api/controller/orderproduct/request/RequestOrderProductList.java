@@ -10,8 +10,8 @@ import lombok.Setter;
 public class RequestOrderProductList {
 
     private Long productId;
-    private String productName;
-    private Long price;
-    private String imgUrl;
+    private Long optionId;
     private Integer count;
+    private Long orderPrice;
+
 }

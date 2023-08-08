@@ -129,6 +129,33 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
         return shopBySizeProduct;
     }
 
+    @Override
+    public Page<ResponseProductDtoList> findByShopBySizeProductList(ProductSize size, Pageable pageable, ProductOrderCondition orderCondition) {
+        List<ResponseProductDtoList> productList = query
+                .select(Projections.constructor(ResponseProductDtoList.class,
+                        product.id,
+                        product.name,
+                        product.thumbnailImg,
+                        product.discountRate,
+                        product.price,
+                        product.averageStarRating,
+                        product.reviewCount))
+                .from(product)
+                .where(product.size.eq(size))
+                .orderBy(productOrderCondition(orderCondition))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = query
+                .select(product.count())
+                .from(product)
+                .where(product.size.eq(size))
+                .fetchOne();
+
+        return new PageImpl<>(productList, pageable, count);
+    }
+
     private OrderSpecifier<?> productOrderCondition(ProductOrderCondition orderCondition) {
         Order order = Order.DESC;
 
