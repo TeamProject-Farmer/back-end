@@ -28,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -56,7 +55,7 @@ public class ReviewService {
 
     /**
      * 상품별 리뷰 페이지
-     * @param sortOrderCond
+     * @param sortOrderCond 정렬 값
      * @param reviewCond 베스트순
      * @param productId 상품 ID 값
      * @return Page<ResponseProductReviewListDto>
@@ -124,6 +123,18 @@ public class ReviewService {
         ProductReviews productReviews = requestReviewWriteDto.toEntity(product,member,reviewImgUrl);
         productReviewRepository.save(productReviews);
 
+
+    }
+
+    /**
+     * 리뷰 좋아요 누르기
+     */
+    @Transactional
+    public void reviewLikeCount(Long reviewId) {
+
+        ProductReviews productReview = productReviewRepository.findById(reviewId).orElseThrow(()->new CustomException(ErrorCode.REVIEW_NOT_FOUND));
+
+        productReview.updateLikeCount();
 
     }
 }
