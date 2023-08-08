@@ -31,9 +31,9 @@ public class ProductQnAService {
     /**
      * 문의사항 전체 리스트
      */
-    @Transactional
-    public Page<ResponseProductQnADto> productQnA(Pageable pageable) {
-        return productQnAQueryRepositoryImpl.productQnAList(pageable);
+    @Transactional(readOnly = true)
+    public Page<ResponseProductQnADto> productQnA(Pageable pageable,Long productId) {
+        return productQnAQueryRepositoryImpl.productQnAList(pageable,productId);
     }
 
     /**
