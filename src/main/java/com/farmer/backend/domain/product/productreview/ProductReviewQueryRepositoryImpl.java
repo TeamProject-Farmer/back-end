@@ -64,6 +64,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
         List<ResponseProductReviewListDto> productReviewList = query
                 .select(Projections.constructor(
                         ResponseProductReviewListDto.class,
+                        productReviews.id,
                         productReviews.member.nickname,
                         productReviews.fiveStarRating,
                         productReviews.createdDate,
