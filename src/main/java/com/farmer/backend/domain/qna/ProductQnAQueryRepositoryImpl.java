@@ -23,7 +23,7 @@ public class ProductQnAQueryRepositoryImpl implements ProductQnAQueryRepository 
     }
 
     @Override
-    public Page<ResponseProductQnADto> productQnAList(Pageable pageable) {
+    public Page<ResponseProductQnADto> productQnAList(Pageable pageable,Long productId) {
         List<ResponseProductQnADto> productQnAList = query
                 .select(Projections.constructor(
                         ResponseProductQnADto.class,
@@ -38,14 +38,16 @@ public class ProductQnAQueryRepositoryImpl implements ProductQnAQueryRepository 
 
                 ))
                 .from(qna)
-                .orderBy(qna.qCreatedDate.desc())
+                .where(qna.product.id.eq(productId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(qna.qCreatedDate.desc())
                 .fetch();
 
         Long count = query
                 .select(qna.count())
                 .from(qna)
+                .where(qna.product.id.eq(productId))
                 .fetchOne();
 
         return new PageImpl<>(productQnAList, pageable, count);
