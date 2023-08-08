@@ -18,4 +18,5 @@ public interface ProductQueryRepository {
 
     ResponseShopBySizeProduct findByShopBySizeProductOne(ProductSize size);
 
+    Page<ResponseProductDtoList> findByShopBySizeProductList(ProductSize size, Pageable pageable, ProductOrderCondition orderCondition);
 }
