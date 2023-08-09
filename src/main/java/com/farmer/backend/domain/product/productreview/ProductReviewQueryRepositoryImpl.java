@@ -149,7 +149,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                     .fetchOne();
 
             if(productCount==0){
-                throw new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
+                throw new CustomException(ErrorCode.PRODUCT_REVIEW_NOT_FOUND);
             }
             return productCount;
     }

@@ -25,6 +25,7 @@ public enum ErrorCode {
     OPTION_NOT_FOUND(BAD_REQUEST, "해당 옵션이 존재하지 않습니다."),
     PRODUCT_CATEGORY_NOT_FOUND(BAD_REQUEST, "해당 상품 카테고리가 존재하지 않습니다."),
     REVIEW_NOT_FOUND(BAD_REQUEST, "해당 리뷰가 존재하지 않습니다."),
+    PRODUCT_REVIEW_NOT_FOUND(BAD_REQUEST,"해당 상품에 대한 리뷰가 존재하지 않습니다."),
     REVIEW_FOUND(BAD_REQUEST,"해당 리뷰 ID가 이미 존재합니다."),
     QNA_NOT_FOUND (BAD_REQUEST, "해당 QNA가 존재하지 않습니다."),
     QNA_SECRET (BAD_REQUEST, "비밀글 입니다"),
