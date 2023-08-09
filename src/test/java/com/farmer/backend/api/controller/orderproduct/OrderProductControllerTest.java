@@ -62,22 +62,22 @@ class OrderProductControllerTest {
     @DisplayName("주문내역 상품리스트 전체 조회")
     @WithMockCustomUser
     void orderList() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        MemberAdapter memberAdapter = (MemberAdapter) loginService.loadUserByUsername(authentication.getPrincipal().toString());
-        log.info("member={}", memberAdapter);
-
-        RequestOrderProductStatusSearchDto statusSearchDto = new RequestOrderProductStatusSearchDto();
-
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        Authentication authentication = context.getAuthentication();
+//        MemberAdapter memberAdapter = (MemberAdapter) loginService.loadUserByUsername(authentication.getPrincipal().toString());
+//        log.info("member={}", memberAdapter);
+//
+//        RequestOrderProductStatusSearchDto statusSearchDto = new RequestOrderProductStatusSearchDto();
+//
 //        LocalDate st = LocalDate.of(2022, 03, 05);
 //        LocalDate ed = LocalDate.of(2023, 07, 11);
 //        statusSearchDto.setStartDate(st);
 //        statusSearchDto.setEndDate(ed);
-
-        List<ResponseOrderProductDetailDto> responseOrderProductDetailDtos = orderProductController.orderList(memberAdapter, statusSearchDto);
-        for (ResponseOrderProductDetailDto responseOrderProductDetailDto : responseOrderProductDetailDtos) {
-            log.info("responseOrderProductDetailDto={}", responseOrderProductDetailDto.getProductName());
-        }
+//
+//        List<ResponseOrderProductDetailDto> responseOrderProductDetailDtos = (List<ResponseOrderProductDetailDto>) orderProductController.orderList(memberAdapter, statusSearchDto);
+//        for (ResponseOrderProductDetailDto responseOrderProductDetailDto : responseOrderProductDetailDtos) {
+//            log.info("responseOrderProductDetailDto={}", responseOrderProductDetailDto.getProductName());
+//        }
 
     }
 

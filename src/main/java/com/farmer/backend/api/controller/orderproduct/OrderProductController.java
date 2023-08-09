@@ -6,11 +6,14 @@ import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProd
 import com.farmer.backend.api.service.orderproduct.OrderProductService;
 import com.farmer.backend.config.ApiDocumentResponse;
 import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.exception.CustomException;
+import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.login.general.MemberAdapter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,9 +52,11 @@ public class OrderProductController {
     @ApiDocumentResponse
     @Operation(summary = "주문내역 전체 조회", description = "현재 로그인 한 사용자의 전체 주문내역을 조회합니다.")
     @PostMapping("/order-list")
-    public List<ResponseOrderProductDetailDto> orderList(@AuthenticationPrincipal MemberAdapter member,
+    public ResponseEntity<List<ResponseOrderProductDetailDto>> orderList(@AuthenticationPrincipal MemberAdapter member,
                                                          @ModelAttribute RequestOrderProductStatusSearchDto statusSearchDto) {
-        log.info("member={}", member.getMember().getEmail());
-        return orderProductService.orderList(statusSearchDto, member.getUsername());
+        if (statusSearchDto.getEndDate() == null) {
+            return new ResponseEntity(ErrorCode.END_DATE_IS_NULL.getHttpStatus());
+        }
+        return ResponseEntity.ok(orderProductService.orderList(statusSearchDto, member.getUsername()));
     }
 }
