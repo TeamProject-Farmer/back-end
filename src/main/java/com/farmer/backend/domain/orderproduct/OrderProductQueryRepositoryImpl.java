@@ -93,7 +93,10 @@ public class OrderProductQueryRepositoryImpl implements OrderProductQueryReposit
     }
 
     private BooleanExpression eqOrderStatus(OrderStatus orderStatus) {
-        return orderStatus != null ? orders.orderStatus.eq(orderStatus) : null;
+        if (orderStatus.equals(OrderStatus.ALL) || Objects.isNull(orderStatus)) {
+            return orders.orderStatus.ne(OrderStatus.ALL);
+        }
+        return orders.orderStatus.eq(orderStatus);
     }
 
 
