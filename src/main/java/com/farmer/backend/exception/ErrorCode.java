@@ -32,6 +32,7 @@ public enum ErrorCode {
     NOTICE_NOT_FOUND (BAD_REQUEST, "해당 공지사항이 존재하지 않습니다."),
     NEWS_NOT_FOUND(BAD_REQUEST, "해당 뉴스가 존재하지 않습니다."),
     CART_PRODUCT_NOT_FOUNT(BAD_REQUEST, "해당 장바구니에 상품이 존재하지 않습니다."),
+    END_DATE_IS_NULL(BAD_REQUEST, "종료날짜가 올바르지 않습니다"),
 
     COUPON_NOT_FOUND(BAD_REQUEST, "해당 쿠폰이 존재하지 않습니다."),
     FAQ_NOT_FOUND(BAD_REQUEST,"해당 자주 묻는 질문이 존재하지 않습니다."),
