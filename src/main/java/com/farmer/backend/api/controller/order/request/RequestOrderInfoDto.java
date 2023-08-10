@@ -37,6 +37,7 @@ public class RequestOrderInfoDto {
     private String orderNumber;
     private Long orderTotalPrice;
     private Integer totalQuantity;
+    private Long point;
     private String payMethod;
 
     public Delivery toEntityDelivery() {
