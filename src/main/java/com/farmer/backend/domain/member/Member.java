@@ -1,6 +1,7 @@
 package com.farmer.backend.domain.member;
 
 import com.farmer.backend.api.controller.member.request.RequestMemberProfileDto;
+import com.farmer.backend.api.controller.order.request.RequestOrderInfoDto;
 import com.farmer.backend.domain.BaseTimeEntity;
 import com.farmer.backend.api.controller.member.request.RequestMemberDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberDto;
@@ -114,5 +115,10 @@ public class Member extends BaseTimeEntity {
     public void emailSeveralRequest(EmailDto emailDto,String emailAuth){
         this.emailAuth=emailAuth;
         this.email=emailDto.getEmail();
+    }
+
+    public void deductionPoint(Member member, RequestOrderInfoDto orderInfoDto) {
+        this.id = member.getId();
+        this.point -= orderInfoDto.getPoint();
     }
 }

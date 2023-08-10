@@ -31,12 +31,13 @@ public class RequestOrderInfoDto {
     private String phoneNumber;
     private DeliveryMemo memo;
     private String selfMemo;
-    private String defaultAddr;
+    private boolean defaultAddr;
 
     //주문결제
     private String orderNumber;
     private Long orderTotalPrice;
     private Integer totalQuantity;
+    private Long point;
     private String payMethod;
 
     public Delivery toEntityDelivery() {

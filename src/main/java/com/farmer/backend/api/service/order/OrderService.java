@@ -122,19 +122,26 @@ public class OrderService {
         return null;
     }
 
+    /**
+     * 주문 생성
+     * @param orderInfoDto 주문/결제 정보
+     * @return Long
+     */
     @Transactional
     public Long createOrder(RequestOrderInfoDto orderInfoDto) {
         Delivery savedDelivery = deliveryRepository.save(orderInfoDto.toEntityDelivery());
-        Optional<Member> findMember = memberRepository.findByNickname(orderInfoDto.getUsername());
-        if (Objects.nonNull(orderInfoDto.getDefaultAddr())) {
-            DeliveryAddress oldAddress = deliveryAddressRepository.findByMember(findMember.get());
+        Member findMember = memberRepository.findByNickname(orderInfoDto.getUsername()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        if (orderInfoDto.isDefaultAddr()) {
+            DeliveryAddress oldAddress = deliveryAddressRepository.findByMember(findMember);
             if (Objects.isNull(oldAddress)) {
-                deliveryAddressRepository.save(orderInfoDto.toEntityDeliveryAddress(findMember.get()));
+                deliveryAddressRepository.save(orderInfoDto.toEntityDeliveryAddress(findMember));
             } else {
                 oldAddress.updateDeliveryAddress(oldAddress);
             }
         }
-        Orders createdOrder = orderRepository.save(orderInfoDto.toEntity(findMember.get(), savedDelivery));
+        findMember.deductionPoint(findMember, orderInfoDto);
+
+        Orders createdOrder = orderRepository.save(orderInfoDto.toEntity(findMember, savedDelivery));
 
         return createdOrder.getId();
     }
