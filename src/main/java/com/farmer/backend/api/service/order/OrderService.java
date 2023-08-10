@@ -131,7 +131,7 @@ public class OrderService {
     public Long createOrder(RequestOrderInfoDto orderInfoDto) {
         Delivery savedDelivery = deliveryRepository.save(orderInfoDto.toEntityDelivery());
         Member findMember = memberRepository.findByNickname(orderInfoDto.getUsername()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        if (Objects.nonNull(orderInfoDto.getDefaultAddr())) {
+        if (orderInfoDto.isDefaultAddr()) {
             DeliveryAddress oldAddress = deliveryAddressRepository.findByMember(findMember);
             if (Objects.isNull(oldAddress)) {
                 deliveryAddressRepository.save(orderInfoDto.toEntityDeliveryAddress(findMember));
@@ -139,6 +139,7 @@ public class OrderService {
                 oldAddress.updateDeliveryAddress(oldAddress);
             }
         }
+        findMember.deductionPoint(findMember, orderInfoDto);
 
         Orders createdOrder = orderRepository.save(orderInfoDto.toEntity(findMember, savedDelivery));
 
