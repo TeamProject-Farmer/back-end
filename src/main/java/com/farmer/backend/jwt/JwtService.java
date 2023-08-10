@@ -4,18 +4,23 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.farmer.backend.domain.member.MemberRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.jwt.BadJwtException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
 
+import static javax.servlet.http.HttpServletResponse.*;
 @Service
 @RequiredArgsConstructor
 @Getter
@@ -74,7 +79,7 @@ public class JwtService {
      */
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
 
-        response.setStatus(HttpServletResponse.SC_OK);
+        response.setStatus(SC_OK);
 
         setAccessTokenHeader(response, accessToken);
         setRefreshTokenHeader(response, refreshToken);
@@ -134,17 +139,36 @@ public class JwtService {
     /**
      * 토큰 유효성 검사
      */
-    public boolean isTokenValid(String token) {
+    @SneakyThrows
+    public boolean isTokenValid(String type, String token, HttpServletResponse response){
+        ObjectMapper mapper = new ObjectMapper();
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
 
         try {
             JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token);
             return true;
         }
         catch (TokenExpiredException e) {
-            throw new TokenExpiredException("토큰 유효기간이 만료되었습니다.",e.getExpiredOn());
+            ResponseStatusException tokenExpiredException
+                    = new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, type+ "토큰이 만료되었습니다.");
+
+            mapper.writeValue(response.getWriter(),tokenExpiredException.getReason());
+
+            throw tokenExpiredException;
         }
-        catch (Exception  e){
-            throw new BadJwtException("토큰을 다시 확인해주세요");
+        catch (Exception e){
+
+            ResponseStatusException responseStatusException
+                    = new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, type+ "토큰을 다시 확인해주세요.");
+
+            mapper.writeValue(response.getWriter(),responseStatusException.getReason());
+
+            throw responseStatusException;
         }
     }
 
