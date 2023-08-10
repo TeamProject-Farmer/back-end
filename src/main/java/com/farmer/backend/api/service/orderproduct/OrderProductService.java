@@ -65,9 +65,11 @@ public class OrderProductService {
         Member findMember = memberRepository.findByEmail(userId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         List<Orders> orderList = orderRepository.findByMemberId(findMember.getId());
         List<ResponseOrderProductDetailDto> orderProductList = new ArrayList<>();
-        log.info("userId={}", userId);
         for (Orders orders : orderList) {
-            orderProductList = orderProductQueryRepositoryImpl.findUserOrderProductDetail(statusSearchDto, orders.getId());
+            List<ResponseOrderProductDetailDto> userOrderProductDetail = orderProductQueryRepositoryImpl.findUserOrderProductDetail(statusSearchDto, orders.getId());
+            for (ResponseOrderProductDetailDto responseOrderProductDetailDto : userOrderProductDetail) {
+                orderProductList.add(responseOrderProductDetailDto);
+            }
         }
 
         return orderProductList;

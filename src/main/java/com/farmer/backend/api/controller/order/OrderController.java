@@ -60,6 +60,10 @@ public class OrderController {
         return memo;
     }
 
+    /**
+     * 주문/결제 페이지
+     * 주문 결제
+     */
     @ApiDocumentResponse
     @Operation(summary = "주문 결제 요청", description = "주문 한건을 생성합니다.")
     @PostMapping
