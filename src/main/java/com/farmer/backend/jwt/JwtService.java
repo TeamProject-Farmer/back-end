@@ -143,15 +143,17 @@ public class JwtService {
     public boolean isTokenValid(String type, String token, HttpServletResponse response){
         ObjectMapper mapper = new ObjectMapper();
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+
 
         try {
             JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token);
             return true;
         }
         catch (TokenExpiredException e) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+
             ResponseStatusException tokenExpiredException
                     = new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED, type+ "토큰이 만료되었습니다.");
@@ -161,6 +163,10 @@ public class JwtService {
             throw tokenExpiredException;
         }
         catch (Exception e){
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
 
             ResponseStatusException responseStatusException
                     = new ResponseStatusException(
