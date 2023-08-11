@@ -37,9 +37,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         }
 
         String refreshToken = jwtService.extractRefreshToken(request)
-                .filter(jwtService::isTokenValid)
+                .filter(refresh -> jwtService.isTokenValid("refresh",refresh,response))
                 .orElse(null);
-
 
         if (refreshToken != null){
             checkRefreshTokenAndReIssueAccessToken(response,refreshToken);
@@ -71,7 +70,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                                                   FilterChain filterChain) throws ServletException, IOException {
 
         jwtService.extractAccessToken(request)
-                .filter(token -> jwtService.isTokenValid(token))
+                .filter(token -> jwtService.isTokenValid("access",token,response))
                 .ifPresentOrElse(
                         accessToken -> {
                             jwtService.extractUserEmail(accessToken)
