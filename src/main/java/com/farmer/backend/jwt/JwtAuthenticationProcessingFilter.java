@@ -51,7 +51,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         }
     }
 
-    public void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
+    public void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) throws IOException {
 
         Member member= memberRepository.findByRefreshToken(refreshToken).orElseThrow(()-> new NullPointerException("회원이 존재하지 않습니다."));
 

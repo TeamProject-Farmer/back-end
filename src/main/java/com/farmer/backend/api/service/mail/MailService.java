@@ -46,7 +46,7 @@ public class MailService {
             sendMail.setSubject("회원가입 이메일 인증");
             sendMail.setText(new StringBuffer().append("<h1>[이메일 인증]</h1>")
                     .append("<p>아래 링크를 클릭하시면 이메일 인증이 완료됩니다.</p>")
-                    .append("<a href='http://3.39.150.186:8080/api/member/join/mail/checkDone?email=")
+                    .append("<a href='http://3.39.150.186:8080/api/main/join/mail/checkDone?memberEmail=")
                     .append(email)
                     .append("' target='_blenk'>이메일 인증 확인</a>")
                     .toString());
