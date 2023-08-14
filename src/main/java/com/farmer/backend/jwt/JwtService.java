@@ -3,6 +3,7 @@ package com.farmer.backend.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.farmer.backend.api.controller.member.response.ResponseMemberTokenDto;
 import com.farmer.backend.domain.member.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
@@ -47,6 +48,7 @@ public class JwtService {
     private static final String USERID_CLAIM = "account_email";
     private static final String BEARER = "Bearer ";
     private final MemberRepository memberRepository;
+    private final ObjectMapper objectMapper;
 
 
     /**
@@ -77,12 +79,15 @@ public class JwtService {
     /**
      * AccessToken , RefreshToken 헤더 설정 후 보내기
      */
-    public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
+    public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) throws IOException {
 
         response.setStatus(SC_OK);
+        ResponseMemberTokenDto responseMemberTokenDto = new ResponseMemberTokenDto(accessToken,refreshToken);
+        String memberToken = objectMapper.writeValueAsString(responseMemberTokenDto);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(memberToken);
 
-        setAccessTokenHeader(response, accessToken);
-        setRefreshTokenHeader(response, refreshToken);
     }
 
     /**
@@ -119,20 +124,6 @@ public class JwtService {
                     .verify(accessToken)
                     .getClaim(USERID_CLAIM)
                     .asString());
-    }
-
-    /**
-     * AccessToken 헤더 설정
-     */
-    public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
-        response.setHeader(accessHeader, accessToken);
-    }
-
-    /**
-     * RefreshToken 헤더 설정
-     */
-    public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
-        response.setHeader(refreshHeader, refreshToken);
     }
 
 
