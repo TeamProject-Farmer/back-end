@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class ResponseBestReviewListDto {
 
     private Long reviewId;
+    private Long productId;
     private String memberNickName;
     private String imgUrl ;
     private String content;

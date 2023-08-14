@@ -38,6 +38,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                 .select(Projections.constructor(
                         ResponseBestReviewListDto.class,
                         productReviews.id,
+                        productReviews.orderProduct.product.id,
                         productReviews.member.nickname,
                         productReviews.imgUrl,
                         productReviews.content,
