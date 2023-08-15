@@ -34,8 +34,6 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         String accessToken = jwtService.createAccessToken(email);
         String refreshToken = jwtService.createRefreshToken();
 
-        jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);
-
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(()-> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         member.updateToken(refreshToken,accessToken);
