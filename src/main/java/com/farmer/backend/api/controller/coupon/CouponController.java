@@ -2,7 +2,7 @@ package com.farmer.backend.api.controller.coupon;
 
 import com.farmer.backend.api.controller.coupon.response.ResponseMembersCouponDto;
 import com.farmer.backend.api.controller.coupon.response.ResponseUseCouponListDto;
-import com.farmer.backend.api.service.membersCoupon.membersCouponService;
+import com.farmer.backend.api.service.membersCoupon.MembersCouponService;
 import com.farmer.backend.config.ApiDocumentResponse;
 
 import com.farmer.backend.login.general.MemberAdapter;
@@ -24,7 +24,7 @@ import java.util.List;
 public class CouponController {
 
 
-    private final membersCouponService membersCouponService;
+    private final MembersCouponService membersCouponService;
 
     /**
      * 회원 쿠폰 전체 리스트 조회
