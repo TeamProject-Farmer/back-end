@@ -9,6 +9,7 @@ import com.farmer.backend.api.controller.join.EmailDto;
 import com.farmer.backend.api.controller.join.RequestJoinDto;
 import com.farmer.backend.api.controller.login.ResponseOAuthUserInfoDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberPoint;
+import com.farmer.backend.api.service.membersCoupon.MembersCouponService;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
 import com.farmer.backend.exception.CustomException;
@@ -47,6 +48,7 @@ public class MemberService {
     private final GoogleSocialLogin googleSocialLogin;
     private final KakaoSocialLogin kakaoSocialLogin;
     private final NaverSocialLogin naverSocialLogin;
+    private final MembersCouponService membersCouponService;
 
     /**
      * 전체 회원 리스트
@@ -195,8 +197,8 @@ public class MemberService {
         if(memberRepository.findByNickname(requestDto.getNickname()).isPresent()){
             throw new CustomException(ErrorCode.NICKNAME_FOUND);
         }
-
         member.joinMember(requestDto);
+        membersCouponService.joinCoupon(member);
         member.encodePassword(passwordEncoder);
 
     }
