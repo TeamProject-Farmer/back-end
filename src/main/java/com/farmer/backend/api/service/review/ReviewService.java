@@ -86,7 +86,8 @@ public class ReviewService {
         else{
             productReviewAverageRepository.save(productReviewAverage);
         }
-
+        product.updateAverageStar(reviewStar.getAverageStarRating());
+        log.info(String.valueOf(reviewStar.getAverageStarRating()));
         return new ResponseReviewStarDto(reviewStar.getAverageStarRating(),reviewStar.getFiveStar(),
                 reviewStar.getFourStar(),reviewStar.getThreeStar(),reviewStar.getTwoStar(),reviewStar.getOneStar());
 
