@@ -39,8 +39,8 @@ public class Product extends BaseTimeEntity {
 
     private Integer sellQuantity;
 
-    @Column(columnDefinition = "0")
-    private Double averageStarRating;
+    @ColumnDefault("0.0")
+    private double averageStarRating;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
@@ -89,5 +89,8 @@ public class Product extends BaseTimeEntity {
         this.detailImg5 = productDto.getDetailImg5();
     }
 
+    public void updateAverageStar(double averageStarRating ){
+        this.averageStarRating=averageStarRating;
+    }
 
 }
