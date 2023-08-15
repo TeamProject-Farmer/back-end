@@ -86,7 +86,8 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
         Long count = query
                 .select(productReviews.count())
                 .from(productReviews)
-                .where(productReviews.orderProduct.product.id.eq(productId))
+                .where(productReviews.orderProduct.product.id.eq(productId),likeStar(reviewCond))
+                .orderBy(sortOrderProductReview(sortOrderCond))
                 .fetchOne();
 
         return new PageImpl<>(productReviewList,pageable,count);
@@ -107,6 +108,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                 .where(productReviews.orderProduct.product.id.eq(productId))
                 .groupBy(productReviews.fiveStarRating)
                 .fetch();
+
 
         for (Tuple reviewStar : allStar){
             Integer reviewStarRating = reviewStar.get(0,Integer.class)-1;
@@ -148,9 +150,19 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                     .from(orderProduct)
                     .where(orderProduct.product.id.eq(productId))
                     .fetchOne();
+            Long reviewCount = query
+                    .select(productReviews.count())
+                    .from(productReviews)
+                    .where(productReviews.orderProduct.product.id.eq(productId))
+                    .fetchOne();
+
 
             if(productCount==0){
                 throw new CustomException(ErrorCode.PRODUCT_REVIEW_NOT_FOUND);
+            } else if (reviewCount==0) {
+
+                throw new CustomException(ErrorCode.PRODUCT_REVIEW_NOT_FOUND);
+
             }
             return productCount;
     }
@@ -163,7 +175,7 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
         if (Objects.isNull(sortOrderCond) || sortOrderCond.equals("recent")) {
             return new OrderSpecifier<>(Order.DESC, productReviews.createdDate);
         } else if (sortOrderCond.equals("best")) {
-            return new OrderSpecifier<>(Order.ASC, productReviews.likeCount);
+            return new OrderSpecifier<>(Order.DESC, productReviews.likeCount);
         }
         return new OrderSpecifier(Order.DESC, NullExpression.DEFAULT, OrderSpecifier.NullHandling.Default);
     }
