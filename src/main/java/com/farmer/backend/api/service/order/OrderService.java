@@ -131,7 +131,7 @@ public class OrderService {
     /**
      * 주문 생성
      * @param orderInfoDto 주문/결제 정보
-     * @return Long
+     * @return ResponseOrderCompleteDto
      */
     @Transactional
     public ResponseOrderCompleteDto createOrder(RequestOrderInfoDto orderInfoDto) {
