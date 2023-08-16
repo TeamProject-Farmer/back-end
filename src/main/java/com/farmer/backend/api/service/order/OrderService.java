@@ -1,11 +1,9 @@
 package com.farmer.backend.api.service.order;
 
 import com.farmer.backend.api.controller.order.request.RequestOrderInfoDto;
+import com.farmer.backend.api.controller.order.request.RequestOrderProductDto;
 import com.farmer.backend.api.controller.order.request.SearchOrdersCondition;
-import com.farmer.backend.api.controller.order.response.ResponseOrderDetailDto;
-import com.farmer.backend.api.controller.order.response.ResponseOrderInfoDto;
-import com.farmer.backend.api.controller.order.response.ResponseOrdersAndPaymentDto;
-import com.farmer.backend.api.controller.order.response.ResponseOrdersDto;
+import com.farmer.backend.api.controller.order.response.*;
 import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductListDto;
 import com.farmer.backend.domain.delivery.Delivery;
 import com.farmer.backend.domain.delivery.DeliveryRepository;
@@ -14,8 +12,13 @@ import com.farmer.backend.domain.deliveryaddress.DeliveryAddressQueryRepository;
 import com.farmer.backend.domain.deliveryaddress.DeliveryAddressRepository;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;
+import com.farmer.backend.domain.options.OptionRepository;
+import com.farmer.backend.domain.options.Options;
+import com.farmer.backend.domain.orderproduct.OrderProduct;
 import com.farmer.backend.domain.orders.Orders;
+import com.farmer.backend.domain.product.Product;
 import com.farmer.backend.domain.product.ProductQueryRepository;
+import com.farmer.backend.domain.product.ProductRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.domain.orderproduct.OrderProductQueryRepository;
@@ -33,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -41,11 +45,13 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderQueryRepository orderQueryRepositoryImpl;
+    private final OrderProductRepository orderProductRepository;
     private final OrderProductQueryRepository orderProductQueryRepositoryImpl;
+    private final ProductRepository productRepository;
     private final DeliveryRepository deliveryRepository;
     private final MemberRepository memberRepository;
     private final DeliveryAddressRepository deliveryAddressRepository;
-    private final EntityManager em;
+    private final OptionRepository optionRepository;
 
     /**
      * 주문 전체 리스트
@@ -125,12 +131,14 @@ public class OrderService {
     /**
      * 주문 생성
      * @param orderInfoDto 주문/결제 정보
-     * @return Long
+     * @return ResponseOrderCompleteDto
      */
     @Transactional
-    public Long createOrder(RequestOrderInfoDto orderInfoDto) {
+    public ResponseOrderCompleteDto createOrder(RequestOrderInfoDto orderInfoDto) {
+
         Delivery savedDelivery = deliveryRepository.save(orderInfoDto.toEntityDelivery());
         Member findMember = memberRepository.findByNickname(orderInfoDto.getUsername()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
         if (orderInfoDto.isDefaultAddr()) {
             DeliveryAddress oldAddress = deliveryAddressRepository.findByMember(findMember);
             if (Objects.isNull(oldAddress)) {
@@ -139,10 +147,18 @@ public class OrderService {
                 oldAddress.updateDeliveryAddress(oldAddress);
             }
         }
+        int totalCount = orderInfoDto.getOrderProduct().stream().map(orderInfo -> orderInfo.getCount().intValue()).mapToInt(cnt -> cnt).sum();
         findMember.deductionPoint(findMember, orderInfoDto);
 
-        Orders createdOrder = orderRepository.save(orderInfoDto.toEntity(findMember, savedDelivery));
+        Orders createdOrder = orderRepository.save(orderInfoDto.toEntity(findMember, savedDelivery, totalCount));
 
-        return createdOrder.getId();
+        List<RequestOrderProductDto> orderProduct = orderInfoDto.getOrderProduct().stream().collect(Collectors.toList());
+        for (RequestOrderProductDto requestOrderProductDto : orderProduct) {
+            Product product = productRepository.findById(requestOrderProductDto.getProductId()).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+            Options options = optionRepository.findById(requestOrderProductDto.getOptionId()).orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
+            orderProductRepository.save(orderInfoDto.toEntityOrderProduct(product, options, requestOrderProductDto.getCount(), requestOrderProductDto.getOrderPrice(), createdOrder));
+        }
+
+        return ResponseOrderCompleteDto.orderCompleteData(findMember, savedDelivery, orderInfoDto, createdOrder);
     }
 }
