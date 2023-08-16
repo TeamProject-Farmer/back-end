@@ -1,5 +1,6 @@
 package com.farmer.backend.domain.delivery;
 
+import com.farmer.backend.domain.BaseTimeEntity;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Builder
-public class Delivery {
+public class Delivery extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +37,4 @@ public class Delivery {
     @Column(length = 100)
     private String selfMemo;
 
-    @CreatedDate
-    @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
-    private LocalDateTime createdDate;
 }
