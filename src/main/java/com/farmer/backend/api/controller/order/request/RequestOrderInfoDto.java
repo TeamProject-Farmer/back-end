@@ -6,22 +6,23 @@ import com.farmer.backend.domain.delivery.DeliveryStatus;
 import com.farmer.backend.domain.deliveryaddress.AddressStatus;
 import com.farmer.backend.domain.deliveryaddress.DeliveryAddress;
 import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.domain.options.Options;
+import com.farmer.backend.domain.orderproduct.OrderProduct;
 import com.farmer.backend.domain.orders.OrderStatus;
 import com.farmer.backend.domain.orders.Orders;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import com.farmer.backend.domain.product.Product;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class RequestOrderInfoDto {
 
     //주문상품
-    private Long productId;
-    private Long optionId;
-    private Integer count;
+    private List<RequestOrderProductDto> orderProduct;
 
     //배송지
     private String username;
@@ -61,16 +62,27 @@ public class RequestOrderInfoDto {
                 .build();
     }
 
-    public Orders toEntity(Member member, Delivery delivery) {
+    public OrderProduct toEntityOrderProduct(Product product, Options options, Integer count, Long orderPrice, Orders createdOrder) {
+        return OrderProduct.builder()
+                .product(product)
+                .options(options)
+                .count(count)
+                .orderPrice(orderPrice)
+                .orders(createdOrder)
+                .build();
+    }
+
+    public Orders toEntity(Member member, Delivery delivery, int totalCount) {
         return Orders.builder()
                 .comment(memo.getName())
                 .orderPrice(orderTotalPrice)
                 .orderStatus(OrderStatus.DONE)
                 .payMethod(payMethod)
-                .totalQuantity(totalQuantity)
+                .totalQuantity(totalCount)
                 .member(member)
                 .delivery(delivery)
                 .orderNumber(orderNumber)
                 .build();
     }
+
 }

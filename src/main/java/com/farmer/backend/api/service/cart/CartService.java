@@ -10,14 +10,20 @@ import com.farmer.backend.domain.cart.CartQueryRepository;
 import com.farmer.backend.domain.cart.CartRepository;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;
+import com.farmer.backend.domain.orderproduct.OrderProductRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
+import com.farmer.backend.login.general.MemberAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +33,7 @@ public class CartService {
     private final CartRepository cartRepository;
     private final CartQueryRepository cartQueryRepositoryImpl;
     private final MemberRepository memberRepository;
+    private final OrderProductRepository orderProductRepository;
 
     /**
      * 장바구니에 상품 등록
@@ -98,5 +105,21 @@ public class CartService {
         }
         ResponseTotalPriceAndCountDto totalPriceInfo = new ResponseTotalPriceAndCountDto(totalCount, totalPrice);
         return totalPriceInfo;
+    }
+
+    /**
+     * 주문 한 상품 장바구니에서 삭제
+     * @param productId 상품 일련번호
+     * @param member 회원 정보
+     * @return
+     */
+    @Transactional
+    public Long completeOrderAndRemoveCartProduct(Long[] productId, MemberAdapter member) {
+        Member findMember = memberRepository.findByEmail(member.getUsername()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        for (Long id : productId) {
+            orderProductRepository.findByProductId(id).orElseThrow(() -> new CustomException(ErrorCode.ORDER_PRODUCT_NOT_FOUND));
+            return cartQueryRepositoryImpl.deleteCartProduct(id, findMember);
+        }
+        return null;
     }
 }

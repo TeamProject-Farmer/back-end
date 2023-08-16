@@ -5,6 +5,7 @@ import com.farmer.backend.domain.options.Options;
 import com.farmer.backend.domain.product.Product;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 public class OrderProduct {
 

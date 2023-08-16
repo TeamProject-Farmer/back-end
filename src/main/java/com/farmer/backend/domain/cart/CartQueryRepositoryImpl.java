@@ -1,6 +1,5 @@
 package com.farmer.backend.domain.cart;
 
-import com.farmer.backend.api.controller.cart.request.RequestCartProductQuantityDto;
 import com.farmer.backend.api.controller.cart.response.ResponseCartProductListDto;
 import com.farmer.backend.api.controller.cart.response.ResponseCartProductQuantityDto;
 import com.farmer.backend.domain.member.Member;
@@ -56,5 +55,13 @@ public class CartQueryRepositoryImpl implements CartQueryRepository{
                 .from(cart)
                 .where(cart.id.eq(cartId))
                 .fetchFirst();
+    }
+
+    @Override
+    public Long deleteCartProduct(Long productId, Member findMember) {
+        return query
+                .delete(cart)
+                .where(cart.product.id.eq(productId), cart.member.eq(findMember))
+                .execute();
     }
 }

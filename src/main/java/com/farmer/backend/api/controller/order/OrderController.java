@@ -1,8 +1,8 @@
 package com.farmer.backend.api.controller.order;
 
 import com.farmer.backend.api.controller.order.request.RequestOrderInfoDto;
+import com.farmer.backend.api.controller.order.response.ResponseDeliveryMemoListDto;
 import com.farmer.backend.api.controller.order.response.ResponseOrderInfoDto;
-import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductListDto;
 import com.farmer.backend.api.service.order.OrderService;
 import com.farmer.backend.config.ApiDocumentResponse;
 import com.farmer.backend.domain.delivery.DeliveryMemo;
@@ -11,14 +11,18 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.query.criteria.internal.expression.function.AggregationFunction;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @RestController
@@ -51,13 +55,8 @@ public class OrderController {
     @ApiDocumentResponse
     @Operation(summary = "배송 메모 리스트", description = "배송 메모 정보 리스트를 출력합니다.")
     @GetMapping("/delivery/memo-list")
-    public Map<DeliveryMemo, String> deliveryMemoInfo() {
-        List<DeliveryMemo> memoKeys = Stream.of(DeliveryMemo.values()).collect(Collectors.toList());
-        Map<DeliveryMemo, String> memo = new HashMap<>();
-        for (DeliveryMemo memoKey : memoKeys) {
-            memo.put(memoKey, memoKey.getName());
-        }
-        return memo;
+    public List<ResponseDeliveryMemoListDto> deliveryMemoInfo() {
+        return Stream.of(DeliveryMemo.values()).map(memoList -> ResponseDeliveryMemoListDto.memoList(memoList)).collect(Collectors.toList());
     }
 
     /**
@@ -66,9 +65,8 @@ public class OrderController {
      */
     @ApiDocumentResponse
     @Operation(summary = "주문 결제 요청", description = "주문 한건을 생성합니다.")
-    @PostMapping
-    public ResponseEntity order(@AuthenticationPrincipal MemberAdapter member, RequestOrderInfoDto orderInfoDto) {
-        log.info("orderInfo={}", orderInfoDto.getOrderNumber().toString());
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity order(@AuthenticationPrincipal MemberAdapter member, @RequestBody RequestOrderInfoDto orderInfoDto) {
         return ResponseEntity.ok(orderService.createOrder(orderInfoDto));
     }
 
