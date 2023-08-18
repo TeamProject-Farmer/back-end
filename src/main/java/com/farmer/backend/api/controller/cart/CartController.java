@@ -7,6 +7,9 @@ import com.farmer.backend.api.controller.cart.response.ResponseCartProductQuanti
 import com.farmer.backend.api.controller.cart.response.ResponseTotalPriceAndCountDto;
 import com.farmer.backend.api.service.cart.CartService;
 import com.farmer.backend.config.ApiDocumentResponse;
+import com.farmer.backend.domain.orderproduct.OrderProductRepository;
+import com.farmer.backend.exception.CustomException;
+import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.login.general.MemberAdapter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -85,5 +88,20 @@ public class CartController {
     public ResponseEntity<ResponseTotalPriceAndCountDto> totalPriceAndCountOfCartProduct(@PathVariable Long[] cartId, @AuthenticationPrincipal MemberAdapter member) {
         ResponseTotalPriceAndCountDto totalPriceAndCount = cartService.totalPriceAndCountOfCartProduct(cartId);
         return ResponseEntity.ok(totalPriceAndCount);
+    }
+
+    /**
+     * 장바구니 목록 페이지
+     * 주문 완료 된 장바구니 상품 삭제
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "장바구니 상품 주문 완료시 삭제", description = "주문 한 장바구니의 상품들을 리스트에서 삭제합니다.")
+    @PostMapping("/remove/{productId}")
+    public ResponseEntity completeOrderAndRemoveCartProduct(@PathVariable Long[] productId, @AuthenticationPrincipal MemberAdapter member) {
+        Long result = cartService.completeOrderAndRemoveCartProduct(productId, member);
+        if (result == null || result < 1) {
+            return new ResponseEntity(ErrorCode.CART_PRODUCT_NOT_FOUNT.getHttpStatus());
+        }
+        return ResponseEntity.ok(result);
     }
 }
