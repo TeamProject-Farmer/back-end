@@ -93,4 +93,8 @@ public class Product extends BaseTimeEntity {
         this.averageStarRating=averageStarRating;
     }
 
+    public void updateReviewCount(){
+        this.reviewCount+=1;
+    }
+
 }
