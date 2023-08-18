@@ -87,7 +87,7 @@ public class ReviewService {
             productReviewAverageRepository.save(productReviewAverage);
         }
         product.updateAverageStar(reviewStar.getAverageStarRating());
-        log.info(String.valueOf(reviewStar.getAverageStarRating()));
+
         return new ResponseReviewStarDto(reviewStar.getAverageStarRating(),reviewStar.getFiveStar(),
                 reviewStar.getFourStar(),reviewStar.getThreeStar(),reviewStar.getTwoStar(),reviewStar.getOneStar());
 
@@ -120,10 +120,9 @@ public class ReviewService {
             reviewImgUrl = s3Service.reviewImgUpload(requestReviewWriteDto.getReviewImage());
         }
 
-
         ProductReviews productReviews = requestReviewWriteDto.toEntity(product,member,reviewImgUrl);
         productReviewRepository.save(productReviews);
-
+        product.getProduct().updateReviewCount();
 
     }
 
