@@ -67,7 +67,7 @@ public class OrderController {
     @Operation(summary = "주문 결제 요청", description = "주문 한건을 생성합니다.")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity order(@AuthenticationPrincipal MemberAdapter member, @RequestBody RequestOrderInfoDto orderInfoDto) {
-        return ResponseEntity.ok(orderService.createOrder(orderInfoDto));
+        return ResponseEntity.ok(orderService.createOrder(orderInfoDto, member.getUsername()));
     }
 
 

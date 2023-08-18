@@ -134,10 +134,10 @@ public class OrderService {
      * @return ResponseOrderCompleteDto
      */
     @Transactional
-    public ResponseOrderCompleteDto createOrder(RequestOrderInfoDto orderInfoDto) {
+    public ResponseOrderCompleteDto createOrder(RequestOrderInfoDto orderInfoDto, String memberEmail) {
 
         Delivery savedDelivery = deliveryRepository.save(orderInfoDto.toEntityDelivery());
-        Member findMember = memberRepository.findByNickname(orderInfoDto.getUsername()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Member findMember = memberRepository.findByEmail(memberEmail).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         if (orderInfoDto.isDefaultAddr()) {
             DeliveryAddress oldAddress = deliveryAddressRepository.findByMember(findMember);
