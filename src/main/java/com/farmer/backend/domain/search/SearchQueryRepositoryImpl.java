@@ -42,17 +42,12 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
                         product.price,
                         product.discountRate,
                         product.reviewCount,
-                        ExpressionUtils.as(
-                                JPAExpressions.select(productReviewAverage.averageStarRating)
-                                        .from(productReviewAverage)
-                                        .where(productReviewAverage.product.id.eq(product.id)),"averageStarRating"
-                        )
+                        product.averageStarRating
                 ))
                 .distinct()
                 .from(product)
                 .where(likeIncludingSearchWord(searchWord).or(likeBelongCategory(searchWord)))
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .orderBy(sortOrderSearchProduct(sortSearchCond))
 
                 .fetch();
@@ -60,7 +55,8 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
         Long count = query
                 .select(product.count())
                 .from(product)
-                .where(likeIncludingSearchWord(searchWord))
+                .distinct()
+                .where(likeIncludingSearchWord(searchWord).or(likeBelongCategory(searchWord)))
                 .fetchOne();
 
 
@@ -76,6 +72,8 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
                 .select(search.searchWord)
                 .from(search)
                 .where(search.member.email.eq(memberEmail))
+                .orderBy(search.searchDate.desc())
+                .limit(5)
                 .fetch();
 
         return memberSearchWord;
