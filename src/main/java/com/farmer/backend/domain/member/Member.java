@@ -119,6 +119,8 @@ public class Member extends BaseTimeEntity {
 
     public void deductionPoint(Member member, RequestOrderInfoDto orderInfoDto) {
         this.id = member.getId();
-        this.point -= orderInfoDto.getPoint();
+        if (orderInfoDto.getPoint() <= member.getPoint()) {
+            this.point -= orderInfoDto.getPoint();
+        }
     }
 }
