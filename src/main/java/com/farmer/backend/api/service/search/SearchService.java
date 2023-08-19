@@ -41,7 +41,7 @@ public class SearchService {
         Page<ResponseSearchProductDto> searchProduct =
                 searchQueryRepositoryImpl.searchProduct(pageable,sortSearchCond, searchWord.trim());
 
-        if(memberEmail!=null){
+        if(memberEmail!=null && sortSearchCond==null){
 
             Member member = memberRepository.findByEmail(memberEmail).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
