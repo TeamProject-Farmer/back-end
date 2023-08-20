@@ -161,4 +161,16 @@ public class OrderService {
 
         return ResponseOrderCompleteDto.orderCompleteData(findMember, savedDelivery, orderInfoDto, createdOrder);
     }
+
+    /**
+     * 주문 조회(주문 번호)
+     * @param orderNumber 주문번호
+     * @return ResponseOrderCompleteDto
+     */
+    @Transactional
+    public ResponseOrderCompleteDto orderCheck(String orderNumber) {
+        Orders findOrders = orderRepository.findByOrderNumber(orderNumber).orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
+        DeliveryAddress memberInfo = deliveryAddressRepository.findByMember(findOrders.getMember());
+        return ResponseOrderCompleteDto.orderCompleteData(findOrders, memberInfo);
+    }
 }

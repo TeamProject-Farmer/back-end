@@ -2,6 +2,7 @@ package com.farmer.backend.api.controller.order.response;
 
 import com.farmer.backend.api.controller.order.request.RequestOrderInfoDto;
 import com.farmer.backend.domain.delivery.Delivery;
+import com.farmer.backend.domain.deliveryaddress.DeliveryAddress;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.orders.Orders;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,17 @@ public class ResponseOrderCompleteDto {
                 .paymentPrice(orderInfo.getOrderTotalPrice())
                 .orderedDate(createdOrder.getCreatedDate())
                 .orderNumber(createdOrder.getOrderNumber())
+                .build();
+    }
+
+    public static ResponseOrderCompleteDto orderCompleteData(Orders findOrders, DeliveryAddress memberInfo) {
+        return ResponseOrderCompleteDto.builder()
+                .name(memberInfo.getName())
+                .phoneNumber(memberInfo.getHp())
+                .address(memberInfo.getAddress() + " " + memberInfo.getAddressDetail() + " " + memberInfo.getZipcode())
+                .paymentPrice(findOrders.getOrderPrice())
+                .orderedDate(findOrders.getCreatedDate())
+                .orderNumber(findOrders.getOrderNumber())
                 .build();
     }
 }
