@@ -16,6 +16,7 @@ import com.farmer.backend.domain.options.OptionRepository;
 import com.farmer.backend.domain.options.Options;
 import com.farmer.backend.domain.orderproduct.OrderProduct;
 import com.farmer.backend.domain.orders.Orders;
+import com.farmer.backend.domain.payment.Payment;
 import com.farmer.backend.domain.product.Product;
 import com.farmer.backend.domain.product.ProductQueryRepository;
 import com.farmer.backend.domain.product.ProductRepository;
@@ -52,6 +53,7 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final DeliveryAddressRepository deliveryAddressRepository;
     private final OptionRepository optionRepository;
+    private final PaymentRepository paymentRepository;
 
     /**
      * 주문 전체 리스트
@@ -158,7 +160,19 @@ public class OrderService {
             Options options = optionRepository.findById(requestOrderProductDto.getOptionId()).orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
             orderProductRepository.save(orderInfoDto.toEntityOrderProduct(product, options, requestOrderProductDto.getCount(), requestOrderProductDto.getOrderPrice(), createdOrder));
         }
-
+        paymentRepository.save(Payment.toEntity(createdOrder, orderInfoDto));
         return ResponseOrderCompleteDto.orderCompleteData(findMember, savedDelivery, orderInfoDto, createdOrder);
+    }
+
+    /**
+     * 주문 조회(주문 번호)
+     * @param orderNumber 주문번호
+     * @return ResponseOrderCompleteDto
+     */
+    @Transactional
+    public ResponseOrderCompleteDto orderCheck(String orderNumber) {
+        Orders findOrders = orderRepository.findByOrderNumber(orderNumber).orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
+        DeliveryAddress memberInfo = deliveryAddressRepository.findByMember(findOrders.getMember());
+        return ResponseOrderCompleteDto.orderCompleteData(findOrders, memberInfo);
     }
 }

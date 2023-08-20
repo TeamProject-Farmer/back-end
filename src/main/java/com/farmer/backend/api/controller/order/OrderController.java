@@ -70,5 +70,16 @@ public class OrderController {
         return ResponseEntity.ok(orderService.createOrder(orderInfoDto, member.getUsername()));
     }
 
+    /**
+     * 주문/결제 페이지
+     * 주문 조회(주문번호)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "주문 조회", description = "주문 결과 정보 한 건을 노출합니다.")
+    @GetMapping("/complete")
+    public ResponseEntity completeOrder(@AuthenticationPrincipal MemberAdapter member, String orderNumber) {
+        return ResponseEntity.ok(orderService.orderCheck(orderNumber));
+    }
+
 
 }
