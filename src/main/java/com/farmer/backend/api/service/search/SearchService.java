@@ -1,7 +1,6 @@
 package com.farmer.backend.api.service.search;
 
 import com.farmer.backend.api.controller.search.request.RequestSearchDto;
-import com.farmer.backend.api.controller.search.response.ResponseSearchPage;
 import com.farmer.backend.api.controller.search.response.ResponseSearchProductDto;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;
@@ -34,35 +33,35 @@ public class SearchService {
      * @return 검색 상품
      */
     @Transactional
-    public ResponseSearchPage searchProduct(String memberEmail,
+    public Page<ResponseSearchProductDto> searchProduct(String memberEmail,
                                             Pageable pageable,
                                             String sortSearchCond,
                                             String searchWord) {
 
-        List<String> memberSearchWord = null;
-
-
         Page<ResponseSearchProductDto> searchProduct =
                 searchQueryRepositoryImpl.searchProduct(pageable,sortSearchCond, searchWord.trim());
 
+        if(memberEmail!=null && sortSearchCond==null){
 
+            Member member = memberRepository.findByEmail(memberEmail).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        if(memberEmail!=null ){
-            memberSearchWord = searchQueryRepositoryImpl.memberSearchWordList(memberEmail);
-
-            if(!memberSearchWord.contains(searchWord.trim())&& searchProduct.getTotalElements()!=0 ){
-                Member member = memberRepository.findByEmail(memberEmail).orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-
-                RequestSearchDto memberSearchWordList = new RequestSearchDto(member,searchWord.trim());
-                searchRepository.save(memberSearchWordList.toEntity(memberSearchWordList));
-            }
-
+            RequestSearchDto memberSearchWordList = new RequestSearchDto(member, searchWord.trim());
+            searchRepository.save(memberSearchWordList.toEntity(memberSearchWordList));
 
         }
+        return searchProduct;
+    }
 
-        ResponseSearchPage searchPage = new ResponseSearchPage(memberSearchWord,searchProduct);
+    /**
+     * 회원 최근 검색어
+     * @param memberEmail 회원 이메일
+     * @return 회원 최근 검색어
+     */
+    @Transactional
+    public List<String> memberSearchWord(String memberEmail){
 
-        return searchPage;
+        return searchQueryRepositoryImpl.memberSearchWordList(memberEmail);
+
     }
 
 }
