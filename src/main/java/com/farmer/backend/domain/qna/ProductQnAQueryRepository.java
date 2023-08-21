@@ -8,5 +8,5 @@ public interface ProductQnAQueryRepository {
 
     Page<ResponseProductQnADto> productQnAList(Pageable pageable,Long productId);
 
-    Page<ResponseProductQnADto> qnaMineList(Pageable pageable,String memberEmail);
+    Page<ResponseProductQnADto> qnaMineList(Pageable pageable,String memberEmail,Long productId);
 }
