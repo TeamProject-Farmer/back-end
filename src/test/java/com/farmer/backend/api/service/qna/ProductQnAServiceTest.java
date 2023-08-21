@@ -97,7 +97,8 @@ class ProductQnAServiceTest {
         Pageable pageable = PageRequest.ofSize(5);
         Member member = memberRepository.findByEmail("codms7020@naver.com").orElseThrow(()-> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         String memberEmail = member.getEmail();
-        Page<ResponseProductQnADto> qnaList  = productQnAQueryRepositoryImpl.qnaMineList(pageable,memberEmail);
+        Long productId= 66L;
+        Page<ResponseProductQnADto> qnaList  = productQnAQueryRepositoryImpl.qnaMineList(pageable,memberEmail,productId);
 
         for(ResponseProductQnADto qna : qnaList){
             log.info(String.valueOf(qna.getQnaId()));
