@@ -120,7 +120,7 @@ class QnAControllerTest {
         JSONObject jsonObj = (JSONObject) jsonParser.parse(result.getResponse().getContentAsString());
         String accessToken = (String) jsonObj.get("accessToken");
 
-        mvc.perform(get("/api/member/qna/mine")
+        mvc.perform(get("/api/member/qna/mine/66")
                         .header("Authorization","Bearer "+accessToken))
                 .andExpect(status().isOk())
                 .andDo(print());

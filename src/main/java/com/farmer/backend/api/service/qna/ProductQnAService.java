@@ -77,8 +77,8 @@ public class ProductQnAService {
      * @param memberEmail 회원 이메일
      */
     @Transactional
-    public Page<ResponseProductQnADto> qnaMine(Pageable pageable,String memberEmail) {
+    public Page<ResponseProductQnADto> qnaMine(Pageable pageable,String memberEmail,Long productId) {
 
-        return productQnAQueryRepositoryImpl.qnaMineList(pageable,memberEmail);
+        return productQnAQueryRepositoryImpl.qnaMineList(pageable,memberEmail,productId);
     }
 }

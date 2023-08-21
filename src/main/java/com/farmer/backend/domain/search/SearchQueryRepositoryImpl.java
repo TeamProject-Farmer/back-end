@@ -72,7 +72,7 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
                 .select(search.searchWord)
                 .from(search)
                 .where(search.member.email.eq(memberEmail))
-                .orderBy(search.searchDate.desc())
+                .orderBy(search.id.desc())
                 .limit(5)
                 .fetch();
 
