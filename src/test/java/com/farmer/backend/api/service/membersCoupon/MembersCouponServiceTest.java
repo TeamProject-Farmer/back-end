@@ -61,7 +61,7 @@ class MembersCouponServiceTest {
     void delCoupon(){
 
         MembersCoupon membersCoupon
-                = memberCouponRepository.findById(1L).orElseThrow(()-> new CustomException(ErrorCode.COUPON_NOT_FOUND));
+                = memberCouponRepository.findById(3L).orElseThrow(()-> new CustomException(ErrorCode.COUPON_NOT_FOUND));
 
         memberCouponRepository.delete(membersCoupon);
 
