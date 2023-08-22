@@ -47,7 +47,6 @@ public class DeliveryAddress {
     private AddressStatus status;
 
     public void updateDeliveryAddress(DeliveryAddress deliveryAddress) {
-        this.id = deliveryAddress.getId();
         this.member = deliveryAddress.getMember();
         this.address = deliveryAddress.getAddress();
         this.addressDetail = deliveryAddress.getAddressDetail();

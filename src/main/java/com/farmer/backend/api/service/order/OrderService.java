@@ -140,13 +140,14 @@ public class OrderService {
 
         Delivery savedDelivery = deliveryRepository.save(orderInfoDto.toEntityDelivery());
         Member findMember = memberRepository.findByEmail(memberEmail).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        DeliveryAddress address = orderInfoDto.toEntityDeliveryAddress(findMember);
 
         if (orderInfoDto.isDefaultAddr()) {
             DeliveryAddress oldAddress = deliveryAddressRepository.findByMember(findMember);
             if (Objects.isNull(oldAddress)) {
-                deliveryAddressRepository.save(orderInfoDto.toEntityDeliveryAddress(findMember));
+                deliveryAddressRepository.save(address);
             } else {
-                oldAddress.updateDeliveryAddress(oldAddress);
+                oldAddress.updateDeliveryAddress(address);
             }
         }
         int totalCount = orderInfoDto.getOrderProduct().stream().map(orderInfo -> orderInfo.getCount().intValue()).mapToInt(cnt -> cnt).sum();
