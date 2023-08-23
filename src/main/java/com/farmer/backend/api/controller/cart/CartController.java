@@ -7,7 +7,6 @@ import com.farmer.backend.api.controller.cart.response.ResponseCartProductQuanti
 import com.farmer.backend.api.controller.cart.response.ResponseTotalPriceAndCountDto;
 import com.farmer.backend.api.service.cart.CartService;
 import com.farmer.backend.config.ApiDocumentResponse;
-import com.farmer.backend.domain.orderproduct.OrderProductRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.login.general.MemberAdapter;
@@ -20,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -72,10 +70,13 @@ public class CartController {
      */
     @ApiDocumentResponse
     @Operation(summary = "장바구니 상품 삭제", description = "장바구니의 상품을 삭제합니다.")
-    @PostMapping("/remove-product/{cartId}")
-    public ResponseEntity removeToCartProduct(@PathVariable Long[] cartId, @AuthenticationPrincipal MemberAdapter member) {
-        cartService.removeToCartProduct(cartId);
-        return new ResponseEntity(HttpStatus.OK);
+    @PostMapping("/remove-product")
+    public ResponseEntity removeToCartProduct(@RequestBody List<Long> cartId, @AuthenticationPrincipal MemberAdapter member) {
+        int resultSize = cartService.removeToCartProduct(cartId, member.getMember());
+        if (resultSize == 0) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok(resultSize);
     }
 
     /**
