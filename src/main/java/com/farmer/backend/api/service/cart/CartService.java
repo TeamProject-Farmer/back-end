@@ -16,12 +16,9 @@ import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.login.general.MemberAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,14 +76,23 @@ public class CartService {
 
     /**
      * 장바구니 상품 삭제
+     *
      * @param cartId 장바구니 일련번호
+     * @param member
+     * @return
      */
     @Transactional
-    public void removeToCartProduct(Long[] cartId) {
-        for (Long id : cartId) {
-            Cart findCartProduct = cartRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.CART_PRODUCT_NOT_FOUNT));
-            cartRepository.delete(findCartProduct);
+    public int removeToCartProduct(List<Long> cartId, Member member) {
+        List<Cart> cartList = cartId.stream()
+                .map(cart -> cartRepository.findById(cart).orElseThrow(() -> new CustomException(ErrorCode.CART_PRODUCT_NOT_FOUNT)))
+                .collect(Collectors.toList());
+
+        int deleteSize = cartList.stream().filter(cart -> cart.getMember().getId() == member.getId()).collect(Collectors.toList()).size();
+        if (deleteSize != cartId.size()) {
+            return 0;
         }
+        cartList.forEach(cart -> cartRepository.delete(cart));
+        return deleteSize;
     }
 
     /**
