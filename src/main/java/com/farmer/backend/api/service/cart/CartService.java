@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +41,14 @@ public class CartService {
     @Transactional
     public void addToCart(RequestProductCartDto productCartDto, String memberEmail) {
         Member findMember = memberRepository.findByEmail(memberEmail).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        cartRepository.save(productCartDto.toEntity(findMember));
+        Optional<Cart> findCart = cartRepository.findByProductAndMember(productCartDto.getProduct(), findMember);
+        if (!findCart.isEmpty()) {
+            Integer productCount = findCart.get().getCount();
+            productCount++;
+            findCart.get().cartProductQuantityUpdate(productCount);
+        } else {
+            cartRepository.save(productCartDto.toEntity(findMember));
+        }
     }
 
     /**
