@@ -1,5 +1,6 @@
 package com.farmer.backend.api.controller.search;
 
+import com.farmer.backend.api.controller.search.request.RequestSearchDto;
 import com.farmer.backend.api.controller.search.response.ResponseSearchProductDto;
 import com.farmer.backend.api.service.search.SearchService;
 import com.farmer.backend.config.ApiDocumentResponse;
@@ -11,11 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -32,12 +31,13 @@ public class SearchController {
     @ApiDocumentResponse
     @Operation(summary = "검색 상품 출력" , description = "검색어에 해당되는 상품을 출력합니다.")
     @PostMapping("/main/search")
-    public Page<ResponseSearchProductDto> searchProduct(String memberEmail,
-                                                        PageRequest pageRequest,
-                                                        String sortSearchCond,
-                                                        String searchWord){
+    public Page<ResponseSearchProductDto> searchProduct(@Valid @RequestBody RequestSearchDto requestSearchDto,
+                                                        PageRequest pageRequest){
 
-        return searchService.searchProduct(memberEmail,pageRequest.of(),sortSearchCond, searchWord);
+        log.info(requestSearchDto.getMemberEmail());
+        log.info(requestSearchDto.getSearchWord());
+        log.info(requestSearchDto.getSortSearchCond());
+        return searchService.searchProduct(requestSearchDto,pageRequest.of());
     }
 
     @ApiDocumentResponse
