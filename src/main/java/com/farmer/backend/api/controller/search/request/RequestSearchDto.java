@@ -7,25 +7,20 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@AllArgsConstructor
 public class RequestSearchDto {
 
-    private Member member;
+    private String memberEmail;
     private String searchWord;
-    private LocalDateTime searchDate;
+    private String sortSearchCond;
 
-    @Builder
-    public RequestSearchDto(Member member,String searchWord){
-        this.member=member;
-        this.searchWord=searchWord;
-    }
 
-    public Search toEntity(RequestSearchDto requestSearchDto){
+    public Search toEntity(Member member){
         return Search.builder()
-                .member(requestSearchDto.member)
-                .searchWord(requestSearchDto.searchWord)
+                .member(member)
+                .searchWord(searchWord)
                 .searchDate(LocalDateTime.now())
                 .build();
     }
