@@ -38,6 +38,7 @@ public class CartQueryRepositoryImpl implements CartQueryRepository{
                         cart.product.price.multiply(cart.count)
                 ))
                 .from(cart)
+                .where(cart.member.eq(findMember))
                 .fetch();
 
     }
