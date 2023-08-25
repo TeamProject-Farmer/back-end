@@ -4,6 +4,7 @@ import com.farmer.backend.api.controller.search.request.RequestSearchDto;
 import com.farmer.backend.api.controller.search.response.ResponseSearchProductDto;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;
+import com.farmer.backend.domain.search.Search;
 import com.farmer.backend.domain.search.SearchQueryRepositoryImpl;
 import com.farmer.backend.domain.search.SearchRepository;
 import com.farmer.backend.exception.CustomException;
@@ -25,28 +26,25 @@ public class SearchService {
     private final SearchRepository searchRepository;
     private final MemberRepository memberRepository;
 
+
     /**
      * 상품 검색
+     * @param requestSearchDto 검색 DTO
      * @param pageable 페이징
-     * @param sortSearchCond 정렬값 (recent - 신상품순, review - 리뷰 많은 순 , low - 낮은 가격 순, high - 높은 가격 순)
-     * @param searchWord 검색어
-     * @return 검색 상품
      */
     @Transactional
-    public Page<ResponseSearchProductDto> searchProduct(String memberEmail,
-                                            Pageable pageable,
-                                            String sortSearchCond,
-                                            String searchWord) {
+    public Page<ResponseSearchProductDto> searchProduct(RequestSearchDto requestSearchDto,
+                                            Pageable pageable) {
 
         Page<ResponseSearchProductDto> searchProduct =
-                searchQueryRepositoryImpl.searchProduct(pageable,sortSearchCond, searchWord.trim());
+                searchQueryRepositoryImpl.searchProduct(pageable,requestSearchDto.getSortSearchCond(), requestSearchDto.getSearchWord().trim());
 
-        if(memberEmail!=null && sortSearchCond==null){
+        if(requestSearchDto.getMemberEmail()!=null && requestSearchDto.getSortSearchCond()==null){
 
-            Member member = memberRepository.findByEmail(memberEmail).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+            Member member = memberRepository.findByEmail(requestSearchDto.getMemberEmail()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-            RequestSearchDto memberSearchWordList = new RequestSearchDto(member, searchWord.trim());
-            searchRepository.save(memberSearchWordList.toEntity(memberSearchWordList));
+            Search memberSearchWordList = requestSearchDto.toEntity(member);
+            searchRepository.save(memberSearchWordList);
 
         }
         return searchProduct;
