@@ -115,24 +115,24 @@ public class AdminApiController {
     }
 
 
-    /**
-     * 회원 관리 페이지(회원 전체 리스트)
-     * 검색, 정렬
-     */
-    @ApiDocumentResponse
-    @Operation(summary = "회원 전체 리스트", description = "회원 전체 리스트를 출력합니다.")
-    @GetMapping("/member-list")
-    public Page<ResponseMemberDto> memberList(PageRequest pageRequest,
-                                              SortOrderCondition sortOrderMemberCondition,
-                                              SearchMemberCondition searchMemberCondition) {
-
-        Page<ResponseMemberDto> memberList = memberService.memberList(
-                pageRequest.of(),
-                sortOrderMemberCondition.getFieldName(),
-                searchMemberCondition
-        );
-        return ResponseEntity.ok(memberList).getBody();
-    }
+//    /**
+//     * 회원 관리 페이지(회원 전체 리스트)
+//     * 검색, 정렬
+//     */
+//    @ApiDocumentResponse
+//    @Operation(summary = "회원 전체 리스트", description = "회원 전체 리스트를 출력합니다.")
+//    @GetMapping("/member-list")
+//    public Page<ResponseMemberDto> memberList(PageRequest pageRequest,
+//                                              SortOrderCondition sortOrderMemberCondition,
+//                                              SearchMemberCondition searchMemberCondition) {
+//
+//        Page<ResponseMemberDto> memberList = memberService.memberList(
+//                pageRequest.of(),
+//                sortOrderMemberCondition.getFieldName(),
+//                searchMemberCondition
+//        );
+//        return ResponseEntity.ok(memberList).getBody();
+//    }
 
     /**
      * 회원 관리 페이지(회원 단건 조회)

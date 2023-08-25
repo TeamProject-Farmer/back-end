@@ -8,17 +8,16 @@ import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
 import com.farmer.backend.api.controller.join.EmailDto;
 import com.farmer.backend.api.controller.join.RequestJoinDto;
 import com.farmer.backend.api.controller.login.ResponseOAuthUserInfoDto;
+import com.farmer.backend.api.controller.member.response.ResponseMemberListDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberPoint;
 import com.farmer.backend.api.service.membersCoupon.MembersCouponService;
-import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.domain.member.*;
 import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.login.oauth.userInfo.GoogleSocialLogin;
 import com.farmer.backend.login.oauth.userInfo.KakaoSocialLogin;
 import com.farmer.backend.login.oauth.userInfo.NaverSocialLogin;
-import com.farmer.backend.domain.member.MemberQueryRepository;
-import com.farmer.backend.domain.member.MemberRepository;
 import com.farmer.backend.api.service.mail.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -52,14 +52,18 @@ public class MemberService {
 
     /**
      * 전체 회원 리스트
-     * @param pageable 페이징
      * @param sortOrderCond 정렬순서
      * @param searchMemberCondition 검색정보
      * @return
      */
     @Transactional(readOnly = true)
-    public Page<ResponseMemberDto> memberList(Pageable pageable, String sortOrderCond, SearchMemberCondition searchMemberCondition) {
-        return memberQueryRepositoryImpl.findAll(pageable, sortOrderCond, searchMemberCondition).map(Member::memberList);
+    public List<ResponseMemberListDto> memberList(Member member, String sortOrderCond, String searchMemberCondition) {
+
+        if(!member.getRole().equals(UserRole.ADMIN)){
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+
+        return memberQueryRepositoryImpl.memberList(sortOrderCond,searchMemberCondition);
     }
 
     /**
