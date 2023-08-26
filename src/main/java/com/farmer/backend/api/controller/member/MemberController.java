@@ -7,6 +7,7 @@ import com.farmer.backend.api.controller.member.response.ResponseMemberDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberListDto;
 import com.farmer.backend.api.service.member.MemberService;
 import com.farmer.backend.config.ApiDocumentResponse;
+import com.farmer.backend.domain.member.UserRole;
 import com.farmer.backend.login.general.MemberAdapter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

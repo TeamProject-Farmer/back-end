@@ -60,7 +60,7 @@ public class MemberService {
     public List<ResponseMemberListDto> memberList(Member member, String sortOrderCond, String searchMemberCondition) {
 
         if(!member.getRole().equals(UserRole.ADMIN)){
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+            throw new CustomException(ErrorCode.ADMIN_ACCESS);
         }
 
         return memberQueryRepositoryImpl.memberList(sortOrderCond,searchMemberCondition);

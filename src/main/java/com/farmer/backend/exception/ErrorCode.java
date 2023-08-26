@@ -12,6 +12,7 @@ public enum ErrorCode {
 
     SUCCESS(OK, "success"),
     MEMBER_NOT_FOUND(BAD_REQUEST, "해당 회원이 존재하지 않습니다."),
+    ADMIN_ACCESS(FORBIDDEN,"관리자만 접근 가능합니다."),
     MEMBER_FOUND(BAD_REQUEST, "해당 회원이 이미 존재합니다."),
     MEMBER_EMAIL_FOUND(BAD_REQUEST,"해당 이메일이 존재합니다."),
 
