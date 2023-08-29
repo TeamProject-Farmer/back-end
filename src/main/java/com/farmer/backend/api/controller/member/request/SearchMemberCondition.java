@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class SearchMemberCondition {
 
-    private String username;
+    private String userName;
     private String userId;
 
 }

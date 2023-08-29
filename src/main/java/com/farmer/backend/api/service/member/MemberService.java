@@ -1,6 +1,5 @@
 package com.farmer.backend.api.service.member;
 
-import com.farmer.backend.api.controller.login.ResponseLoginMemberDto;
 import com.farmer.backend.api.controller.member.request.RequestMemberDto;
 import com.farmer.backend.api.controller.member.request.RequestMemberProfileDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberDto;
@@ -8,17 +7,17 @@ import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
 import com.farmer.backend.api.controller.join.EmailDto;
 import com.farmer.backend.api.controller.join.RequestJoinDto;
 import com.farmer.backend.api.controller.login.ResponseOAuthUserInfoDto;
+import com.farmer.backend.api.controller.member.response.ResponseMemberInfoDto;
+import com.farmer.backend.api.controller.member.response.ResponseMemberListDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberPoint;
 import com.farmer.backend.api.service.membersCoupon.MembersCouponService;
-import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.domain.member.*;
 import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.farmer.backend.login.oauth.userInfo.GoogleSocialLogin;
 import com.farmer.backend.login.oauth.userInfo.KakaoSocialLogin;
 import com.farmer.backend.login.oauth.userInfo.NaverSocialLogin;
-import com.farmer.backend.domain.member.MemberQueryRepository;
-import com.farmer.backend.domain.member.MemberRepository;
 import com.farmer.backend.api.service.mail.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +25,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -51,27 +53,36 @@ public class MemberService {
     private final MembersCouponService membersCouponService;
 
     /**
-     * 전체 회원 리스트
-     * @param pageable 페이징
+     * 전체 회원 리스트 (admin)
+     * @param member 관리자
      * @param sortOrderCond 정렬순서
-     * @param searchMemberCondition 검색정보
-     * @return
+     * @param searchMemberCond 검색정보
      */
     @Transactional(readOnly = true)
-    public Page<ResponseMemberDto> memberList(Pageable pageable, String sortOrderCond, SearchMemberCondition searchMemberCondition) {
-        return memberQueryRepositoryImpl.findAll(pageable, sortOrderCond, searchMemberCondition).map(Member::memberList);
+    public List<ResponseMemberListDto> memberList(Member member, String sortOrderCond, SearchMemberCondition searchMemberCond) {
+
+        if(!member.getRole().equals(UserRole.ADMIN)){
+            throw new CustomException(ErrorCode.ADMIN_ACCESS);
+        }
+
+        return memberQueryRepositoryImpl.memberList(sortOrderCond,searchMemberCond);
     }
 
     /**
-     * 회원 단건 조회
-     * @param memberId 회원 일련번호
-     * @return
+     * 특정 회원 정보 조회 (admin)
+     * @param member 관리자
+     * @param memberId 특정 회원 ID
      */
-    @Transactional(readOnly = true)
-    public ResponseMemberDto findOneMember(Long memberId) {
-        Optional<Member> findMember = memberRepository.findById(memberId);
-        return findMember.map(member -> ResponseMemberDto.getMember(member)).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    @Transactional
+    public ResponseMemberInfoDto memberInfo(Member member, Long memberId) {
+
+        if(!member.getRole().equals(UserRole.ADMIN)){
+            throw new CustomException(ErrorCode.ADMIN_ACCESS);
+        }
+
+        return memberQueryRepositoryImpl.memberInfo(memberId);
     }
+
 
     /**
      * 회원 수정
@@ -98,15 +109,22 @@ public class MemberService {
 
 
     /**
-     * 회원 삭제(계정 상태 변경)
-     * @param memberIds 회원 일련번호 배열
+     * 회원 계정 상태 변경 - 삭제 (admin)
+     * @param member 관리자
+     * @param memberId 회원 일련번호 배열
+     * @return
      */
     @Transactional
-    public void deleteMember(Long[] memberIds) {
-        for (Long memberId : memberIds) {
-            ResponseMemberDto findMember = memberRepository.findById(memberId).map(Member::memberList).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-            memberQueryRepositoryImpl.deleteMember(memberId);
+    public ResponseEntity<String> deleteMember(Member member, Long memberId) {
+
+        if(!member.getRole().equals(UserRole.ADMIN)){
+            throw new CustomException(ErrorCode.ADMIN_ACCESS);
         }
+
+        memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        memberQueryRepositoryImpl.deleteMember(memberId);
+
+        return new ResponseEntity<>("OK",HttpStatus.OK);
     }
 
     /**
@@ -276,5 +294,6 @@ public class MemberService {
         Long point = memberRepository.findByEmail(memberEmail).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)).getPoint();
         return new ResponseMemberPoint(point);
     }
+
 
 }
