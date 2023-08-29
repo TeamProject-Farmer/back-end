@@ -4,6 +4,7 @@ import com.farmer.backend.api.controller.login.ResponseLoginMemberDto;
 import com.farmer.backend.api.controller.member.request.RequestMemberProfileDto;
 import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
 import com.farmer.backend.api.controller.member.response.ResponseMemberDto;
+import com.farmer.backend.api.controller.member.response.ResponseMemberInfoDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberListDto;
 import com.farmer.backend.api.service.member.MemberService;
 import com.farmer.backend.config.ApiDocumentResponse;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import retrofit2.http.Path;
 
 import java.util.List;
 import java.util.UUID;
@@ -64,7 +66,6 @@ public class MemberController {
      */
     @ApiDocumentResponse
     @Operation(summary = "전체 회원 목록 조회" , description = "파머 회원의 목록을 조회합니다.")
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/admin/memberList")
     public List<ResponseMemberListDto> farmerMemberList(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                                         String sortOrderCond,
@@ -72,6 +73,18 @@ public class MemberController {
 
         return memberService.memberList(memberAdapter.getMember(),sortOrderCond,searchMemberCond);
 
+    }
+
+    /**
+     * 회원 정보 상세 조회 (admin)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "특정 회원의 정보 조회", description = "특정 회원의 정보를 조회합니다.")
+    @GetMapping(value = "/admin/memberList/{memberId}")
+    public ResponseMemberInfoDto memberInfo(@AuthenticationPrincipal MemberAdapter memberAdapter,
+                                            @PathVariable(name="memberId") Long memberId){
+
+        return memberService.memberInfo(memberAdapter.getMember(),memberId);
     }
 
 

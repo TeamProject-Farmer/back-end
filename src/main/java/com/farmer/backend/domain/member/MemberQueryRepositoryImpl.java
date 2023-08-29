@@ -1,25 +1,24 @@
 package com.farmer.backend.domain.member;
 import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
-import com.farmer.backend.api.controller.member.response.ResponseMemberDto;
+import com.farmer.backend.api.controller.member.response.ResponseMemberInfoDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberListDto;
-import com.querydsl.core.types.NullExpression;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import org.yaml.snakeyaml.constructor.Constructor;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Objects;
 
+import static com.farmer.backend.domain.admin.qna.QQna.qna;
 import static com.farmer.backend.domain.member.QMember.member;
+import static com.farmer.backend.domain.product.productreview.QProductReviews.productReviews;
 
 
 @Repository
@@ -71,11 +70,39 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
                         member.grade,
                         member.createdDate,
                         member.cumulativeAmount
-                )
-                )
+                ))
                 .from(member)
                 .fetch();
 
+    }
+
+    /**
+     * 특정 회원 정보 조회
+     * @param memberId 회원
+     */
+    public ResponseMemberInfoDto memberInfo(Long memberId){
+
+
+        return query
+                .select(Projections.constructor(
+                        ResponseMemberInfoDto.class,
+                        member.email,
+                        member.nickname,
+                        member.grade,
+                        JPAExpressions.select(productReviews.count())
+                                .from(productReviews)
+                                .where(productReviews.member.id.eq(memberId))
+                        ,
+                        JPAExpressions.select(qna.count())
+                                .from(qna)
+                                .where(qna.member.id.eq(memberId)),
+                        member.cumulativeAmount,
+                        member.point,
+                        member.createdDate
+                ))
+                .from(member)
+                .where(member.id.eq(memberId))
+                .fetchOne();
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
 import com.farmer.backend.api.controller.join.EmailDto;
 import com.farmer.backend.api.controller.join.RequestJoinDto;
 import com.farmer.backend.api.controller.login.ResponseOAuthUserInfoDto;
+import com.farmer.backend.api.controller.member.response.ResponseMemberInfoDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberListDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberPoint;
 import com.farmer.backend.api.service.membersCoupon.MembersCouponService;
@@ -15,6 +16,7 @@ import com.farmer.backend.domain.member.*;
 import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
+import com.farmer.backend.login.general.MemberAdapter;
 import com.farmer.backend.login.oauth.userInfo.GoogleSocialLogin;
 import com.farmer.backend.login.oauth.userInfo.KakaoSocialLogin;
 import com.farmer.backend.login.oauth.userInfo.NaverSocialLogin;
@@ -67,15 +69,21 @@ public class MemberService {
     }
 
     /**
-     * 회원 단건 조회
-     * @param memberId 회원 일련번호
+     * 특정 회원 정보 조회
+     * @param member 관리자
+     * @param memberId 특정 회원 ID
      * @return
      */
-    @Transactional(readOnly = true)
-    public ResponseMemberDto findOneMember(Long memberId) {
-        Optional<Member> findMember = memberRepository.findById(memberId);
-        return findMember.map(member -> ResponseMemberDto.getMember(member)).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    @Transactional
+    public ResponseMemberInfoDto memberInfo(Member member, Long memberId) {
+
+        if(!member.getRole().equals(UserRole.ADMIN)){
+            throw new CustomException(ErrorCode.ADMIN_ACCESS);
+        }
+
+        return memberQueryRepositoryImpl.memberInfo(memberId);
     }
+
 
     /**
      * 회원 수정
@@ -280,5 +288,6 @@ public class MemberService {
         Long point = memberRepository.findByEmail(memberEmail).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)).getPoint();
         return new ResponseMemberPoint(point);
     }
+
 
 }
