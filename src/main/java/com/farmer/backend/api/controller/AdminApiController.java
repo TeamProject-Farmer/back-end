@@ -155,15 +155,15 @@ public class AdminApiController {
         return memberService.updateMember(memberDto);
     }
 
-    /**
-     * 회원 관리 페이지(회원 삭제)
-     */
-    @ApiDocumentResponse
-    @Operation(summary = "회원 삭제", description = "회원을 삭제합니다.")
-    @PostMapping("/members/delete")
-    public void deleteMember(@RequestParam(value = "member") Long memberIds[]) {
-        memberService.deleteMember(memberIds);
-    }
+//    /**
+//     * 회원 관리 페이지(회원 삭제)
+//     */
+//    @ApiDocumentResponse
+//    @Operation(summary = "회원 삭제", description = "회원을 삭제합니다.")
+//    @PostMapping("/members/delete")
+//    public void deleteMember(@RequestParam(value = "member") Long memberIds[]) {
+//        memberService.deleteMember(memberIds);
+//    }
 
     /**
      * 회원 관리 페이지(회원 검색(이름, 아이디))

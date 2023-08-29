@@ -25,6 +25,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +54,7 @@ public class MemberService {
 
     /**
      * 전체 회원 리스트 (admin)
+     * @param member 관리자
      * @param sortOrderCond 정렬순서
      * @param searchMemberCond 검색정보
      */
@@ -106,15 +109,22 @@ public class MemberService {
 
 
     /**
-     * 회원 삭제(계정 상태 변경)
-     * @param memberIds 회원 일련번호 배열
+     * 회원 계정 상태 변경 - 삭제 (admin)
+     * @param member 관리자
+     * @param memberId 회원 일련번호 배열
+     * @return
      */
     @Transactional
-    public void deleteMember(Long[] memberIds) {
-        for (Long memberId : memberIds) {
-            ResponseMemberDto findMember = memberRepository.findById(memberId).map(Member::memberList).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-            memberQueryRepositoryImpl.deleteMember(memberId);
+    public ResponseEntity<String> deleteMember(Member member, Long memberId) {
+
+        if(!member.getRole().equals(UserRole.ADMIN)){
+            throw new CustomException(ErrorCode.ADMIN_ACCESS);
         }
+
+        memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        memberQueryRepositoryImpl.deleteMember(memberId);
+
+        return new ResponseEntity<>("OK",HttpStatus.OK);
     }
 
     /**

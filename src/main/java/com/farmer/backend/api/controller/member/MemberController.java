@@ -8,11 +8,16 @@ import com.farmer.backend.config.ApiDocumentResponse;
 import com.farmer.backend.login.general.MemberAdapter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
+import retrofit2.http.Path;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -78,6 +83,18 @@ public class MemberController {
                                             @PathVariable(name="memberId") Long memberId){
 
         return memberService.memberInfo(memberAdapter.getMember(),memberId);
+    }
+
+    /**
+     * 회원 계정 상태 변경(삭제) (admin)
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "특정 회원 계정 상태 변경", description = "특정 회원의 계정 상태를 변경 합니다.")
+    @GetMapping(value = "/admin/memberList/del/{memberId}")
+    public ResponseEntity<String> delMember(@AuthenticationPrincipal MemberAdapter memberAdapter,
+                                            @PathVariable(name = "memberId") Long memberId){
+
+        return memberService.deleteMember(memberAdapter.getMember(),memberId);
     }
 
 
