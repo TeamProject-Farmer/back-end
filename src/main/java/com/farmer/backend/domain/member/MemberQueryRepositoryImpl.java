@@ -57,10 +57,9 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
      * 회원 전체 리스트 (admin)
      * @param sortOrderCond 정렬값
      * @param searchMemberCond 검색값
-     * @return
      */
     @Override
-    public List<ResponseMemberListDto> memberList(String sortOrderCond, String searchMemberCond){
+    public List<ResponseMemberListDto> memberList(String sortOrderCond, SearchMemberCondition searchMemberCond){
 
         return query
                 .select(Projections.constructor(
@@ -72,12 +71,13 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
                         member.cumulativeAmount
                 ))
                 .from(member)
+                .where(likeUserId(searchMemberCond.getUserId()),likeUserName(searchMemberCond.getUserName()))
                 .fetch();
 
     }
 
     /**
-     * 특정 회원 정보 조회
+     * 특정 회원 정보 조회 (admin)
      * @param memberId 회원
      */
     public ResponseMemberInfoDto memberInfo(Long memberId){
@@ -116,8 +116,6 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
 
     /**
      * 회원 검색 리스트(이름, 아이디)
-     * @param pageable
-     * @param cond
      */
     @Override
     public Page<Member> searchMemberList(Pageable pageable, SearchMemberCondition cond) {
@@ -204,6 +202,10 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
 
     public BooleanExpression likeUserId(String userId) {
         return userId != null ? member.email.contains(userId) : null;
+    }
+
+    public BooleanExpression likeUserName(String userName) {
+        return userName != null ? member.nickname.contains(userName) : null;
     }
 
 

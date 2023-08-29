@@ -1,25 +1,18 @@
 package com.farmer.backend.api.controller.member;
-import com.farmer.backend.api.controller.SortOrderCondition;
-import com.farmer.backend.api.controller.login.ResponseLoginMemberDto;
 import com.farmer.backend.api.controller.member.request.RequestMemberProfileDto;
 import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
-import com.farmer.backend.api.controller.member.response.ResponseMemberDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberInfoDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberListDto;
 import com.farmer.backend.api.service.member.MemberService;
 import com.farmer.backend.config.ApiDocumentResponse;
-import com.farmer.backend.domain.member.UserRole;
 import com.farmer.backend.login.general.MemberAdapter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import retrofit2.http.Path;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -69,7 +62,7 @@ public class MemberController {
     @GetMapping(value = "/admin/memberList")
     public List<ResponseMemberListDto> farmerMemberList(@AuthenticationPrincipal MemberAdapter memberAdapter,
                                                         String sortOrderCond,
-                                                        String searchMemberCond){
+                                                        SearchMemberCondition searchMemberCond){
 
         return memberService.memberList(memberAdapter.getMember(),sortOrderCond,searchMemberCond);
 

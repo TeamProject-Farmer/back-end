@@ -21,7 +21,7 @@ public interface MemberQueryRepository {
 
     Page<Member> searchManagerList(Pageable pageable, SearchMemberCondition cond);
 
-    List<ResponseMemberListDto> memberList(String sortOrderCond, String searchMemberCondition);
+    List<ResponseMemberListDto> memberList(String sortOrderCond, SearchMemberCondition searchMemberCond);
 
     ResponseMemberInfoDto memberInfo(Long memberId);
 }

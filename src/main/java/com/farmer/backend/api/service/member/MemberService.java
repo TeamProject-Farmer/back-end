@@ -1,6 +1,5 @@
 package com.farmer.backend.api.service.member;
 
-import com.farmer.backend.api.controller.login.ResponseLoginMemberDto;
 import com.farmer.backend.api.controller.member.request.RequestMemberDto;
 import com.farmer.backend.api.controller.member.request.RequestMemberProfileDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberDto;
@@ -16,7 +15,6 @@ import com.farmer.backend.domain.member.*;
 import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
-import com.farmer.backend.login.general.MemberAdapter;
 import com.farmer.backend.login.oauth.userInfo.GoogleSocialLogin;
 import com.farmer.backend.login.oauth.userInfo.KakaoSocialLogin;
 import com.farmer.backend.login.oauth.userInfo.NaverSocialLogin;
@@ -53,26 +51,24 @@ public class MemberService {
     private final MembersCouponService membersCouponService;
 
     /**
-     * 전체 회원 리스트
+     * 전체 회원 리스트 (admin)
      * @param sortOrderCond 정렬순서
-     * @param searchMemberCondition 검색정보
-     * @return
+     * @param searchMemberCond 검색정보
      */
     @Transactional(readOnly = true)
-    public List<ResponseMemberListDto> memberList(Member member, String sortOrderCond, String searchMemberCondition) {
+    public List<ResponseMemberListDto> memberList(Member member, String sortOrderCond, SearchMemberCondition searchMemberCond) {
 
         if(!member.getRole().equals(UserRole.ADMIN)){
             throw new CustomException(ErrorCode.ADMIN_ACCESS);
         }
 
-        return memberQueryRepositoryImpl.memberList(sortOrderCond,searchMemberCondition);
+        return memberQueryRepositoryImpl.memberList(sortOrderCond,searchMemberCond);
     }
 
     /**
-     * 특정 회원 정보 조회
+     * 특정 회원 정보 조회 (admin)
      * @param member 관리자
      * @param memberId 특정 회원 ID
-     * @return
      */
     @Transactional
     public ResponseMemberInfoDto memberInfo(Member member, Long memberId) {
