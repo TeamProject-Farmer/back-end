@@ -3,8 +3,11 @@ package com.farmer.backend.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.farmer.backend.api.controller.login.ResponseLoginMemberDto;
 import com.farmer.backend.api.controller.member.response.ResponseMemberTokenDto;
+import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;
+import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +52,7 @@ public class JwtService {
     private static final String BEARER = "Bearer ";
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
+    private final MemberCouponRepository memberCouponRepository;
 
 
     /**
@@ -77,16 +81,26 @@ public class JwtService {
 
 
     /**
-     * AccessToken , RefreshToken 헤더 설정 후 보내기
+     * AccessToken , RefreshToken 보내기
      */
-    public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) throws IOException {
+    public void sendAccessAndRefreshToken(Member member, HttpServletResponse response, String accessToken, String refreshToken) throws IOException {
+
+
+        //ResponseMemberTokenDto responseMemberTokenDto = new ResponseMemberTokenDto(accessToken,refreshToken);
+        //String memberToken = objectMapper.writeValueAsString(responseMemberTokenDto);
+        //response.getWriter().write(memberToken);
+        Long couponCount = memberCouponRepository.countByMemberId(member.getId());
 
         response.setStatus(SC_OK);
-        ResponseMemberTokenDto responseMemberTokenDto = new ResponseMemberTokenDto(accessToken,refreshToken);
-        String memberToken = objectMapper.writeValueAsString(responseMemberTokenDto);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(memberToken);
+        ResponseLoginMemberDto loginMemberDto = ResponseLoginMemberDto.getLoginMember(member,couponCount);
+
+        String res = objectMapper.writeValueAsString(loginMemberDto);
+        response.getWriter().write(res);
+
+
+
 
     }
 
