@@ -3,8 +3,10 @@ package com.farmer.backend.api.controller.cart.response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @Builder
 public class ResponseCartProductListDto {
@@ -15,6 +17,7 @@ public class ResponseCartProductListDto {
     private String productName;
     private Long optionId;
     private String optionName;
+    private Integer optionPrice;
     private Integer count;
     private Integer productPrice;
     private Integer totalPrice;
