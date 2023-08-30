@@ -3,6 +3,7 @@ package com.farmer.backend.domain.cart;
 import com.farmer.backend.api.controller.cart.response.ResponseCartProductListDto;
 import com.farmer.backend.api.controller.cart.response.ResponseCartProductQuantityDto;
 import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.domain.options.QOptions;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -11,6 +12,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.farmer.backend.domain.cart.QCart.cart;
+import static com.farmer.backend.domain.options.QOptions.options;
 
 @Repository
 public class CartQueryRepositoryImpl implements CartQueryRepository{
@@ -31,13 +33,14 @@ public class CartQueryRepositoryImpl implements CartQueryRepository{
                         cart.product.id,
                         cart.product.thumbnailImg,
                         cart.product.name,
-                        cart.options.id,
-                        cart.options.optionName,
+                        options.id,
+                        options.optionName,
                         cart.count,
                         cart.product.price,
                         cart.product.price.multiply(cart.count)
                 ))
                 .from(cart)
+                .leftJoin(options).on(options.eq(cart.options))
                 .where(cart.member.eq(findMember))
                 .fetch();
 
