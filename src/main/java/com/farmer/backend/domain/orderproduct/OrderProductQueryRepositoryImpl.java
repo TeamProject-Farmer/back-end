@@ -64,6 +64,7 @@ public class OrderProductQueryRepositoryImpl implements OrderProductQueryReposit
                                 ResponseOrderProductDetailDto.class,
                                 orders.orderNumber,
                                 orderProduct.product.thumbnailImg,
+                                orderProduct.id,
                                 orderProduct.product.id,
                                 orderProduct.product.name,
                                 orderProduct.count,
