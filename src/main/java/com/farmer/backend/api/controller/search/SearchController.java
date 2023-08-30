@@ -34,9 +34,6 @@ public class SearchController {
     public Page<ResponseSearchProductDto> searchProduct(@Valid @RequestBody RequestSearchDto requestSearchDto,
                                                         PageRequest pageRequest){
 
-        log.info(requestSearchDto.getMemberEmail());
-        log.info(requestSearchDto.getSearchWord());
-        log.info(requestSearchDto.getSortSearchCond());
         return searchService.searchProduct(requestSearchDto,pageRequest.of());
     }
 

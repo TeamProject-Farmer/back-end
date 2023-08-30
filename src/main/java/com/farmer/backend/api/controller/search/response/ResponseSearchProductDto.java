@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 public class ResponseSearchProductDto {
 
+    private Long productId;
     private String thumbnailImg;
     private String name;
     private Integer price;
