@@ -37,6 +37,7 @@ public class SearchQueryRepositoryImpl implements SearchQueryRepository {
         List<ResponseSearchProductDto> searchProducts = query
                 .select(Projections.constructor(
                         ResponseSearchProductDto.class,
+                        product.id,
                         product.thumbnailImg,
                         product.name,
                         product.price,
