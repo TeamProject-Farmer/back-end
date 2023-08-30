@@ -82,16 +82,16 @@ public class AdminApiController {
         return ResponseEntity.ok(managerList).getBody();
     }
 
-    /**
-     * 계정 관리 페이지(관리자 단건 조회)
-     */
-    @ApiDocumentResponse
-    @Operation(summary = "관리자 단건 조회", description = "특정 관리자 정보를 열람합니다.")
-    @GetMapping("/account/managers/{memberId}")
-    public ResponseEntity<ResponseMemberDto> findManager(@PathVariable Long memberId) {
-        ResponseMemberDto oneMember = memberService.findOneMember(memberId);
-        return new ResponseEntity<>(oneMember, HttpStatus.OK);
-    }
+//    /**
+//     * 계정 관리 페이지(관리자 단건 조회)
+//     */
+//    @ApiDocumentResponse
+//    @Operation(summary = "관리자 단건 조회", description = "특정 관리자 정보를 열람합니다.")
+//    @GetMapping("/account/managers/{memberId}")
+//    public ResponseEntity<ResponseMemberDto> findManager(@PathVariable Long memberId) {
+//        ResponseMemberDto oneMember = memberService.findOneMember(memberId);
+//        return new ResponseEntity<>(oneMember, HttpStatus.OK);
+//    }
 
     /**
      * 계정 관리 페이지(관리자 권한 계정 검색)
@@ -115,35 +115,35 @@ public class AdminApiController {
     }
 
 
-    /**
-     * 회원 관리 페이지(회원 전체 리스트)
-     * 검색, 정렬
-     */
-    @ApiDocumentResponse
-    @Operation(summary = "회원 전체 리스트", description = "회원 전체 리스트를 출력합니다.")
-    @GetMapping("/member-list")
-    public Page<ResponseMemberDto> memberList(PageRequest pageRequest,
-                                              SortOrderCondition sortOrderMemberCondition,
-                                              SearchMemberCondition searchMemberCondition) {
+//    /**
+//     * 회원 관리 페이지(회원 전체 리스트)
+//     * 검색, 정렬
+//     */
+//    @ApiDocumentResponse
+//    @Operation(summary = "회원 전체 리스트", description = "회원 전체 리스트를 출력합니다.")
+//    @GetMapping("/member-list")
+//    public Page<ResponseMemberDto> memberList(PageRequest pageRequest,
+//                                              SortOrderCondition sortOrderMemberCondition,
+//                                              SearchMemberCondition searchMemberCondition) {
+//
+//        Page<ResponseMemberDto> memberList = memberService.memberList(
+//                pageRequest.of(),
+//                sortOrderMemberCondition.getFieldName(),
+//                searchMemberCondition
+//        );
+//        return ResponseEntity.ok(memberList).getBody();
+//    }
 
-        Page<ResponseMemberDto> memberList = memberService.memberList(
-                pageRequest.of(),
-                sortOrderMemberCondition.getFieldName(),
-                searchMemberCondition
-        );
-        return ResponseEntity.ok(memberList).getBody();
-    }
-
-    /**
-     * 회원 관리 페이지(회원 단건 조회)
-     */
-    @ApiDocumentResponse
-    @Operation(summary = "회원 단건 조회", description = "특정 회원 정보를 열람합니다.")
-    @GetMapping("/members/{memberId}")
-    public ResponseEntity<ResponseMemberDto> findMember(@PathVariable Long memberId) {
-        ResponseMemberDto oneMember = memberService.findOneMember(memberId);
-        return new ResponseEntity<>(oneMember, HttpStatus.OK);
-    }
+//    /**
+//     * 회원 관리 페이지(회원 단건 조회)
+//     */
+//    @ApiDocumentResponse
+//    @Operation(summary = "회원 단건 조회", description = "특정 회원 정보를 열람합니다.")
+//    @GetMapping("/members/{memberId}")
+//    public ResponseEntity<ResponseMemberDto> findMember(@PathVariable Long memberId) {
+//        ResponseMemberDto oneMember = memberService.findOneMember(memberId);
+//        return new ResponseEntity<>(oneMember, HttpStatus.OK);
+//    }
 
     /**
      * 회원 관리 페이지(회원 수정)
@@ -155,15 +155,15 @@ public class AdminApiController {
         return memberService.updateMember(memberDto);
     }
 
-    /**
-     * 회원 관리 페이지(회원 삭제)
-     */
-    @ApiDocumentResponse
-    @Operation(summary = "회원 삭제", description = "회원을 삭제합니다.")
-    @PostMapping("/members/delete")
-    public void deleteMember(@RequestParam(value = "member") Long memberIds[]) {
-        memberService.deleteMember(memberIds);
-    }
+//    /**
+//     * 회원 관리 페이지(회원 삭제)
+//     */
+//    @ApiDocumentResponse
+//    @Operation(summary = "회원 삭제", description = "회원을 삭제합니다.")
+//    @PostMapping("/members/delete")
+//    public void deleteMember(@RequestParam(value = "member") Long memberIds[]) {
+//        memberService.deleteMember(memberIds);
+//    }
 
     /**
      * 회원 관리 페이지(회원 검색(이름, 아이디))
