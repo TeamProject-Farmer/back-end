@@ -69,8 +69,7 @@ class CartServiceTest {
     @Test
     @DisplayName("장바구니 상품 수량 변경")
     void changeQuantityAction() {
-        RequestCartProductQuantityDto requestCartProductQuantityDto = new RequestCartProductQuantityDto(2429L, "plus");
-        Member member = memberRepository.findByEmail("codms7020@naver.com").orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        RequestCartProductQuantityDto requestCartProductQuantityDto = new RequestCartProductQuantityDto(3090L, "plus");
         Cart findCartProduct = cartRepository.findById(requestCartProductQuantityDto.getCartId()).orElseThrow(() -> new CustomException(ErrorCode.CART_PRODUCT_NOT_FOUNT));
         Integer originCount = findCartProduct.getCount();
         Integer beforeCount = findCartProduct.getCount();
