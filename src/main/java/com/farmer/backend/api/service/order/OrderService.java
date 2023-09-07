@@ -158,8 +158,12 @@ public class OrderService {
         List<RequestOrderProductDto> orderProduct = orderInfoDto.getOrderProduct().stream().collect(Collectors.toList());
         for (RequestOrderProductDto requestOrderProductDto : orderProduct) {
             Product product = productRepository.findById(requestOrderProductDto.getProductId()).orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
-            Options options = optionRepository.findById(requestOrderProductDto.getOptionId()).orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
-            orderProductRepository.save(orderInfoDto.toEntityOrderProduct(product, options, requestOrderProductDto.getCount(), requestOrderProductDto.getOrderPrice(), createdOrder));
+            if (requestOrderProductDto.getOptionId() == null) {
+                orderProductRepository.save(orderInfoDto.toEntityOrderProduct(product, null, requestOrderProductDto.getCount(), requestOrderProductDto.getOrderPrice(), createdOrder));
+            } else {
+                Options options = optionRepository.findById(requestOrderProductDto.getOptionId()).orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
+                orderProductRepository.save(orderInfoDto.toEntityOrderProduct(product, options, requestOrderProductDto.getCount(), requestOrderProductDto.getOrderPrice(), createdOrder));
+            }
         }
         paymentRepository.save(Payment.toEntity(createdOrder, orderInfoDto));
         return ResponseOrderCompleteDto.orderCompleteData(findMember, savedDelivery, orderInfoDto, createdOrder);
