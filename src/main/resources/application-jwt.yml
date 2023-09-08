@@ -2,7 +2,11 @@ jwt:
   secretKey: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
 
   access:
+<<<<<<< HEAD
     expiration: 360000 # 1시간(60분) (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h))
+=======
+    expiration: 3600000 # 1시간(60분) (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h))
+>>>>>>> 91270b7aeb158d35513990b6cda4761f4acc2443
     header: Authorization
 
   refresh:
