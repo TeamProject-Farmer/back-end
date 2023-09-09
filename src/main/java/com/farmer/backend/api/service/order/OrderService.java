@@ -1,5 +1,6 @@
 package com.farmer.backend.api.service.order;
 
+import com.farmer.backend.api.controller.admin.order.response.ResponseOrderListDto;
 import com.farmer.backend.api.controller.user.order.request.RequestOrderInfoDto;
 import com.farmer.backend.api.controller.user.order.request.RequestOrderProductDto;
 import com.farmer.backend.api.controller.user.order.request.SearchOrdersCondition;
@@ -56,15 +57,15 @@ public class OrderService {
      * @param sortOrderCond 주문 상태 정렬
      * @return
      */
-    @Transactional(readOnly = true)
-    public Page<ResponseOrdersDto> orderList(Pageable pageable, SearchOrdersCondition searchCondition, String sortOrderCond) {
-        if (Objects.isNull(sortOrderCond)) {
-            return orderQueryRepositoryImpl.findAll(pageable, searchCondition);
-        } else if (sortOrderCond.toString().equals("ORDER")) {
-            return orderQueryRepositoryImpl.findOrderList(pageable, searchCondition, sortOrderCond);
-        }
-        return orderQueryRepositoryImpl.findOrderStatusList(pageable, searchCondition, sortOrderCond);
-    }
+//    @Transactional(readOnly = true)
+//    public Page<ResponseOrdersDto> orderList(Pageable pageable, SearchOrdersCondition searchCondition, String sortOrderCond) {
+//        if (Objects.isNull(sortOrderCond)) {
+//            return orderQueryRepositoryImpl.findAll(pageable, searchCondition);
+//        } else if (sortOrderCond.toString().equals("ORDER")) {
+//            return orderQueryRepositoryImpl.findOrderList(pageable, searchCondition, sortOrderCond);
+//        }
+//        return orderQueryRepositoryImpl.findOrderStatusList(pageable, searchCondition, sortOrderCond);
+//    }
 
     /**
      * 주문 상세 조회
@@ -173,5 +174,14 @@ public class OrderService {
         Orders findOrders = orderRepository.findByOrderNumber(orderNumber).orElseThrow(() -> new CustomException(ErrorCode.ORDER_NOT_FOUND));
         DeliveryAddress memberInfo = deliveryAddressRepository.findByMember(findOrders.getMember());
         return ResponseOrderCompleteDto.orderCompleteData(findOrders, memberInfo);
+    }
+
+    /**
+     * =========================================================================================================
+     * Admin logic
+     */
+    @Transactional
+    public List<ResponseOrderListDto> orderList(SearchOrdersCondition searchOrdersCondition) {
+        return orderRepository.findOrderList(searchOrdersCondition);
     }
 }
