@@ -8,6 +8,5 @@ import lombok.Data;
 public class SearchOrdersCondition {
 
     private String orderNumber;
-    private String memberName;
-    private String email;
+    private String orderName;
 }
