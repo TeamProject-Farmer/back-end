@@ -279,17 +279,6 @@ public class AdminApiController {
     }
 
     /**
-     * 주문 관리 페이지
-     * (검색, 정렬)
-     */
-    @ApiDocumentResponse
-    @Operation(summary = "주문 전체 리스트", description = "주문 전체 리스트를 출력합니다.")
-    @GetMapping("/order-list")
-    public Page<ResponseOrdersDto> orderList(PageRequest pageRequest, SearchOrdersCondition searchCond, SortOrderCondition sortCond) {
-        return orderService.orderList(pageRequest.of(), searchCond, sortCond.getFieldName());
-    }
-
-    /**
      * 주문 관리 페이지(주문 단건 조회)
      */
     @ApiDocumentResponse
