@@ -1,10 +1,10 @@
 package com.farmer.backend.api.service.review;
 
-import com.farmer.backend.api.controller.review.request.RequestReviewStarDto;
-import com.farmer.backend.api.controller.review.request.RequestReviewWriteDto;
-import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
-import com.farmer.backend.api.controller.review.response.ResponseProductReviewListDto;
-import com.farmer.backend.api.controller.review.response.ResponseReviewStarDto;
+import com.farmer.backend.api.controller.user.review.request.RequestReviewStarDto;
+import com.farmer.backend.api.controller.user.review.request.RequestReviewWriteDto;
+import com.farmer.backend.api.controller.user.review.response.ResponseBestReviewListDto;
+import com.farmer.backend.api.controller.user.review.response.ResponseProductReviewListDto;
+import com.farmer.backend.api.controller.user.review.response.ResponseReviewStarDto;
 import com.farmer.backend.api.service.S3Service;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;

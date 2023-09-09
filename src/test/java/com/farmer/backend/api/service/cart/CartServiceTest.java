@@ -1,9 +1,9 @@
 package com.farmer.backend.api.service.cart;
 
-import com.farmer.backend.api.controller.cart.request.RequestCartProductQuantityDto;
-import com.farmer.backend.api.controller.cart.request.RequestProductCartDto;
-import com.farmer.backend.api.controller.cart.response.ResponseCartProductListDto;
-import com.farmer.backend.api.controller.cart.response.ResponseCartProductQuantityDto;
+import com.farmer.backend.api.controller.user.cart.request.RequestCartProductQuantityDto;
+import com.farmer.backend.api.controller.user.cart.request.RequestProductCartDto;
+import com.farmer.backend.api.controller.user.cart.response.ResponseCartProductListDto;
+import com.farmer.backend.api.controller.user.cart.response.ResponseCartProductQuantityDto;
 import com.farmer.backend.domain.cart.Cart;
 import com.farmer.backend.domain.cart.CartQueryRepositoryImpl;
 import com.farmer.backend.domain.cart.CartRepository;
@@ -18,7 +18,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;

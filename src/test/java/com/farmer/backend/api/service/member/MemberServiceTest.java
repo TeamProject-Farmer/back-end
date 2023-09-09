@@ -1,15 +1,13 @@
 package com.farmer.backend.api.service.member;
 
-import com.farmer.backend.api.controller.login.ResponseLoginMemberDto;
-import com.farmer.backend.api.controller.member.request.RequestMemberDto;
-import com.farmer.backend.api.controller.member.request.RequestMemberProfileDto;
+import com.farmer.backend.api.controller.user.login.ResponseLoginMemberDto;
+import com.farmer.backend.api.controller.user.member.request.RequestMemberProfileDto;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;
 import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+
 @Slf4j
 @SpringBootTest
 @Transactional

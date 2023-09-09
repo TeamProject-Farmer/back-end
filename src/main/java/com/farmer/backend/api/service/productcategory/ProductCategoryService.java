@@ -1,6 +1,6 @@
 package com.farmer.backend.api.service.productcategory;
 
-import com.farmer.backend.api.controller.productcategory.response.ResponseCategoryDto;
+import com.farmer.backend.api.controller.user.productcategory.response.ResponseCategoryDto;
 import com.farmer.backend.domain.product.productcategory.ProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

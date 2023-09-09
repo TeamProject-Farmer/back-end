@@ -1,24 +1,20 @@
 package com.farmer.backend.api.service.order;
 
-import com.farmer.backend.api.controller.order.request.RequestOrderInfoDto;
-import com.farmer.backend.api.controller.order.request.RequestOrderProductDto;
-import com.farmer.backend.api.controller.order.request.SearchOrdersCondition;
-import com.farmer.backend.api.controller.order.response.*;
-import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductListDto;
+import com.farmer.backend.api.controller.user.order.request.RequestOrderInfoDto;
+import com.farmer.backend.api.controller.user.order.request.RequestOrderProductDto;
+import com.farmer.backend.api.controller.user.order.request.SearchOrdersCondition;
+import com.farmer.backend.api.controller.user.order.response.*;
 import com.farmer.backend.domain.delivery.Delivery;
 import com.farmer.backend.domain.delivery.DeliveryRepository;
 import com.farmer.backend.domain.deliveryaddress.DeliveryAddress;
-import com.farmer.backend.domain.deliveryaddress.DeliveryAddressQueryRepository;
 import com.farmer.backend.domain.deliveryaddress.DeliveryAddressRepository;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;
 import com.farmer.backend.domain.options.OptionRepository;
 import com.farmer.backend.domain.options.Options;
-import com.farmer.backend.domain.orderproduct.OrderProduct;
 import com.farmer.backend.domain.orders.Orders;
 import com.farmer.backend.domain.payment.Payment;
 import com.farmer.backend.domain.product.Product;
-import com.farmer.backend.domain.product.ProductQueryRepository;
 import com.farmer.backend.domain.product.ProductRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
@@ -26,7 +22,6 @@ import com.farmer.backend.domain.orderproduct.OrderProductQueryRepository;
 import com.farmer.backend.domain.orderproduct.OrderProductRepository;
 import com.farmer.backend.domain.orders.OrderQueryRepository;
 import com.farmer.backend.domain.orders.OrderRepository;
-import com.farmer.backend.domain.payment.PaymentQueryRepository;
 import com.farmer.backend.domain.payment.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +30,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -1,8 +1,7 @@
 package com.farmer.backend.api.service.payment;
 
-import com.farmer.backend.api.controller.payment.request.RequestPaymentInfoDto;
+import com.farmer.backend.api.controller.user.payment.request.RequestPaymentInfoDto;
 import com.farmer.backend.domain.member.MemberRepository;
-import com.farmer.backend.domain.orderproduct.OrderProduct;
 import com.farmer.backend.domain.orderproduct.OrderProductRepository;
 import com.farmer.backend.domain.orders.OrderRepository;
 import com.farmer.backend.domain.orders.Orders;
@@ -13,9 +12,6 @@ import com.farmer.backend.login.general.MemberAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j

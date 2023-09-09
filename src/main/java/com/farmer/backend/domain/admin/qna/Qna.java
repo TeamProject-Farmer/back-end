@@ -2,8 +2,8 @@ package com.farmer.backend.domain.admin.qna;
 
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.product.Product;
-import com.farmer.backend.api.controller.qna.request.RequestBoardQnADto;
-import com.farmer.backend.api.controller.qna.response.ResponseBoardQnADto;
+import com.farmer.backend.api.controller.user.qna.request.RequestBoardQnADto;
+import com.farmer.backend.api.controller.user.qna.response.ResponseBoardQnADto;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

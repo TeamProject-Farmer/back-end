@@ -1,6 +1,5 @@
 package com.farmer.backend.domain.cart;
 
-import com.farmer.backend.api.controller.cart.request.RequestCartProductQuantityDto;
 import com.farmer.backend.domain.BaseTimeEntity;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.options.Options;

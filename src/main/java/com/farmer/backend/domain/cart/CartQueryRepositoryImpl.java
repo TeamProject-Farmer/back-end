@@ -1,23 +1,19 @@
 package com.farmer.backend.domain.cart;
 
-import com.farmer.backend.api.controller.cart.response.ResponseCartProductListDto;
-import com.farmer.backend.api.controller.cart.response.ResponseCartProductQuantityDto;
+import com.farmer.backend.api.controller.user.cart.response.ResponseCartProductListDto;
+import com.farmer.backend.api.controller.user.cart.response.ResponseCartProductQuantityDto;
 import com.farmer.backend.domain.member.Member;
-import com.farmer.backend.domain.options.QOptions;
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.math.BigDecimal;
 import java.util.List;
 
 import static com.farmer.backend.domain.cart.QCart.cart;
 import static com.farmer.backend.domain.options.QOptions.options;
 import static com.querydsl.core.types.dsl.Expressions.asNumber;
-import static com.querydsl.core.types.dsl.Expressions.constant;
 
 @Repository
 public class CartQueryRepositoryImpl implements CartQueryRepository{

@@ -1,9 +1,8 @@
 package com.farmer.backend.domain.orders;
 
-import com.farmer.backend.api.controller.order.response.ResponseOrderCompleteDto;
-import com.farmer.backend.api.controller.order.response.ResponseOrdersAndPaymentDto;
-import com.farmer.backend.api.controller.order.response.ResponseOrdersDto;
-import com.farmer.backend.api.controller.order.request.SearchOrdersCondition;
+import com.farmer.backend.api.controller.user.order.response.ResponseOrdersAndPaymentDto;
+import com.farmer.backend.api.controller.user.order.response.ResponseOrdersDto;
+import com.farmer.backend.api.controller.user.order.request.SearchOrdersCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

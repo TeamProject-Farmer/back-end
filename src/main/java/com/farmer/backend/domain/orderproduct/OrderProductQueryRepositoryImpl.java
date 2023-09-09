@@ -1,24 +1,17 @@
 package com.farmer.backend.domain.orderproduct;
 
-import com.farmer.backend.api.controller.order.response.ResponseOrderDetailDto;
-import com.farmer.backend.api.controller.orderproduct.request.RequestOrderProductStatusSearchDto;
-import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductDetailDto;
+import com.farmer.backend.api.controller.user.order.response.ResponseOrderDetailDto;
+import com.farmer.backend.api.controller.user.orderproduct.request.RequestOrderProductStatusSearchDto;
+import com.farmer.backend.api.controller.user.orderproduct.response.ResponseOrderProductDetailDto;
 import com.farmer.backend.domain.orders.OrderStatus;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.util.StringUtils;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
