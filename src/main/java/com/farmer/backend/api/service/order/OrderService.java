@@ -51,23 +51,6 @@ public class OrderService {
     private final PaymentRepository paymentRepository;
 
     /**
-     * 주문 전체 리스트
-     * @param pageable 페이징
-     * @param searchCondition 주문 정보 검색
-     * @param sortOrderCond 주문 상태 정렬
-     * @return
-     */
-//    @Transactional(readOnly = true)
-//    public Page<ResponseOrdersDto> orderList(Pageable pageable, SearchOrdersCondition searchCondition, String sortOrderCond) {
-//        if (Objects.isNull(sortOrderCond)) {
-//            return orderQueryRepositoryImpl.findAll(pageable, searchCondition);
-//        } else if (sortOrderCond.toString().equals("ORDER")) {
-//            return orderQueryRepositoryImpl.findOrderList(pageable, searchCondition, sortOrderCond);
-//        }
-//        return orderQueryRepositoryImpl.findOrderStatusList(pageable, searchCondition, sortOrderCond);
-//    }
-
-    /**
      * 주문 상세 조회
      * @param orderId 주문 일련번호
      * @return
@@ -179,6 +162,12 @@ public class OrderService {
     /**
      * =========================================================================================================
      * Admin logic
+     */
+
+    /**
+     * 주문 전체 조회
+     * @param searchOrdersCondition 검색 정보
+     * @return
      */
     @Transactional
     public List<ResponseOrderListDto> orderList(SearchOrdersCondition searchOrdersCondition) {
