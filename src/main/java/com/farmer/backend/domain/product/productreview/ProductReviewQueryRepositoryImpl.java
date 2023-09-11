@@ -109,6 +109,9 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
                 .groupBy(productReviews.fiveStarRating)
                 .fetch();
 
+        if(allStar.isEmpty()){
+            return new RequestReviewStarDto(0.0,0L,0L,0L,0L,0L);
+        }
 
         for (Tuple reviewStar : allStar){
             Integer reviewStarRating = reviewStar.get(0,Integer.class)-1;
@@ -143,29 +146,6 @@ public class ProductReviewQueryRepositoryImpl implements ProductReviewQueryRepos
         return imgList;
     }
 
-    @Override
-    public Long productCount(Long productId){
-            Long productCount = query
-                    .select(orderProduct.product.count())
-                    .from(orderProduct)
-                    .where(orderProduct.product.id.eq(productId))
-                    .fetchOne();
-            Long reviewCount = query
-                    .select(productReviews.count())
-                    .from(productReviews)
-                    .where(productReviews.orderProduct.product.id.eq(productId))
-                    .fetchOne();
-
-
-            if(productCount==0){
-                throw new CustomException(ErrorCode.PRODUCT_REVIEW_NOT_FOUND);
-            } else if (reviewCount==0) {
-
-                throw new CustomException(ErrorCode.PRODUCT_REVIEW_NOT_FOUND);
-
-            }
-            return productCount;
-    }
 
     public BooleanExpression likeStar(Integer star){
         return star != null ? productReviews.fiveStarRating.eq(star) :null;

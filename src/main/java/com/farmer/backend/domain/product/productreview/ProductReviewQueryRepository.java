@@ -19,5 +19,4 @@ public interface ProductReviewQueryRepository {
 
     List<String> productReviewImg(Long productId);
 
-    Long productCount(Long productId);
 }

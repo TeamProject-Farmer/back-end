@@ -75,7 +75,6 @@ public class ReviewService {
     public ResponseReviewStarDto reviewAverage(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(()->new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
-        reviewQueryRepositoryImpl.productCount(productId);
 
         RequestReviewStarDto reviewStar = reviewQueryRepositoryImpl.fiveStars(productId);
         ProductReviewAverage productReviewAverage = reviewStar.toEntity(product);
