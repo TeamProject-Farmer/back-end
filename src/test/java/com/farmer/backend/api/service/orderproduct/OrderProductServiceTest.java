@@ -1,9 +1,9 @@
 package com.farmer.backend.api.service.orderproduct;
 
-import com.farmer.backend.api.controller.order.response.ResponseOrderInfoDto;
-import com.farmer.backend.api.controller.orderproduct.request.RequestOrderProductStatusSearchDto;
-import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductDetailDto;
-import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductDto;
+import com.farmer.backend.api.controller.user.order.response.ResponseOrderInfoDto;
+import com.farmer.backend.api.controller.user.orderproduct.request.RequestOrderProductStatusSearchDto;
+import com.farmer.backend.api.controller.user.orderproduct.response.ResponseOrderProductDetailDto;
+import com.farmer.backend.api.controller.user.orderproduct.response.ResponseOrderProductDto;
 import com.farmer.backend.domain.deliveryaddress.DeliveryAddress;
 import com.farmer.backend.domain.deliveryaddress.DeliveryAddressRepository;
 import com.farmer.backend.domain.member.Member;
@@ -17,21 +17,17 @@ import com.farmer.backend.domain.orders.Orders;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

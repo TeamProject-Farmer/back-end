@@ -1,6 +1,6 @@
 package com.farmer.backend.domain.payment;
 
-import com.farmer.backend.api.controller.order.request.RequestOrderInfoDto;
+import com.farmer.backend.api.controller.user.order.request.RequestOrderInfoDto;
 import com.farmer.backend.domain.orders.Orders;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;

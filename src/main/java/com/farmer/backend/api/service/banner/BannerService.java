@@ -1,6 +1,6 @@
 package com.farmer.backend.api.service.banner;
 
-import com.farmer.backend.api.controller.banner.response.ResponseBannerDtoList;
+import com.farmer.backend.api.controller.user.banner.response.ResponseBannerDtoList;
 import com.farmer.backend.domain.banner.BannerQueryRepository;
 import com.farmer.backend.domain.banner.BannerQueryRepositoryImpl;
 import lombok.RequiredArgsConstructor;

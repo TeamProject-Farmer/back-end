@@ -1,10 +1,9 @@
 package com.farmer.backend.api.service.banner;
 
-import com.farmer.backend.api.controller.banner.response.ResponseBannerDtoList;
+import com.farmer.backend.api.controller.user.banner.response.ResponseBannerDtoList;
 import com.farmer.backend.domain.banner.BannerQueryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

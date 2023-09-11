@@ -1,9 +1,9 @@
 package com.farmer.backend.api.service.cart;
 
-import com.farmer.backend.api.controller.cart.request.RequestCartProductQuantityDto;
-import com.farmer.backend.api.controller.cart.request.RequestProductCartDto;
-import com.farmer.backend.api.controller.cart.response.ResponseCartProductListDto;
-import com.farmer.backend.api.controller.cart.response.ResponseCartProductQuantityDto;
+import com.farmer.backend.api.controller.user.cart.request.RequestCartProductQuantityDto;
+import com.farmer.backend.api.controller.user.cart.request.RequestProductCartDto;
+import com.farmer.backend.api.controller.user.cart.response.ResponseCartProductListDto;
+import com.farmer.backend.api.controller.user.cart.response.ResponseCartProductQuantityDto;
 import com.farmer.backend.domain.cart.Cart;
 import com.farmer.backend.domain.cart.CartQueryRepositoryImpl;
 import com.farmer.backend.domain.cart.CartRepository;
@@ -18,7 +18,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -58,7 +57,7 @@ class CartServiceTest {
     @Test
     @DisplayName("장바구니 목록")
     void cartList() {
-        Member member = memberRepository.findByEmail("codms7020@naver.com").orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Member member = memberRepository.findByEmail("k980912@naver.com").orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         List<ResponseCartProductListDto> cartProductListByMember = cartQueryRepositoryImpl.findCartProductListByMember(member);
         for (ResponseCartProductListDto responseCartProductListDto : cartProductListByMember) {
             log.info(responseCartProductListDto.getProductName());
@@ -69,7 +68,7 @@ class CartServiceTest {
     @Test
     @DisplayName("장바구니 상품 수량 변경")
     void changeQuantityAction() {
-        RequestCartProductQuantityDto requestCartProductQuantityDto = new RequestCartProductQuantityDto(3300L, "plus");
+        RequestCartProductQuantityDto requestCartProductQuantityDto = new RequestCartProductQuantityDto(3489L, "plus");
         Cart findCartProduct = cartRepository.findById(requestCartProductQuantityDto.getCartId()).orElseThrow(() -> new CustomException(ErrorCode.CART_PRODUCT_NOT_FOUNT));
         Integer originCount = findCartProduct.getCount();
         Integer beforeCount = findCartProduct.getCount();

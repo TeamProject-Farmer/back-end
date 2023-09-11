@@ -1,8 +1,12 @@
 package com.farmer.backend.domain.orders;
 
-import com.farmer.backend.api.controller.order.request.SearchOrdersCondition;
-import com.farmer.backend.api.controller.order.response.ResponseOrdersAndPaymentDto;
-import com.farmer.backend.api.controller.order.response.ResponseOrdersDto;
+import com.farmer.backend.api.controller.admin.order.response.ResponseOrderListDto;
+import com.farmer.backend.api.controller.admin.orderproduct.response.ResponseOrderProductDto;
+import com.farmer.backend.api.controller.user.options.response.ResponseOptionDto;
+import com.farmer.backend.api.controller.user.order.request.SearchOrdersCondition;
+import com.farmer.backend.api.controller.user.order.response.ResponseOrdersAndPaymentDto;
+import com.farmer.backend.api.controller.user.order.response.ResponseOrdersDto;
+import com.farmer.backend.domain.orderproduct.QOrderProduct;
 import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,6 +20,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.farmer.backend.domain.member.QMember.member;
+import static com.farmer.backend.domain.orderproduct.QOrderProduct.orderProduct;
 import static com.farmer.backend.domain.orders.QOrders.orders;
 import static com.farmer.backend.domain.payment.QPayment.payment;
 
@@ -29,70 +34,43 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
     }
 
     @Override
-    public Page<ResponseOrdersDto> findOrderStatusList(Pageable pageable, SearchOrdersCondition searchCond, String sortOrderCond) {
-        List<ResponseOrdersDto> orderList = query
-                .select(Projections.constructor(ResponseOrdersDto.class,
+    public List<ResponseOrderListDto> findOrderList(SearchOrdersCondition searchCond) {
+        return query
+                .select(Projections.constructor(
+                        ResponseOrderListDto.class,
                         orders.id,
-                        orders.member.email,
-                        orders.orderStatus,
+                        orders.createdDate,
+                        orders.orderNumber,
+                        orders.member.nickname,
+                        Projections.list(
+                                Projections.constructor(
+                                        ResponseOrderProductDto.class,
+                                        orderProduct.product.name,
+                                        orderProduct.product.thumbnailImg,
+                                        Projections.list(
+                                                Projections.constructor(
+                                                        ResponseOptionDto.class,
+                                                        orderProduct.options.id,
+                                                        orderProduct.options.optionName,
+                                                        orderProduct.options.optionPrice
+                                                )
+                                        )
+                                )
+                        ),
                         orders.orderPrice,
-                        orders.payMethod,
                         orders.totalQuantity,
-                        orders.comment,
-                        orders.createdDate))
-                .from(orders)
-                .where(likeOrderNumber(searchCond.getOrderNumber()),
-                        likeEmail(searchCond.getEmail()),
-                        eqOrderStatus(sortOrderCond))
-                .join(orders.member, member)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(orders.id.desc())
-                .fetch();
-
-        Long count = query
-                .select(orders.count())
-                .from(orders)
-                .where(likeOrderNumber(searchCond.getOrderNumber()),
-                        likeEmail(searchCond.getEmail()),
-                        eqOrderStatus(sortOrderCond)
-                )
-                .fetchOne();
-
-        return new PageImpl<>(orderList, pageable, count);
-    }
-    @Override
-    public Page<ResponseOrdersDto> findOrderList(Pageable pageable, SearchOrdersCondition searchCond, String sortOrderCond) {
-        List<ResponseOrdersDto> orderList = query
-                .select(Projections.constructor(ResponseOrdersDto.class,
-                        orders.id,
-                        orders.member.email,
                         orders.orderStatus,
-                        orders.orderPrice,
-                        orders.payMethod,
-                        orders.totalQuantity,
-                        orders.comment,
-                        orders.createdDate))
+                        orders.payMethod
+                ))
                 .from(orders)
-                .where(likeOrderNumber(searchCond.getOrderNumber()),
-                        likeEmail(searchCond.getEmail()),
-                        orders.orderStatus.ne(OrderStatus.WAIT),
-                        orders.orderStatus.ne(OrderStatus.REFUND))
-                .join(orders.member, member)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(orders.id.desc())
-                .fetch();
-
-        Long count = query
-                .select(orders.count())
-                .from(orders)
-                .where(likeOrderNumber(searchCond.getOrderNumber()),
-                        likeEmail(searchCond.getEmail())
+                .join(orderProduct).on(orderProduct.orders.eq(orders))
+                .leftJoin(orderProduct.options)
+                .leftJoin(orders.member)
+                .where(
+                        likeOrderNumber(searchCond.getOrderNumber()), likeOrderName(searchCond.getOrderName())
                 )
-                .fetchOne();
-
-        return new PageImpl<>(orderList, pageable, count);
+                .orderBy(orders.createdDate.desc())
+                .fetch();
     }
 
     @Override
@@ -121,41 +99,12 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
         return fetch;
     }
 
-    @Override
-    public Page<ResponseOrdersDto> findAll(Pageable pageable, SearchOrdersCondition searchCond) {
-        List<ResponseOrdersDto> orderList = query
-                .select(Projections.constructor(ResponseOrdersDto.class,
-                        orders.id,
-                        orders.member.email,
-                        orders.orderStatus,
-                        orders.orderPrice,
-                        orders.payMethod,
-                        orders.totalQuantity,
-                        orders.comment,
-                        orders.createdDate))
-                .from(orders)
-                .where(likeOrderNumber(searchCond.getOrderNumber()),
-                        likeEmail(searchCond.getEmail())
-                )
-                .join(orders.member, member)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(orders.id.desc())
-                .fetch();
-
-        Long count = query
-                .select(orders.count())
-                .from(orders)
-                .where(likeOrderNumber(searchCond.getOrderNumber()),
-                        likeEmail(searchCond.getEmail())
-                )
-                .fetchOne();
-
-        return new PageImpl<>(orderList, pageable, count);
-    }
-
     private BooleanExpression likeOrderNumber(String orderNumber) {
         return orderNumber != null ? orders.orderNumber.contains(orderNumber) : null;
+    }
+
+    private BooleanExpression likeOrderName(String orderName) {
+        return orderName != null ? orders.member.nickname.contains(orderName) : null;
     }
 
 
@@ -167,19 +116,6 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
         return statusName != null ? orders.orderStatus.eq(OrderStatus.valueOf(statusName)) : null;
     }
 
-
-//    private BooleanBuilder eqOrderStatus(String statusName) {
-//        return nullSafeBuilder(() -> orders.orderStatus.eq(OrderStatus.valueOf(statusName)));
-//    }
-//
-//
-//    public static BooleanBuilder nullSafeBuilder(Supplier<BooleanExpression> f) {
-//        try {
-//            return new BooleanBuilder(f.get());
-//        } catch (IllegalArgumentException e) {
-//            return new BooleanBuilder();
-//        }
-//    }
 
 
 }

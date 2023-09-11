@@ -1,6 +1,6 @@
 package com.farmer.backend.api.service.news;
 
-import com.farmer.backend.api.controller.news.response.ResponseNewsDto;
+import com.farmer.backend.api.controller.user.news.response.ResponseNewsDto;
 import com.farmer.backend.domain.news.NewsRepository;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
@@ -8,9 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

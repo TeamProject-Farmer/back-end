@@ -1,9 +1,8 @@
 package com.farmer.backend.domain.search;
 
-import com.farmer.backend.api.controller.search.response.ResponseSearchProductDto;
+import com.farmer.backend.api.controller.user.search.response.ResponseSearchProductDto;
 import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.farmer.backend.domain.product.QProduct.product;
-import static com.farmer.backend.domain.product.productreviewstar.QProductReviewAverage.productReviewAverage;
 import static com.farmer.backend.domain.search.QSearch.search;
 
 @Repository

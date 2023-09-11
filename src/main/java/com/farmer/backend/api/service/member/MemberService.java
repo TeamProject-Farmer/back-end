@@ -1,15 +1,15 @@
 package com.farmer.backend.api.service.member;
 
-import com.farmer.backend.api.controller.member.request.RequestMemberDto;
-import com.farmer.backend.api.controller.member.request.RequestMemberProfileDto;
-import com.farmer.backend.api.controller.member.response.ResponseMemberDto;
-import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
-import com.farmer.backend.api.controller.join.EmailDto;
-import com.farmer.backend.api.controller.join.RequestJoinDto;
-import com.farmer.backend.api.controller.login.ResponseOAuthUserInfoDto;
-import com.farmer.backend.api.controller.member.response.ResponseMemberInfoDto;
-import com.farmer.backend.api.controller.member.response.ResponseMemberListDto;
-import com.farmer.backend.api.controller.member.response.ResponseMemberPoint;
+import com.farmer.backend.api.controller.user.member.request.RequestMemberDto;
+import com.farmer.backend.api.controller.user.member.request.RequestMemberProfileDto;
+import com.farmer.backend.api.controller.user.member.response.ResponseMemberDto;
+import com.farmer.backend.api.controller.user.member.request.SearchMemberCondition;
+import com.farmer.backend.api.controller.user.join.EmailDto;
+import com.farmer.backend.api.controller.user.join.RequestJoinDto;
+import com.farmer.backend.api.controller.user.login.ResponseOAuthUserInfoDto;
+import com.farmer.backend.api.controller.user.member.response.ResponseMemberInfoDto;
+import com.farmer.backend.api.controller.user.member.response.ResponseMemberListDto;
+import com.farmer.backend.api.controller.user.member.response.ResponseMemberPoint;
 import com.farmer.backend.api.service.membersCoupon.MembersCouponService;
 import com.farmer.backend.domain.member.*;
 import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;

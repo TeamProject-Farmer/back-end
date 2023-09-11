@@ -1,8 +1,7 @@
 package com.farmer.backend.api.controller.orderproduct;
 
-import com.farmer.backend.api.controller.orderproduct.request.RequestOrderProductStatusSearchDto;
-import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductDetailDto;
-import com.farmer.backend.api.controller.orderproduct.response.ResponseOrderProductDto;
+import com.farmer.backend.api.controller.user.orderproduct.OrderProductController;
+import com.farmer.backend.api.controller.user.orderproduct.response.ResponseOrderProductDto;
 import com.farmer.backend.api.service.member.MemberService;
 import com.farmer.backend.api.service.orderproduct.OrderProductService;
 import com.farmer.backend.config.WithMockCustomUser;
@@ -15,15 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Collection;
 import java.util.List;
 
 

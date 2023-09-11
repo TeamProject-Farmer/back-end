@@ -1,7 +1,7 @@
 package com.farmer.backend.domain.banner;
 
 
-import com.farmer.backend.api.controller.banner.response.ResponseBannerDtoList;
+import com.farmer.backend.api.controller.user.banner.response.ResponseBannerDtoList;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;

@@ -1,10 +1,10 @@
 package com.farmer.backend.api.service.product;
 
-import com.farmer.backend.api.controller.options.response.ResponseOptionDto;
-import com.farmer.backend.api.controller.product.response.ResponseProductDto;
-import com.farmer.backend.api.controller.product.response.ResponseProductDtoList;
-import com.farmer.backend.api.controller.product.response.ResponseShopBySizeProduct;
-import com.farmer.backend.api.controller.productcategory.response.ResponseCategoryDto;
+import com.farmer.backend.api.controller.user.options.response.ResponseOptionDto;
+import com.farmer.backend.api.controller.user.product.response.ResponseProductDto;
+import com.farmer.backend.api.controller.user.product.response.ResponseProductDtoList;
+import com.farmer.backend.api.controller.user.product.response.ResponseShopBySizeProduct;
+import com.farmer.backend.api.controller.user.productcategory.response.ResponseCategoryDto;
 import com.farmer.backend.domain.options.OptionRepository;
 import com.farmer.backend.domain.product.*;
 import com.farmer.backend.domain.product.productcategory.ProductCategoryRepository;
@@ -18,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

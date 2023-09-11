@@ -1,7 +1,7 @@
 package com.farmer.backend.domain.product;
 
 import com.farmer.backend.domain.BaseTimeEntity;
-import com.farmer.backend.api.controller.product.request.RequestProductDto;
+import com.farmer.backend.api.controller.user.product.request.RequestProductDto;
 import com.farmer.backend.domain.product.productcategory.ProductCategory;
 import com.sun.istack.NotNull;
 import lombok.*;
