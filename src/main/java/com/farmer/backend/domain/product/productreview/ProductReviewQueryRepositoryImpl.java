@@ -1,7 +1,7 @@
 package com.farmer.backend.domain.product.productreview;
-import com.farmer.backend.api.controller.review.request.RequestReviewStarDto;
-import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
-import com.farmer.backend.api.controller.review.response.ResponseProductReviewListDto;
+import com.farmer.backend.api.controller.user.review.request.RequestReviewStarDto;
+import com.farmer.backend.api.controller.user.review.response.ResponseBestReviewListDto;
+import com.farmer.backend.api.controller.user.review.response.ResponseProductReviewListDto;
 import com.farmer.backend.exception.CustomException;
 import com.farmer.backend.exception.ErrorCode;
 import com.querydsl.core.Tuple;

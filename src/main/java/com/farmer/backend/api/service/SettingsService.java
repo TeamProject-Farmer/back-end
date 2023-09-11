@@ -1,11 +1,11 @@
 package com.farmer.backend.api.service;
 
-import com.farmer.backend.api.controller.productcategory.request.RequestProductCategoryDto;
-import com.farmer.backend.api.controller.productcategory.response.ResponseProductCategoryListDto;
-import com.farmer.backend.api.controller.coupon.request.RequestCouponDetailDto;
-import com.farmer.backend.api.controller.coupon.request.RequestCouponDto;
-import com.farmer.backend.api.controller.coupon.response.ResponseCouponDetailDto;
-import com.farmer.backend.api.controller.coupon.response.ResponseCouponListDto;
+import com.farmer.backend.api.controller.user.productcategory.request.RequestProductCategoryDto;
+import com.farmer.backend.api.controller.user.productcategory.response.ResponseProductCategoryListDto;
+import com.farmer.backend.api.controller.user.coupon.request.RequestCouponDetailDto;
+import com.farmer.backend.api.controller.user.coupon.request.RequestCouponDto;
+import com.farmer.backend.api.controller.user.coupon.response.ResponseCouponDetailDto;
+import com.farmer.backend.api.controller.user.coupon.response.ResponseCouponListDto;
 import com.farmer.backend.domain.coupon.Coupon;
 import com.farmer.backend.domain.product.productcategory.ProductCategory;
 import com.farmer.backend.exception.CustomException;

@@ -1,8 +1,8 @@
 package com.farmer.backend.api.service.membersCoupon;
 
-import com.farmer.backend.api.controller.coupon.request.RequestMembersCouponDto;
-import com.farmer.backend.api.controller.coupon.response.ResponseMembersCouponDto;
-import com.farmer.backend.api.controller.coupon.response.ResponseUseCouponListDto;
+import com.farmer.backend.api.controller.user.coupon.request.RequestMembersCouponDto;
+import com.farmer.backend.api.controller.user.coupon.response.ResponseMembersCouponDto;
+import com.farmer.backend.api.controller.user.coupon.response.ResponseUseCouponListDto;
 import com.farmer.backend.domain.coupon.Coupon;
 import com.farmer.backend.domain.coupon.CouponRepository;
 import com.farmer.backend.domain.member.Member;

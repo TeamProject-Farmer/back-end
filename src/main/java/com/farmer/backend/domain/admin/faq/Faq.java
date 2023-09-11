@@ -1,8 +1,8 @@
 package com.farmer.backend.domain.admin.faq;
 
 import com.farmer.backend.domain.member.Member;
-import com.farmer.backend.api.controller.faq.request.RequestFaqDto;
-import com.farmer.backend.api.controller.faq.response.ResponseFaqDto;
+import com.farmer.backend.api.controller.user.faq.request.RequestFaqDto;
+import com.farmer.backend.api.controller.user.faq.response.ResponseFaqDto;
 import com.farmer.backend.domain.BaseTimeEntity;
 import com.farmer.backend.domain.admin.faq.faqcategory.FaqCategory;
 import com.sun.istack.NotNull;

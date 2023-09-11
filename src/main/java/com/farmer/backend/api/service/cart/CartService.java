@@ -1,10 +1,10 @@
 package com.farmer.backend.api.service.cart;
 
-import com.farmer.backend.api.controller.cart.request.RequestCartProductQuantityDto;
-import com.farmer.backend.api.controller.cart.request.RequestProductCartDto;
-import com.farmer.backend.api.controller.cart.response.ResponseCartProductListDto;
-import com.farmer.backend.api.controller.cart.response.ResponseCartProductQuantityDto;
-import com.farmer.backend.api.controller.cart.response.ResponseTotalPriceAndCountDto;
+import com.farmer.backend.api.controller.user.cart.request.RequestCartProductQuantityDto;
+import com.farmer.backend.api.controller.user.cart.request.RequestProductCartDto;
+import com.farmer.backend.api.controller.user.cart.response.ResponseCartProductListDto;
+import com.farmer.backend.api.controller.user.cart.response.ResponseCartProductQuantityDto;
+import com.farmer.backend.api.controller.user.cart.response.ResponseTotalPriceAndCountDto;
 import com.farmer.backend.domain.cart.Cart;
 import com.farmer.backend.domain.cart.CartQueryRepository;
 import com.farmer.backend.domain.cart.CartRepository;

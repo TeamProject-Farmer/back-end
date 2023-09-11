@@ -1,8 +1,6 @@
 package com.farmer.backend.domain.product.productreviewstar;
 
-import com.farmer.backend.api.controller.review.request.RequestReviewStarDto;
-import com.farmer.backend.api.controller.review.response.ResponseReviewStarDto;
-import com.farmer.backend.domain.member.Member;
+import com.farmer.backend.api.controller.user.review.request.RequestReviewStarDto;
 import com.farmer.backend.domain.product.Product;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;

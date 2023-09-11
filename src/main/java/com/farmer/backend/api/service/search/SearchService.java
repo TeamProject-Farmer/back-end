@@ -1,7 +1,7 @@
 package com.farmer.backend.api.service.search;
 
-import com.farmer.backend.api.controller.search.request.RequestSearchDto;
-import com.farmer.backend.api.controller.search.response.ResponseSearchProductDto;
+import com.farmer.backend.api.controller.user.search.request.RequestSearchDto;
+import com.farmer.backend.api.controller.user.search.response.ResponseSearchProductDto;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;
 import com.farmer.backend.domain.search.Search;

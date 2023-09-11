@@ -1,30 +1,30 @@
 package com.farmer.backend.api.controller;
 
-import com.farmer.backend.api.controller.options.request.RequestOptionDto;
-import com.farmer.backend.api.controller.order.request.SearchOrdersCondition;
-import com.farmer.backend.api.controller.order.response.ResponseOrdersDto;
-import com.farmer.backend.api.controller.product.request.RequestProductDto;
-import com.farmer.backend.api.controller.product.response.ResponseProductDto;
+import com.farmer.backend.api.controller.user.options.request.RequestOptionDto;
+import com.farmer.backend.api.controller.user.order.request.SearchOrdersCondition;
+import com.farmer.backend.api.controller.user.order.response.ResponseOrdersDto;
+import com.farmer.backend.api.controller.user.product.request.RequestProductDto;
+import com.farmer.backend.api.controller.user.product.response.ResponseProductDto;
 import com.farmer.backend.config.ApiDocumentResponse;
-import com.farmer.backend.api.controller.faq.request.RequestFaqDto;
-import com.farmer.backend.api.controller.faq.response.ResponseFaqDto;
-import com.farmer.backend.api.controller.faq.request.SearchFaqCondition;
-import com.farmer.backend.api.controller.notice.request.RequestNoticeDto;
-import com.farmer.backend.api.controller.notice.response.ResponseNoticeDto;
-import com.farmer.backend.api.controller.notice.request.SearchNoticeCondition;
-import com.farmer.backend.api.controller.qna.request.RequestBoardQnADto;
-import com.farmer.backend.api.controller.qna.response.ResponseBoardQnADto;
-import com.farmer.backend.api.controller.qna.request.SearchQnaCondition;
-import com.farmer.backend.api.controller.review.response.ResponseBoardReviewDto;
-import com.farmer.backend.api.controller.review.request.SearchReviewCondition;
-import com.farmer.backend.api.controller.member.request.RequestMemberDto;
-import com.farmer.backend.api.controller.member.response.ResponseMemberDto;
-import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
-import com.farmer.backend.api.controller.productcategory.request.RequestProductCategoryDto;
-import com.farmer.backend.api.controller.productcategory.response.ResponseProductCategoryListDto;
-import com.farmer.backend.api.controller.coupon.request.RequestCouponDetailDto;
-import com.farmer.backend.api.controller.coupon.request.RequestCouponDto;
-import com.farmer.backend.api.controller.coupon.response.ResponseCouponDetailDto;
+import com.farmer.backend.api.controller.user.faq.request.RequestFaqDto;
+import com.farmer.backend.api.controller.user.faq.response.ResponseFaqDto;
+import com.farmer.backend.api.controller.user.faq.request.SearchFaqCondition;
+import com.farmer.backend.api.controller.user.notice.request.RequestNoticeDto;
+import com.farmer.backend.api.controller.user.notice.response.ResponseNoticeDto;
+import com.farmer.backend.api.controller.user.notice.request.SearchNoticeCondition;
+import com.farmer.backend.api.controller.user.qna.request.RequestBoardQnADto;
+import com.farmer.backend.api.controller.user.qna.response.ResponseBoardQnADto;
+import com.farmer.backend.api.controller.user.qna.request.SearchQnaCondition;
+import com.farmer.backend.api.controller.user.review.response.ResponseBoardReviewDto;
+import com.farmer.backend.api.controller.user.review.request.SearchReviewCondition;
+import com.farmer.backend.api.controller.user.member.request.RequestMemberDto;
+import com.farmer.backend.api.controller.user.member.response.ResponseMemberDto;
+import com.farmer.backend.api.controller.user.member.request.SearchMemberCondition;
+import com.farmer.backend.api.controller.user.productcategory.request.RequestProductCategoryDto;
+import com.farmer.backend.api.controller.user.productcategory.response.ResponseProductCategoryListDto;
+import com.farmer.backend.api.controller.user.coupon.request.RequestCouponDetailDto;
+import com.farmer.backend.api.controller.user.coupon.request.RequestCouponDto;
+import com.farmer.backend.api.controller.user.coupon.response.ResponseCouponDetailDto;
 import com.farmer.backend.domain.product.productcategory.ProductCategory;
 import com.farmer.backend.paging.PageRequest;
 import com.farmer.backend.api.service.member.MemberService;
@@ -276,17 +276,6 @@ public class AdminApiController {
     @GetMapping("/product/search")
     public Page<ResponseProductDto> searchProductList(PageRequest pageRequest, String productName) {
         return productService.searchActionProductList(pageRequest.of(), productName);
-    }
-
-    /**
-     * 주문 관리 페이지
-     * (검색, 정렬)
-     */
-    @ApiDocumentResponse
-    @Operation(summary = "주문 전체 리스트", description = "주문 전체 리스트를 출력합니다.")
-    @GetMapping("/order-list")
-    public Page<ResponseOrdersDto> orderList(PageRequest pageRequest, SearchOrdersCondition searchCond, SortOrderCondition sortCond) {
-        return orderService.orderList(pageRequest.of(), searchCond, sortCond.getFieldName());
     }
 
     /**

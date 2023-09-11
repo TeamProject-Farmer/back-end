@@ -5,10 +5,10 @@ import com.farmer.backend.domain.admin.qna.Qna;
 import com.farmer.backend.domain.admin.faq.Faq;
 import com.farmer.backend.domain.orderproduct.OrderProduct;
 import com.farmer.backend.domain.product.productreview.ProductReviews;
-import com.farmer.backend.api.controller.faq.request.SearchFaqCondition;
-import com.farmer.backend.api.controller.notice.request.SearchNoticeCondition;
-import com.farmer.backend.api.controller.qna.request.SearchQnaCondition;
-import com.farmer.backend.api.controller.review.request.SearchReviewCondition;
+import com.farmer.backend.api.controller.user.faq.request.SearchFaqCondition;
+import com.farmer.backend.api.controller.user.notice.request.SearchNoticeCondition;
+import com.farmer.backend.api.controller.user.qna.request.SearchQnaCondition;
+import com.farmer.backend.api.controller.user.review.request.SearchReviewCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
