@@ -1,8 +1,8 @@
 package com.farmer.backend.domain.member;
 
-import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
-import com.farmer.backend.api.controller.member.response.ResponseMemberInfoDto;
-import com.farmer.backend.api.controller.member.response.ResponseMemberListDto;
+import com.farmer.backend.api.controller.user.member.request.SearchMemberCondition;
+import com.farmer.backend.api.controller.user.member.response.ResponseMemberInfoDto;
+import com.farmer.backend.api.controller.user.member.response.ResponseMemberListDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

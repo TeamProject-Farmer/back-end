@@ -1,7 +1,7 @@
 package com.farmer.backend.domain.coupon;
 
 import com.farmer.backend.domain.member.Member;
-import com.farmer.backend.api.controller.coupon.request.RequestCouponDetailDto;
+import com.farmer.backend.api.controller.user.coupon.request.RequestCouponDetailDto;
 import com.farmer.backend.domain.BaseTimeEntity;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;

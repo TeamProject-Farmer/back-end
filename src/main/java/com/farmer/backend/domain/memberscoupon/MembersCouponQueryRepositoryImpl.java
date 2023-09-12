@@ -1,7 +1,7 @@
 package com.farmer.backend.domain.memberscoupon;
 
-import com.farmer.backend.api.controller.coupon.response.ResponseMembersCouponDto;
-import com.farmer.backend.api.controller.coupon.response.ResponseUseCouponListDto;
+import com.farmer.backend.api.controller.user.coupon.response.ResponseMembersCouponDto;
+import com.farmer.backend.api.controller.user.coupon.response.ResponseUseCouponListDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;

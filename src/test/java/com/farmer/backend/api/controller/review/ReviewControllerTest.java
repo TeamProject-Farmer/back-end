@@ -1,6 +1,7 @@
 package com.farmer.backend.api.controller.review;
 
-import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
+import com.farmer.backend.api.controller.user.review.ReviewController;
+import com.farmer.backend.api.controller.user.review.response.ResponseBestReviewListDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.farmer.backend.login.oauth.userInfo;
-import com.farmer.backend.api.controller.login.RequestOAuthUserInfoDto;
-import com.farmer.backend.api.controller.login.ResponseOAuthUserInfoDto;
+import com.farmer.backend.api.controller.user.login.RequestOAuthUserInfoDto;
+import com.farmer.backend.api.controller.user.login.ResponseOAuthUserInfoDto;
 import com.farmer.backend.domain.member.Member;
 
 

@@ -1,8 +1,8 @@
 package com.farmer.backend.api.service.qna;
 
-import com.farmer.backend.api.controller.qna.request.RequestQnAWriteDto;
-import com.farmer.backend.api.controller.qna.response.ResponseProductQnADto;
-import com.farmer.backend.api.controller.qna.response.ResponseQnADetailDto;
+import com.farmer.backend.api.controller.user.qna.request.RequestQnAWriteDto;
+import com.farmer.backend.api.controller.user.qna.response.ResponseProductQnADto;
+import com.farmer.backend.api.controller.user.qna.response.ResponseQnADetailDto;
 import com.farmer.backend.domain.admin.board.QnARepository;
 import com.farmer.backend.domain.admin.qna.Qna;
 import com.farmer.backend.domain.admin.qna.SecretQuestion;

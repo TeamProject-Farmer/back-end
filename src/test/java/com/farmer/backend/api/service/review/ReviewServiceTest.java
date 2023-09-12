@@ -1,10 +1,9 @@
 package com.farmer.backend.api.service.review;
 
-import com.farmer.backend.api.controller.review.request.RequestReviewStarDto;
-import com.farmer.backend.api.controller.review.request.SearchProductReviewCondition;
-import com.farmer.backend.api.controller.review.response.ResponseBestReviewListDto;
-import com.farmer.backend.api.controller.review.response.ResponseProductReviewListDto;
-import com.farmer.backend.api.controller.review.response.ResponseReviewStarDto;
+import com.farmer.backend.api.controller.user.review.request.RequestReviewStarDto;
+import com.farmer.backend.api.controller.user.review.response.ResponseBestReviewListDto;
+import com.farmer.backend.api.controller.user.review.response.ResponseProductReviewListDto;
+import com.farmer.backend.api.controller.user.review.response.ResponseReviewStarDto;
 import com.farmer.backend.domain.product.Product;
 import com.farmer.backend.domain.product.ProductRepository;
 import com.farmer.backend.domain.product.productreview.ProductReviewQueryRepositoryImpl;

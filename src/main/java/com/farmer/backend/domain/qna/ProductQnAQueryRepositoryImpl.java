@@ -1,6 +1,6 @@
 package com.farmer.backend.domain.qna;
 
-import com.farmer.backend.api.controller.qna.response.ResponseProductQnADto;
+import com.farmer.backend.api.controller.user.qna.response.ResponseProductQnADto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;

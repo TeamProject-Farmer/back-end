@@ -1,7 +1,7 @@
 package com.farmer.backend.domain.member;
-import com.farmer.backend.api.controller.member.request.SearchMemberCondition;
-import com.farmer.backend.api.controller.member.response.ResponseMemberInfoDto;
-import com.farmer.backend.api.controller.member.response.ResponseMemberListDto;
+import com.farmer.backend.api.controller.user.member.request.SearchMemberCondition;
+import com.farmer.backend.api.controller.user.member.response.ResponseMemberInfoDto;
+import com.farmer.backend.api.controller.user.member.response.ResponseMemberListDto;
 import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
