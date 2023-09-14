@@ -125,9 +125,12 @@ public class KakaoSocialLogin implements OAuthLogin {
             accessToken = jwtService.createAccessToken(email);
             refreshToken = jwtService.createRefreshToken();
 
+
             if(memberRepository.findBySocialId(socialId).isPresent()){
                 kakaoUser=memberRepository.findBySocialId(socialId);
                 kakaoUser.get().updateToken(refreshToken,accessToken);
+                memberRepository.flush();
+
             }
             else{
                 RequestOAuthUserInfoDto userInfo = new RequestOAuthUserInfoDto(socialId,socialType,email,nickname,accessToken,refreshToken);

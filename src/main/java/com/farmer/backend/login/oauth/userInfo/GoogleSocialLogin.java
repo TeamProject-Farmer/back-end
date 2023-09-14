@@ -128,6 +128,7 @@ public class GoogleSocialLogin implements OAuthLogin {
             if(memberRepository.findBySocialId(socialId).isPresent()){
                 googleUser=memberRepository.findBySocialId(socialId);
                 googleUser.get().updateToken(refreshToken,accessToken);
+                memberRepository.flush();
             }
             else{
                 RequestOAuthUserInfoDto userInfo = new RequestOAuthUserInfoDto(socialId,socialType,email,nickname,accessToken,refreshToken);

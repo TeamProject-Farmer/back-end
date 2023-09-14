@@ -130,6 +130,8 @@ public class NaverSocialLogin implements OAuthLogin{
             if(memberRepository.findBySocialId(socialId).isPresent()){
                 naverUser=memberRepository.findBySocialId(socialId);
                 naverUser.get().updateToken(refreshToken,accessToken);
+                memberRepository.flush();
+
             }
             else{
                 RequestOAuthUserInfoDto userInfo = new RequestOAuthUserInfoDto(socialId,socialType,email,nickname,accessToken,refreshToken);
