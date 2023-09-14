@@ -2,6 +2,7 @@ package com.farmer.backend.login.oauth.userInfo;
 
 import com.farmer.backend.api.controller.user.login.RequestOAuthUserInfoDto;
 import com.farmer.backend.api.controller.user.login.ResponseOAuthUserInfoDto;
+import com.farmer.backend.api.service.membersCoupon.MembersCouponService;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.SocialType;
 import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
@@ -32,6 +33,7 @@ import java.util.Optional;
 public class NaverSocialLogin implements OAuthLogin{
 
     private final JwtService jwtService;
+    private final MembersCouponService membersCouponService;
     private final MemberRepository memberRepository;
     private final MemberCouponRepository memberCouponRepository;
 
@@ -128,6 +130,8 @@ public class NaverSocialLogin implements OAuthLogin{
             if(memberRepository.findBySocialId(socialId).isPresent()){
                 naverUser=memberRepository.findBySocialId(socialId);
                 naverUser.get().updateToken(refreshToken,accessToken);
+                memberRepository.flush();
+
             }
             else{
                 RequestOAuthUserInfoDto userInfo = new RequestOAuthUserInfoDto(socialId,socialType,email,nickname,accessToken,refreshToken);
@@ -153,8 +157,11 @@ public class NaverSocialLogin implements OAuthLogin{
 
         Member member = userInfo.toEntity(userInfo);
 
+
         if (!memberRepository.findBySocialId(member.getSocialId()).isPresent()) {
             memberRepository.save(member);
+            membersCouponService.joinCoupon(member);
+
         }
         return member;
     }
