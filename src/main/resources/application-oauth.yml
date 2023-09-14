@@ -6,7 +6,7 @@ spring:
           kakao:
             client-id: a75882f783c2d87ec3f798d330ffb7f2
             client-secret: 0EAIYvVjbeqd7Zy70TWJNf5z3b9hmsNV
-            redirect-uri: http://localhost:3000/login/kakao
+            redirect-uri: https://front-end-farmer-shop.vercel.app/login/kakao
             client-authentication-method: POST
             authorization-grant-type: authorization_code
             scope: account_email, profile_nickname
