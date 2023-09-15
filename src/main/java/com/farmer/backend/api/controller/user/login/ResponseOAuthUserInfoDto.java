@@ -14,6 +14,7 @@ import static org.eclipse.jdt.core.compiler.CharOperation.lastIndexOf;
 public class ResponseOAuthUserInfoDto {
 
     private String socialId;
+    private SocialType socialType;
     private String email;
     private String nickname;
     private Long point;
@@ -35,6 +36,7 @@ public class ResponseOAuthUserInfoDto {
                 .cumulativeAmount(member.get().getCumulativeAmount())
                 .accessToken(member.get().getAccessToken())
                 .refreshToken(member.get().getRefreshToken())
+                .socialType(member.get().getSocialType())
                 .socialId(member.get().getSocialId())
                 .build();
     }
