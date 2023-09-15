@@ -6,7 +6,7 @@ spring:
           kakao:
             client-id: a75882f783c2d87ec3f798d330ffb7f2
             client-secret: 0EAIYvVjbeqd7Zy70TWJNf5z3b9hmsNV
-            redirect-uri: https://front-end-farmer-shop.vercel.app/login/kakao
+            redirect-uri: https://farmer-clone.vercel.app/login/kakao
             client-authentication-method: POST
             authorization-grant-type: authorization_code
             scope: account_email, profile_nickname
@@ -15,7 +15,7 @@ spring:
           naver:
             client-id: HWQ9BzAAb1xWKWm0U6aV
             client-secret: CDhbwZpz57
-            redirect-uri: https://front-end-farmer-shop.vercel.app/login/naver
+            redirect-uri: https://farmer-clone.vercel.app/login/naver
             authorization-grant-type: authorization_code
             scope: email, name
             client-name: Naver
@@ -23,7 +23,7 @@ spring:
           google:
             client-id: 555482867273-rf3vnh1tqf9omcab07dfamq48elo5qho.apps.googleusercontent.com
             client-secret: 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
-            redirect-uri: https://front-end-farmer-shop.vercel.app/login/google
+            redirect-uri: https://farmer-clone.vercel.app/login/google
             scope: profile,email
 
         provider:
