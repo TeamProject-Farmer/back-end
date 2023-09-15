@@ -52,106 +52,6 @@ public class MemberService {
     private final NaverSocialLogin naverSocialLogin;
     private final MembersCouponService membersCouponService;
 
-    /**
-     * 전체 회원 리스트 (admin)
-     * @param member 관리자
-     * @param sortOrderCond 정렬순서
-     * @param searchMemberCond 검색정보
-     */
-    @Transactional(readOnly = true)
-    public List<ResponseMemberListDto> memberList(Member member, String sortOrderCond, SearchMemberCondition searchMemberCond) {
-
-        if(!member.getRole().equals(UserRole.ADMIN)){
-            throw new CustomException(ErrorCode.ADMIN_ACCESS);
-        }
-
-        return memberQueryRepositoryImpl.memberList(sortOrderCond,searchMemberCond);
-    }
-
-    /**
-     * 특정 회원 정보 조회 (admin)
-     * @param member 관리자
-     * @param memberId 특정 회원 ID
-     */
-    @Transactional
-    public ResponseMemberInfoDto memberInfo(Member member, Long memberId) {
-
-        if(!member.getRole().equals(UserRole.ADMIN)){
-            throw new CustomException(ErrorCode.ADMIN_ACCESS);
-        }
-
-        return memberQueryRepositoryImpl.memberInfo(memberId);
-    }
-
-
-    /**
-     * 회원 수정
-     * @param memberDto 회원 데이터
-     * @return
-     */
-    @Transactional
-    public Long updateMember(RequestMemberDto memberDto) {
-        memberRepository.findById(memberDto.getId()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)).updateMember(memberDto);
-        return memberDto.getId();
-    }
-
-    /**
-     * 회원 검색 결과 리스트
-     * @param pageable 페이징
-     * @param searchMemberCondition 검색정보
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public Page<ResponseMemberDto> searchMemberList(Pageable pageable, SearchMemberCondition searchMemberCondition) {
-        Page<Member> memberList = memberQueryRepositoryImpl.searchMemberList(pageable, searchMemberCondition);
-        return new PageImpl<>(memberList.stream().map(member -> ResponseMemberDto.getMember(member)).collect(Collectors.toList()));
-    }
-
-
-    /**
-     * 회원 계정 상태 변경 - 삭제 (admin)
-     * @param member 관리자
-     * @param memberId 회원 일련번호 배열
-     * @return
-     */
-    @Transactional
-    public ResponseEntity<String> deleteMember(Member member, Long memberId) {
-
-        if(!member.getRole().equals(UserRole.ADMIN)){
-            throw new CustomException(ErrorCode.ADMIN_ACCESS);
-        }
-
-        memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-        memberQueryRepositoryImpl.deleteMember(memberId);
-
-        return new ResponseEntity<>("OK",HttpStatus.OK);
-    }
-
-    /**
-     * 관리자 권한 계정 리스트
-     * @param pageable 페이징
-     * @param sortOrderCond 정렬순서
-     * @param searchMemberCondition 검색정보
-     * 검색 후 정렬순서를 변경 할 수 있으므로 검색정보도 파라미터 요청
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public Page<ResponseMemberDto> managerList(Pageable pageable, String sortOrderCond, SearchMemberCondition searchMemberCondition) {
-        return memberQueryRepositoryImpl.getManagerList(pageable, sortOrderCond, searchMemberCondition).map(Member::memberList);
-    }
-
-    /**
-     * 관리자 권한 계정 검색 리스트
-     * @param pageable 페이징
-     * @param searchMemberCondition 검색정보
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public Page<ResponseMemberDto> searchManagerList(Pageable pageable, SearchMemberCondition searchMemberCondition) {
-        Page<Member> memberList = memberQueryRepositoryImpl.searchManagerList(pageable, searchMemberCondition);
-        return new PageImpl<>(memberList.stream().map(member -> ResponseMemberDto.getMember(member)).collect(Collectors.toList()));
-    }
-
 
     /**
      * 이메일 인증 시도한 이메일 저장
@@ -293,6 +193,111 @@ public class MemberService {
     public ResponseMemberPoint getPoint(String memberEmail) {
         Long point = memberRepository.findByEmail(memberEmail).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)).getPoint();
         return new ResponseMemberPoint(point);
+    }
+
+    /**
+     * =========================================================================================================
+     * Admin logic
+     */
+
+    /**
+     * 전체 회원 리스트 (admin)
+     * @param member 관리자
+     * @param sortOrderCond 정렬순서
+     * @param searchMemberCond 검색정보
+     */
+    @Transactional(readOnly = true)
+    public List<ResponseMemberListDto> memberList(Member member, String sortOrderCond, SearchMemberCondition searchMemberCond) {
+
+        if(!member.getRole().equals(UserRole.ADMIN)){
+            throw new CustomException(ErrorCode.ADMIN_ACCESS);
+        }
+
+        return memberQueryRepositoryImpl.memberList(sortOrderCond,searchMemberCond);
+    }
+
+    /**
+     * 특정 회원 정보 조회 (admin)
+     * @param member 관리자
+     * @param memberId 특정 회원 ID
+     */
+    @Transactional
+    public ResponseMemberInfoDto memberInfo(Member member, Long memberId) {
+
+        if(!member.getRole().equals(UserRole.ADMIN)){
+            throw new CustomException(ErrorCode.ADMIN_ACCESS);
+        }
+
+        return memberQueryRepositoryImpl.memberInfo(memberId);
+    }
+
+
+    /**
+     * 회원 수정
+     * @param memberDto 회원 데이터
+     * @return
+     */
+    @Transactional
+    public Long updateMember(RequestMemberDto memberDto) {
+        memberRepository.findById(memberDto.getId()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)).updateMember(memberDto);
+        return memberDto.getId();
+    }
+
+    /**
+     * 회원 검색 결과 리스트
+     * @param pageable 페이징
+     * @param searchMemberCondition 검색정보
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Page<ResponseMemberDto> searchMemberList(Pageable pageable, SearchMemberCondition searchMemberCondition) {
+        Page<Member> memberList = memberQueryRepositoryImpl.searchMemberList(pageable, searchMemberCondition);
+        return new PageImpl<>(memberList.stream().map(member -> ResponseMemberDto.getMember(member)).collect(Collectors.toList()));
+    }
+
+
+    /**
+     * 회원 계정 상태 변경 - 삭제 (admin)
+     * @param member 관리자
+     * @param memberId 회원 일련번호 배열
+     * @return
+     */
+    @Transactional
+    public ResponseEntity<String> deleteMember(Member member, Long memberId) {
+
+        if(!member.getRole().equals(UserRole.ADMIN)){
+            throw new CustomException(ErrorCode.ADMIN_ACCESS);
+        }
+
+        memberRepository.findById(memberId).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        memberQueryRepositoryImpl.deleteMember(memberId);
+
+        return new ResponseEntity<>("OK",HttpStatus.OK);
+    }
+
+    /**
+     * 관리자 권한 계정 리스트
+     * @param pageable 페이징
+     * @param sortOrderCond 정렬순서
+     * @param searchMemberCondition 검색정보
+     * 검색 후 정렬순서를 변경 할 수 있으므로 검색정보도 파라미터 요청
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Page<ResponseMemberDto> managerList(Pageable pageable, String sortOrderCond, SearchMemberCondition searchMemberCondition) {
+        return memberQueryRepositoryImpl.getManagerList(pageable, sortOrderCond, searchMemberCondition).map(Member::memberList);
+    }
+
+    /**
+     * 관리자 권한 계정 검색 리스트
+     * @param pageable 페이징
+     * @param searchMemberCondition 검색정보
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Page<ResponseMemberDto> searchManagerList(Pageable pageable, SearchMemberCondition searchMemberCondition) {
+        Page<Member> memberList = memberQueryRepositoryImpl.searchManagerList(pageable, searchMemberCondition);
+        return new PageImpl<>(memberList.stream().map(member -> ResponseMemberDto.getMember(member)).collect(Collectors.toList()));
     }
 
 

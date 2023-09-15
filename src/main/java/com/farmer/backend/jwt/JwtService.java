@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.farmer.backend.api.controller.user.login.ResponseLoginMemberDto;
+import com.farmer.backend.api.controller.user.member.response.ResponseMemberTokenDto;
 import com.farmer.backend.domain.member.Member;
 import com.farmer.backend.domain.member.MemberRepository;
 import com.farmer.backend.domain.memberscoupon.MemberCouponRepository;
@@ -93,7 +94,7 @@ public class JwtService {
         response.setStatus(SC_OK);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        ResponseLoginMemberDto loginMemberDto = ResponseLoginMemberDto.getLoginMember(member,couponCount);
+        ResponseMemberTokenDto loginMemberDto = new ResponseMemberTokenDto(accessToken,refreshToken);
 
         String res = objectMapper.writeValueAsString(loginMemberDto);
         response.getWriter().write(res);
