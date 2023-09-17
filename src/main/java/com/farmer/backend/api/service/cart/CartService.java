@@ -47,7 +47,15 @@ public class CartService {
             productCount++;
             findCart.get().cartProductQuantityUpdate(productCount);
         } else {
-            cartRepository.save(productCartDto.toEntity(findMember));
+            if (productCartDto.getOption() == null) {
+                cartRepository.save(Cart.builder()
+                                .product(productCartDto.getProduct())
+                                .member(findMember)
+                                .count(productCartDto.getCount())
+                                .build());
+            } else {
+                cartRepository.save(productCartDto.toEntity(findMember));
+            }
         }
     }
 
