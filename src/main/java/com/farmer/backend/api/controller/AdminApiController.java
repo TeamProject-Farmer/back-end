@@ -278,16 +278,6 @@ public class AdminApiController {
         return productService.searchActionProductList(pageRequest.of(), productName);
     }
 
-    /**
-     * 주문 관리 페이지(주문 단건 조회)
-     */
-    @ApiDocumentResponse
-    @Operation(summary = "주문 단건 조회", description = "주문 한건을 조회합니다")
-    @GetMapping("/order/{orderId}")
-    public List<Object> orderInfo(@PathVariable Long orderId) {
-        return orderService.orderInfo(orderId);
-    }
-
     @ApiDocumentResponse
     @Operation(summary = "주문 상태 변경", description = "주문 한 건 상태를 변경합니다.")
     @PostMapping("/order-update/{orderId}")
