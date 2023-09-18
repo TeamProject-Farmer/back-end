@@ -1,11 +1,14 @@
 package com.farmer.backend.domain.orders;
 
+import com.farmer.backend.api.controller.admin.order.response.ResponseOrderDetailDto;
 import com.farmer.backend.api.controller.admin.order.response.ResponseOrderListDto;
 import com.farmer.backend.api.controller.admin.orderproduct.response.ResponseOrderProductDto;
 import com.farmer.backend.api.controller.user.options.response.ResponseOptionDto;
 import com.farmer.backend.api.controller.user.order.request.SearchOrdersCondition;
 import com.farmer.backend.api.controller.user.order.response.ResponseOrdersAndPaymentDto;
 import com.farmer.backend.api.controller.user.order.response.ResponseOrdersDto;
+import com.farmer.backend.domain.delivery.QDelivery;
+import com.farmer.backend.domain.deliveryaddress.QDeliveryAddress;
 import com.farmer.backend.domain.orderproduct.QOrderProduct;
 import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -19,6 +22,8 @@ import javax.persistence.EntityManager;
 
 import java.util.List;
 
+import static com.farmer.backend.domain.delivery.QDelivery.delivery;
+import static com.farmer.backend.domain.deliveryaddress.QDeliveryAddress.deliveryAddress;
 import static com.farmer.backend.domain.member.QMember.member;
 import static com.farmer.backend.domain.orderproduct.QOrderProduct.orderProduct;
 import static com.farmer.backend.domain.orders.QOrders.orders;
@@ -97,6 +102,24 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                 .where(orders.id.eq(orderId))
                 .fetch();
         return fetch;
+    }
+
+    @Override
+    public ResponseOrderDetailDto findByOrderDetail(Long orderId) {
+        return query
+                .select(Projections.constructor(
+                        ResponseOrderDetailDto.class,
+                        orders.orderNumber,
+                        orders.createdDate,
+                        orders.member.nickname,
+                        deliveryAddress.hp,
+                        orders.delivery.address,
+                        orders.member.email
+                ))
+                .from(orders)
+                .leftJoin(deliveryAddress).on(deliveryAddress.member.eq(orders.member))
+                .where(orders.id.eq(orderId))
+                .fetchOne();
     }
 
     private BooleanExpression likeOrderNumber(String orderNumber) {
