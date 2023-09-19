@@ -44,8 +44,7 @@ public class CartService {
         Optional<Cart> findCart = cartRepository.findByProductAndMember(productCartDto.getProduct(), findMember);
         if (!findCart.isEmpty()) {
             Integer productCount = findCart.get().getCount();
-            productCount++;
-            findCart.get().cartProductQuantityUpdate(productCount);
+            findCart.get().cartProductQuantityUpdate(productCount + productCartDto.getCount());
         } else {
             if (productCartDto.getOption() == null) {
                 cartRepository.save(Cart.builder()
