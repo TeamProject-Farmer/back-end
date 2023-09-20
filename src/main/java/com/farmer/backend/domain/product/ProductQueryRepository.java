@@ -1,6 +1,7 @@
 package com.farmer.backend.domain.product;
 
 import com.farmer.backend.api.controller.user.product.response.ResponseProductDtoList;
+import com.farmer.backend.api.controller.user.product.response.ResponseReviewAndQnaDto;
 import com.farmer.backend.api.controller.user.product.response.ResponseShopBySizeProduct;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +20,6 @@ public interface ProductQueryRepository {
     ResponseShopBySizeProduct findByShopBySizeProductOne(ProductSize size);
 
     Page<ResponseProductDtoList> findByShopBySizeProductList(ProductSize size, Pageable pageable, ProductOrderCondition orderCondition);
+
+    ResponseReviewAndQnaDto reviewAndQnaInfo(Long productId,Double reviewAverage);
 }
