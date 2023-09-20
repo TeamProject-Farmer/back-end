@@ -38,7 +38,7 @@ public class ResponseOrderCompleteDto {
         return ResponseOrderCompleteDto.builder()
                 .name(memberInfo.getName())
                 .phoneNumber(memberInfo.getHp())
-                .address(memberInfo.getAddress() + " " + memberInfo.getAddressDetail() + " " + memberInfo.getZipcode())
+                .address(findOrders.getDelivery().getAddress())
                 .paymentPrice(findOrders.getOrderPrice())
                 .orderedDate(findOrders.getCreatedDate())
                 .orderNumber(findOrders.getOrderNumber())
