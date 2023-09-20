@@ -1,7 +1,9 @@
 package com.farmer.backend.domain.product;
 
 import com.farmer.backend.api.controller.user.product.response.ResponseProductDtoList;
+import com.farmer.backend.api.controller.user.product.response.ResponseReviewAndQnaDto;
 import com.farmer.backend.api.controller.user.product.response.ResponseShopBySizeProduct;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -15,11 +17,15 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static com.farmer.backend.domain.admin.qna.QQna.qna;
 import static com.farmer.backend.domain.product.QProduct.product;
 import static com.farmer.backend.domain.product.productcategory.QProductCategory.productCategory;
+import static com.farmer.backend.domain.product.productreview.QProductReviews.productReviews;
 
 
 @Repository
@@ -156,6 +162,30 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
         return new PageImpl<>(productList, pageable, count);
     }
 
+    @Override
+    public ResponseReviewAndQnaDto reviewAndQnaInfo(Long productId, Double reviewAverage){
+
+        System.out.println(reviewAverage);
+
+        Long reviewCount=query
+                .select(productReviews.count())
+                .from(productReviews)
+                .where(productReviews.orderProduct.product.id.eq(productId))
+                .fetchOne();
+
+        System.out.println(reviewCount);
+
+        Long qnaCount=query
+                .select(qna.count())
+                .from(qna)
+                .where(qna.product.id.eq(productId))
+                .fetchOne();
+
+        System.out.println(qnaCount);
+
+        return new ResponseReviewAndQnaDto(productId,reviewCount, qnaCount,reviewAverage);
+
+    }
     private OrderSpecifier<?> productOrderCondition(ProductOrderCondition orderCondition) {
         Order order = Order.DESC;
 

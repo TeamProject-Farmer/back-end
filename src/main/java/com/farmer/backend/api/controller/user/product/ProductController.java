@@ -2,6 +2,7 @@ package com.farmer.backend.api.controller.user.product;
 
 import com.farmer.backend.api.controller.user.product.response.ResponseProductDto;
 import com.farmer.backend.api.controller.user.product.response.ResponseProductDtoList;
+import com.farmer.backend.api.controller.user.product.response.ResponseReviewAndQnaDto;
 import com.farmer.backend.api.controller.user.product.response.ResponseShopBySizeProduct;
 import com.farmer.backend.api.service.product.ProductService;
 import com.farmer.backend.config.ApiDocumentResponse;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import retrofit2.http.Path;
 
 import java.util.List;
 
@@ -99,6 +101,18 @@ public class ProductController {
     public ResponseEntity productDetail(@PathVariable Long productId) {
         ResponseProductDto productDto = productService.productDetail(productId);
         return ResponseEntity.ok(productDto);
+    }
+
+    /**
+     * 상품 리뷰, 문의사항 개수, 리뷰 평점
+     */
+    @ApiDocumentResponse
+    @Operation(summary = "상품 리뷰 , 문의 사항 개수, 리뷰 평점", description = "상품의 리뷰, 문의사항, 리뷰 평점 정보를 확인합니다.")
+    @GetMapping("/reviewAndQna/{productId}")
+    public ResponseReviewAndQnaDto reviewAndQna(@PathVariable Long productId){
+
+        return productService.reviewAndQna(productId);
+
     }
 
 }
