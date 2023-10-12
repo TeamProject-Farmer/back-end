@@ -1,5 +1,6 @@
 package com.farmer.backend.api.service.order;
 
+import com.farmer.backend.api.controller.admin.order.response.ResponseOrderDetailDto;
 import com.farmer.backend.api.controller.admin.order.response.ResponseOrderListDto;
 import com.farmer.backend.api.controller.user.order.request.RequestOrderInfoDto;
 import com.farmer.backend.api.controller.user.order.request.RequestOrderProductDto;
@@ -56,19 +57,8 @@ public class OrderService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<Object> orderInfo(Long orderId) {
-        List<Object> orderDetailContent = new ArrayList<>();
-        Map<String, List<ResponseOrdersAndPaymentDto>> ordersAndPaymentMap = new HashMap<>();
-        Map<String, List<ResponseOrderDetailDto>> orderDetailMap = new HashMap<>();
-        List<ResponseOrdersAndPaymentDto> ordersAndPayment = orderQueryRepositoryImpl.findOrdersAndPayment(orderId);
-        List<ResponseOrderDetailDto> orderDetail = orderProductQueryRepositoryImpl.findOrderDetail(orderId);
-
-        ordersAndPaymentMap.put("주문 결제정보", ordersAndPayment);
-        orderDetailMap.put("주문상품 상세정보", orderDetail);
-        orderDetailContent.add(ordersAndPaymentMap);
-        orderDetailContent.add(orderDetailMap);
-
-        return orderDetailContent;
+    public ResponseOrderDetailDto orderDetail(Long orderId) {
+        return orderQueryRepositoryImpl.findByOrderDetail(orderId);
     }
     @Transactional
     public void orderStatusUpdate(Long orderId, String orderStatus) {

@@ -5,7 +5,9 @@ import com.farmer.backend.api.controller.user.options.response.ResponseOptionDto
 import com.farmer.backend.api.controller.user.product.request.RequestProductDto;
 import com.farmer.backend.api.controller.user.product.response.ResponseProductDto;
 import com.farmer.backend.api.controller.user.product.response.ResponseProductDtoList;
+import com.farmer.backend.api.controller.user.product.response.ResponseReviewAndQnaDto;
 import com.farmer.backend.api.controller.user.product.response.ResponseShopBySizeProduct;
+import com.farmer.backend.api.service.review.ReviewService;
 import com.farmer.backend.domain.options.Options;
 import com.farmer.backend.domain.product.*;
 import com.farmer.backend.domain.product.productcategory.ProductCategory;
@@ -33,6 +35,7 @@ public class ProductService {
     private final ProductQueryRepository productQueryRepositoryImpl;
     private final ProductCategoryRepository categoryRepository;
     private final OptionRepository optionRepository;
+    private final ReviewService reviewService;
 
 
     /**
@@ -216,5 +219,14 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Page<ResponseProductDto> searchActionProductList(PageRequest pageable, String productName) {
         return productQueryRepositoryImpl.findAll(pageable, productName, null).map(ResponseProductDto::getAllProductList);
+    }
+
+    /**
+     * 상품 리뷰 , 문의 사항 개수, 리뷰 평점
+     * @return
+     */
+    public ResponseReviewAndQnaDto reviewAndQna(Long productId) {
+        Double reviewAverage= reviewService.reviewAverage(productId).getAverageStarRating();
+        return productQueryRepositoryImpl.reviewAndQnaInfo(productId,reviewAverage);
     }
 }
